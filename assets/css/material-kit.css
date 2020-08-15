@@ -16777,7 +16777,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 }
 
 .page-header {
-  height: 100vh;
+  height: 120vh;
   background-position: center center;
   background-size: cover;
   margin: 0;
