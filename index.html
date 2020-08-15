@@ -42,7 +42,8 @@
       <div class="row ml-auto mr-auto"> <!-- width -->
         <div class="brand"> <!-- font -->
           <h6>Already have an account?
-          <button style="background-color:transparent;border:none;color:white;font-size:14px;text-decoration:underline">
+          <button style="background-color:transparent;border:none;color:white;font-size:14px;text-decoration:underline" 
+            data-toggle="modal" data-target="#login">
             Log in
           </button>
           </h6>
@@ -60,7 +61,7 @@
 
         <div class="col-md-5 text-center">
           <h2>I am a <span class="title">Jobseeker</span></h1>
-            <button class="btn btn-block btn-primary" data-toggle="modal" data-target="#signup">
+            <button class="btn btn-block btn-primary" data-toggle="modal" data-target="#signup-jobseeker">
               Sign up to view Jobs
             </button>
         </div>
@@ -71,7 +72,7 @@
 
         <div class="col-md-5 text-center"> 
           <h2>I am an <span class="title">Employer</span></h1> 
-            <button class="btn btn-block btn-primary " data-toggle="modal" data-target="#signup">
+            <button class="btn btn-block btn-primary " data-toggle="modal" data-target="#signup-employer">
               Sign up to view Candidates
             </button>
         </div>
@@ -79,80 +80,91 @@
       </div>
 
     </div>
-
-    <!-- Sign in link -->
-
-
-    <!-- <footer class="footer">
-      <div class="container">
-        <span class="text-muted">Place sticky footer content here.</span>
-      </div>
-    </footer> -->
-
-
     
-    <!-- SIGNUP MODAL -->
-      <div class="modal fade" id="signup" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Create an Account</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <i class="material-icons">clear</i>
-              </button>
-            </div>
+    <!-- SIGNUP MODAL - jobseeker -->
+    <div class="modal fade" id="signup-jobseeker" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Create a Jobseeker Account</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <i class="material-icons">clear</i>
+            </button>
+          </div>
 
-            <div class="modal-body">
-              <input type="text" class="form-control" placeholder="Full Name">
-              <input type="text" class="form-control" placeholder="Email">
-              <input type="text" class="form-control" placeholder="Password">
-              <input type="text" class="form-control" placeholder="Re-type Password">
+          <div class="modal-body">
+            <input type="text" class="form-control" placeholder="Full Name">
+            <input type="text" class="form-control" placeholder="Email">
+            <input type="text" class="form-control" placeholder="Password">
+            <input type="text" class="form-control" placeholder="Re-type Password">
 
-              <button type="button" class="btn btn-link" data-toggle="modal" data-target="#login" data-dismiss="modal">Already have an Account? Log in</button>
-            </div>
+            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#login" data-dismiss="modal">Already have an Account? Log in</button>
+          </div>
 
-            <div class="modal-footer">
-              <button type="button" class="btn btn-link">Continue</button>
-            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-link">Continue</button>
           </div>
         </div>
       </div>
-      <!-- SIGNUP MODAL END -->
+    </div>
+    <!-- SIGNUP MODAL END -->
 
-      <!-- LOGIN MODAL -->
-      <div class="modal fade" id="login" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Login</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <i class="material-icons">clear</i>
-              </button>
-            </div>
+    <!-- SIGNUP MODAL - employer -->
+    <div class="modal fade" id="signup-employer" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Create an Employer Account</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <i class="material-icons">clear</i>
+            </button>
+          </div>
 
-            <div class="modal-body">
-              <input type="text" class="form-control" placeholder="Email">
-              <input type="text" class="form-control" placeholder="Password">
+          <div class="modal-body">
+            <input type="text" class="form-control" placeholder="Full Name">
+            <input type="text" class="form-control" placeholder="Email">
+            <input type="text" class="form-control" placeholder="Password">
+            <input type="text" class="form-control" placeholder="Re-type Password">
 
-              <button type="button" class="btn btn-link" data-toggle="modal" data-target="#signup" data-dismiss="modal">Need to create an Account? Sign Up</button>
-            </div>
+            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#login" data-dismiss="modal">Already have an Account? Log in</button>
+          </div>
 
-            <div class="modal-footer">
-              <button type="button" class="btn btn-link">Continue</button>
-            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-link">Continue</button>
           </div>
         </div>
       </div>
-      <!-- LOGIN END -->
-
     </div>
+    <!-- SIGNUP MODAL END -->
 
+    <!-- LOGIN MODAL -->
+    <div class="modal fade" id="login" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Login</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <i class="material-icons">clear</i>
+            </button>
+          </div>
 
+          <div class="modal-body">
+            <input type="text" class="form-control" placeholder="Email">
+            <input type="text" class="form-control" placeholder="Password">
+
+            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#signup" data-dismiss="modal">Need to create an Account? Sign Up</button>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-link">Continue</button>
+          </div>
+        </div>
+      </div>
     </div>
+    <!-- LOGIN END -->
+
   </div>
 
-
-  
 </body>
 
 </html>
