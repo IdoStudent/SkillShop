@@ -420,6 +420,7 @@ template {
   }
 
   .container {
+    height: 120vh;
     min-width: 992px !important;
   }
 
@@ -16777,8 +16778,8 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 }
 
 .page-header {
-  height: 120vh;
-  background-position: center center;
+  height: 100vh;
+  background-position: center;
   background-size: cover;
   margin: 0;
   padding: 0;
@@ -18227,7 +18228,7 @@ footer .pull-center {
 }
 
 .hero {
- height: 400px;
+ height: 200px;
 }
 
 .hero img{
