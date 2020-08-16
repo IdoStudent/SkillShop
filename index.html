@@ -42,7 +42,7 @@
       <div class="row ml-auto mr-auto"> <!-- width -->
         <div class="brand"> <!-- font -->
           <h6>Already have an account?
-          <button style="background-color:transparent;border:none;color:white;font-size:14px;text-decoration:underline" 
+          <button style="background-color:transparent;border:none;color:white;font-size:14px;text-decoration:underline"
             data-toggle="modal" data-target="#login">
             Log in
           </button>
@@ -53,7 +53,7 @@
 
   <!-- Body -->
   <div class="page-header header-filter" style="background-image: url('assets/img/background.png')">
-    
+
     <!-- Landing Page -->
     <div class="container hero">
 
@@ -67,11 +67,11 @@
         </div>
 
         <div class="col">
-          <img src="assets/img/middlelogo.png" alt="logo">         
+          <img src="assets/img/middlelogo.png" alt="logo">
         </div>
 
-        <div class="col-md-5 text-center"> 
-          <h2>I am an <span class="title">Employer</span></h1> 
+        <div class="col-md-5 text-center">
+          <h2>I am an <span class="title">Employer</span></h1>
             <button class="btn btn-block btn-primary " data-toggle="modal" data-target="#signup-employer">
               Sign up to view Candidates
             </button>
@@ -80,7 +80,7 @@
       </div>
 
     </div>
-    
+
     <!-- SIGNUP MODAL - jobseeker -->
     <div class="modal fade" id="signup-jobseeker" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -98,12 +98,10 @@
             <input type="text" class="form-control" placeholder="Password">
             <input type="text" class="form-control" placeholder="Re-type Password">
 
-            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#login" data-dismiss="modal">Already have an Account? Log in</button>
+            <button type="button" class="btn btn-success btn-block">Sign Up</button>
           </div>
 
-          <div class="modal-footer">
-            <button type="button" class="btn btn-link">Continue</button>
-          </div>
+          <button type="button" class="btn btn-link" data-toggle="modal" data-target="#login" data-dismiss="modal">Already have an Account? <u>Log in</u></button>
         </div>
       </div>
     </div>
@@ -126,12 +124,11 @@
             <input type="text" class="form-control" placeholder="Password">
             <input type="text" class="form-control" placeholder="Re-type Password">
 
-            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#login" data-dismiss="modal">Already have an Account? Log in</button>
+            <button type="button" class="btn btn-success btn-block">Sign Up</button>
           </div>
 
-          <div class="modal-footer">
-            <button type="button" class="btn btn-link">Continue</button>
-          </div>
+          <button type="button" class="btn btn-link" data-toggle="modal" data-target="#login" data-dismiss="modal">Already have an Account? <u>Log in</u></button>
+
         </div>
       </div>
     </div>
@@ -151,17 +148,43 @@
           <div class="modal-body">
             <input type="text" class="form-control" placeholder="Email">
             <input type="text" class="form-control" placeholder="Password">
-
-            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#signup" data-dismiss="modal">Need to create an Account? Sign Up</button>
+              <input type="checkbox" value="" id="defaultCheck1">
+              <label for="rememberMe">
+                Remember Me?
+              </label>
+            <button type="button" class="btn btn-success btn-block">Sign Up</button>
           </div>
 
-          <div class="modal-footer">
-            <button type="button" class="btn btn-link">Continue</button>
-          </div>
+          <button type="button" class="btn btn-link" data-toggle="modal" data-target="#forgotPassword" data-dismiss="modal">Forgot Your Password?</button>
         </div>
       </div>
     </div>
     <!-- LOGIN END -->
+
+    <!-- FORGOT PASSWORD MODAL -->
+    <div class="modal fade" id="forgotPassword" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Forgot Password</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <i class="material-icons">clear</i>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <h5 class="modal-title">Enter your email address. We will send you a link to reset your password</h5>
+            <input type="text" class="form-control" placeholder="Email">
+
+            <button type="button" class="btn btn-success btn-block">Reset Password</button>
+          </div>
+
+          <button type="button" class="btn btn-link" data-toggle="modal" data-target="#login" data-dismiss="modal">Remembered It? <u>Log in</u></button>
+        </div>
+      </div>
+    </div>
+    <!-- FORGOT PASSWORD END -->
+
 
   </div>
 
