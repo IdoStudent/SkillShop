@@ -21,6 +21,12 @@
    <script src="./assets/js/plugins/bootstrap-datetimepicker.js" type="text/javascript"></script>
    <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
    <script src="./assets/js/plugins/nouislider.min.js" type="text/javascript"></script>
+   <!-- AWS COGNITO SCRIPTS-->
+   <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> 
+   <script src="./assets/auth/amazon-cognito-auth.min.js"></script>
+   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script> 
+   <script src="./assets/auth/amazon-cognito-identity.min.js"></script>  
+   <script src="./assets/js/config.js"></script>
 </head>
 
 <body>
@@ -93,12 +99,72 @@
           </div>
 
           <div class="modal-body">
-            <input type="text" class="form-control" placeholder="Full Name">
-            <input type="text" class="form-control" placeholder="Email">
-            <input type="text" class="form-control" placeholder="Password">
-            <input type="text" class="form-control" placeholder="Re-type Password">
+            <input type="personalname" class="form-control" id="personalnameRegister" placeholder="Name" pattern=".*" required>
+            <input type="email" class="form-control" id="emailInputRegister" placeholder="Email" pattern=".*" required>
+          	<input type="password" class="form-control" id="passwordInputRegister" placeholder="Password" pattern=".*" required>
+            <input type="password" class="form-control" id="confirmationpassword" placeholder="Confirm Password" pattern=".*" required>
 
-            <button type="button" class="btn btn-success btn-block">Sign Up</button>
+            <button id="mainbutton" class="btn btn-lg btn-primary btn-block" type="button" onclick="registerButton()" >Register</button>
+
+            <script>
+
+              var username;
+              var password;
+              var personalname;
+              var poolData;
+                
+              function registerButton() {
+              
+              personalnamename =  document.getElementById("personalnameRegister").value;	
+              username = document.getElementById("emailInputRegister").value;
+              
+              if (document.getElementById("passwordInputRegister").value != document.getElementById("confirmationpassword").value) {
+                alert("Passwords Do Not Match!")
+                throw "Passwords Do Not Match!"
+              } else {
+                password =  document.getElementById("passwordInputRegister").value;	
+              }
+              
+              poolData = {
+                  UserPoolId : _config.cognito.userPoolId, // Your user pool id here
+                  ClientId : _config.cognito.clientId // Your client id here
+                };		
+              var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+          
+              var attributeList = [];
+              
+              var dataEmail = {
+                Name : 'email', 
+                Value : username, //get from form field
+              };
+              
+              var dataPersonalName = {
+                Name : 'name', 
+                Value : personalname, //get from form field
+              };
+          
+              var attributeEmail = new AmazonCognitoIdentity.CognitoUserAttribute(dataEmail);
+              var attributePersonalName = new AmazonCognitoIdentity.CognitoUserAttribute(dataPersonalName);
+              
+              
+              attributeList.push(attributeEmail);
+              attributeList.push(attributePersonalName);
+          
+              userPool.signUp(username, password, attributeList, null, function(err, result){
+                if (err) {
+                  //document.getElementById("titleheader").innerHTML = "Check your email for a verification link";
+                  return;
+                }
+                cognitoUser = result.user;
+                console.log('user name is ' + cognitoUser.getUsername());
+                //change elements of page
+                alert("Please check your email for your verification link!");
+                window.location.href = "index.html"                
+              });
+              }
+          
+            </script>
+
           </div>
 
           <button type="button" class="btn btn-link" data-toggle="modal" data-target="#login" data-dismiss="modal">Already have an Account? <u>Log in</u></button>
@@ -173,12 +239,13 @@
           </div>
 
           <div class="modal-body">
+            <h5 class="modal-title">Enter your email address. We will send you a link to reset your password</h5>
             <input type="text" class="form-control" placeholder="Email">
 
-            <button type="button" class="btn btn-success btn-block">Send reset instructions</button>
+            <button type="button" class="btn btn-success btn-block">Reset Password</button>
           </div>
 
-          <button type="button" class="btn btn-link" data-toggle="modal" data-target="" data-dismiss="modal">Back to? <u>Sign up</u></button>
+          <button type="button" class="btn btn-link" data-toggle="modal" data-target="#login" data-dismiss="modal">Remembered It? <u>Log in</u></button>
         </div>
       </div>
     </div>
