@@ -212,20 +212,61 @@
           </div>
 
           <div class="modal-body">
-            <input type="text" class="form-control" placeholder="Email">
-            <input type="text" class="form-control" placeholder="Password">
-              <input type="checkbox" value="" id="defaultCheck1">
-              <label for="rememberMe">
-                Remember Me?
+            <form>
+            <input type="text" class="form-control" id="inputUsername"  placeholder="Email address" name="username" required autofocus>
+            <input type="password" class="form-control" id="inputPassword"  placeholder="Password" name="password" required> 
               </label>
-            <button type="button" class="btn btn-success btn-block">Sign Up</button>
+              <button type="button" class="btn btn-success btn-block" onclick="signInButton()">Sign in</button>
+          </form>
+          <!-- LOGIN JS SCRIPT START -->
+
+          <script>
+
+            function signInButton() {
+              
+            var authenticationData = {
+                  Username : document.getElementById("inputUsername").value,
+                  Password : document.getElementById("inputPassword").value,
+              };
+            
+              var authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
+              
+            var poolData = {
+                  UserPoolId : _config.cognito.userPoolId, // Your user pool id here
+                  ClientId : _config.cognito.clientId, // Your client id here
+              };
+            
+              var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+            
+              var userData = {
+                  Username : document.getElementById("inputUsername").value,
+                  Pool : userPool,
+              };
+            
+              var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+              
+            cognitoUser.authenticateUser(authenticationDetails, {
+                  onSuccess: function (result) {
+                var accessToken = result.getAccessToken().getJwtToken();
+                console.log(accessToken);	
+                window.location.href = "profile.html"   
+                  },
+          
+                  onFailure: function(err) {
+                      alert(err.message || JSON.stringify(err));
+                  },
+              });
+            }
+          </script>
+          <!-- LOGIN SCRIPT END! -->
           </div>
 
           <button type="button" class="btn btn-link" data-toggle="modal" data-target="#forgotPassword" data-dismiss="modal">Forgot Your Password?</button>
         </div>
       </div>
     </div>
-    <!-- LOGIN END -->
+    <!-- FORGOT PASSWORD END -->
+
 
     <!-- FORGOT PASSWORD MODAL -->
     <div class="modal fade" id="forgotPassword" tabindex="-1" role="dialog">
