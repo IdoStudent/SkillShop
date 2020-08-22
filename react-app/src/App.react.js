@@ -15,8 +15,6 @@ import {
   ProfilePage,
 } from "./pages";
 
-import HomePage from "./HomePage.react";
-import FormElementsPage from "./FormElementsPage.react";
 import PricingCardsPage from "./interface/PricingCardsPage.react";
 import CardsDesignPage from "./interface/CardsDesignPage.react";
 import StoreCardsPage from "./components/StoreCardsPage.react.js";
@@ -36,7 +34,8 @@ function App(props: Props): React.Node {
     <React.StrictMode>
       <Router>
         <Switch>
-          <Route exact path="/" component={HomePage} />
+          <Route exact path="/" component={ProfilePage} />
+
           <Route exact path="/400" component={Error400} />
           <Route exact path="/401" component={Error401} />
           <Route exact path="/403" component={Error403} />
@@ -48,14 +47,12 @@ function App(props: Props): React.Node {
           <Route exact path="/charts" component={ChartsPage} />
           <Route exact path="/email" component={Email} />
           <Route exact path="/empty-page" component={Empty} />
-          <Route exact path="/form-elements" component={FormElementsPage} />
           <Route exact path="/forgot-password" component={ForgotPasswordPage} />
           <Route exact path="/gallery" component={GalleryPage} />
           <Route exact path="/icons" component={IconPage} />
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/maps" component={MapCardsPage} />
           <Route exact path="/pricing-cards" component={PricingCardsPage} />
-          <Route exact path="/profile" component={ProfilePage} />
           <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/store" component={StoreCardsPage} />
           <Route component={Error404} />

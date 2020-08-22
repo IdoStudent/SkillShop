@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Container, Grid, Divider, Header, Segment } from "semantic-ui-react";
+import { Container, Grid, Divider, Header } from "semantic-ui-react";
 
 class JobseekerExp extends React.Component {
   render() {

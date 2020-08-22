@@ -5,10 +5,6 @@ import { NavLink, withRouter } from "react-router-dom";
 
 import {
   Site,
-  Nav,
-  Grid,
-  List,
-  Button,
   RouterContextProvider,
 } from "tabler-react";
 
@@ -43,7 +39,7 @@ type navItem = {|
 const navBarItems: Array<navItem> = [
   {
     value: "Home (Jobseeker - Placeholder)",
-    to: "/profile",
+    to: "/",
     icon: "home",
     LinkComponent: withRouter(NavLink),
     useExact: true,
