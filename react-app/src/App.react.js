@@ -27,6 +27,7 @@ import MapCardsPage from "./components/MapCardsPage.react";
 import BlogPage from "./components/BlogPage.react";
 
 import "tabler-react/dist/Tabler.css";
+import "semantic-ui-css/semantic.min.css";
 
 type Props = {||};
 
