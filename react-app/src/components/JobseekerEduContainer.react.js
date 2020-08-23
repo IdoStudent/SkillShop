@@ -20,7 +20,7 @@ class JobseekerEduContainer extends React.Component {
                   <Card.Title>Education</Card.Title>
                   {this.state.dataset}
 
-                  <Button color="secondary" icon="plus-circle" onClick={this.addData} type="button" />
+                  <Button color="secondary" icon="plus-circle" onClick={this.addData} type="button"/>
 
                 </Card.Body>
               </Form>

@@ -38,6 +38,13 @@ type navItem = {|
 
 const navBarItems: Array<navItem> = [
   {
+    value: "First login profile creation (Jobseeker - Placeholder)",
+    to: "/setup",
+    icon: "home",
+    LinkComponent: withRouter(NavLink),
+    useExact: true,
+  },
+  {
     value: "Home (Jobseeker - Placeholder)",
     to: "/",
     icon: "home",
@@ -47,7 +54,7 @@ const navBarItems: Array<navItem> = [
   {
     value: "Home (Employer - Placeholder)",
     icon: "home",
-    to: "/cards",
+    to: "/EmployerSetup",
     LinkComponent: withRouter(NavLink),
 
     /* Example of how to use a sub-nav dropdown (if we need it)
