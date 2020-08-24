@@ -8,12 +8,13 @@ class GeneralInformation extends React.Component {
     super(props);
     this.state = {
       // States from API
-      phoneNumber: "",
-      about: "",
-      lastName: "",
-      address: "",
-      email: "",
       firstname: "",
+      middlename: "",
+      surname: "",
+      city: "",
+      postcode: "",
+      state: "",
+      about: "",
 
       // States for editable form
       formfirstname: "",
@@ -30,7 +31,7 @@ class GeneralInformation extends React.Component {
   }
 
   componentDidMount() {
-    fetch("https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata")
+    fetch("https://run.mocky.io/v3/f707b49e-b119-45e5-b6a1-0cca66fa3421")
       .then(res => res.json())
       .then(
         (result) => {
