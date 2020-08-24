@@ -15,7 +15,7 @@ class JobseekerEduContainer extends React.Component {
 
     render() {
       return (
-              <Form className="card" name="experience">
+              <div className="card" name="experience">
                 <Card.Body>
                   <Card.Title>Education</Card.Title>
                   {this.state.dataset}
@@ -23,7 +23,7 @@ class JobseekerEduContainer extends React.Component {
                   <Button color="secondary" icon="plus-circle" onClick={this.addData} type="button"/>
 
                 </Card.Body>
-              </Form>
+              </div>
       );
     }
 }

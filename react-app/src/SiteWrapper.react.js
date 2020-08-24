@@ -38,13 +38,6 @@ type navItem = {|
 
 const navBarItems: Array<navItem> = [
   {
-    value: "First login profile creation (Jobseeker - Placeholder)",
-    to: "/setup",
-    icon: "home",
-    LinkComponent: withRouter(NavLink),
-    useExact: true,
-  },
-  {
     value: "Home (Jobseeker - Placeholder)",
     to: "/",
     icon: "home",
