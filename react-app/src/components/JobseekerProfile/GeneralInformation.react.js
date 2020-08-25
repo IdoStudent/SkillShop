@@ -31,18 +31,18 @@ class GeneralInformation extends React.Component {
   }
 
   componentDidMount() {
-    fetch("https://run.mocky.io/v3/f707b49e-b119-45e5-b6a1-0cca66fa3421")
+    fetch("https://run.mocky.io/v3/cabd2afd-08e0-4ce4-af41-bad8a4509ebe")
       .then(res => res.json())
       .then(
         (result) => {
           this.setState({
-            firstname: result.firstname,
-            middlename: result.middlename,
-            surname: result.surname,
-            city: result.city,
-            postcode: result.postcode,
-            state: result.state,
-            about: result.about,
+            firstname: result.Item.userFirstName,
+            middlename: result.Item.userMiddleName,
+            surname: result.Item.userLastName,
+            city: result.Item.userCity,
+            postcode: result.Item.userPostCode,
+            state: result.Item.userState,
+            about: result.Item.userAbout,
 
             formfirstname: result.firstname,
             formmiddlename: result.middlename,
