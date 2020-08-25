@@ -33,7 +33,7 @@ class GeneralInformation extends React.Component {
   }
 
   componentDidMount() {
-    fetch("https://run.mocky.io/v3/b97f304e-c5d8-4577-9ea1-55af1011664e")
+    fetch("https://run.mocky.io/v3/cabd2afd-08e0-4ce4-af41-bad8a4509ebe")
       .then(res => res.json())
       .then(
         (result) => {
