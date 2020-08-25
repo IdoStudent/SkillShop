@@ -210,7 +210,7 @@ class Skills extends React.Component {
               </Form.Group>
             </Grid.Col>
           </Grid.Row>
-          <Button content='Cancel changes' floated='left' color='red' basic hidden={this.state.sShowCancelButton ? '' : 'hidden'} onClick={this.cancelChanges}/>
+          <Button content='Cancel changes' floated='left' color='red' basic hidden={this.state.showCancelButton ? '' : 'hidden'} onClick={this.cancelChanges}/>
           <Button content='Save changes' floated='right' color='green' basic hidden={this.state.showSaveButton ? '' : 'hidden'}/>
         </Card.Body>
       </div>
