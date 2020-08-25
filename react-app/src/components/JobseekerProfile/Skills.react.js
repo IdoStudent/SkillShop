@@ -1,21 +1,46 @@
 import * as React from "react";
 
 import { Form, Card, Grid } from "tabler-react";
+import { Button } from "semantic-ui-react";
 
 class Skills extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+     showSaveButton: false,
+     showCancelButton: false,
+    };
+  }
+
+  onChange = () => {
+    this.setState(
+      {
+        showSaveButton: true,
+        showCancelButton: true,
+      });
+  }
+
+  cancelChanges = () => {
+    this.setState(
+      {
+        showSaveButton: false,
+        showCancelButton: false,
+      });
+  }
+
   render() {
     return (
       <div className="card" name="skills">
         <Card.Body>
           <Card.Title>Top skills</Card.Title>
           <Grid.Row>
-            <Grid.Col offset={1}>
+            <Grid.Col offset={1} md={10}>
               <Form.Group name="softskills" label="Soft Skills">
-                <Form.SelectGroup canSelectMultiple pills>
+                <Form.SelectGroup canSelectMultiple pills onChange={this.onChange}>
                   <Form.SelectGroupItem
                     label="Communication"
                     name="communication"
-                    value="Communication"
+                    value=""
                   />
                   <Form.SelectGroupItem
                     label="Teamwork"
@@ -72,9 +97,9 @@ class Skills extends React.Component {
             </Grid.Col>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Col offset={1}>
+            <Grid.Col offset={1} md={10}>
               <Form.Group name="hardskills" label="Hard Skills">
-                <Form.SelectGroup canSelectMultiple pills>
+                <Form.SelectGroup canSelectMultiple pills onChange={this.onChange}>
                   <Form.SelectGroupItem
                     label="Design"
                     name="design"
@@ -125,9 +150,9 @@ class Skills extends React.Component {
             </Grid.Col>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Col offset={1}>
+            <Grid.Col offset={1} md={10}>
               <Form.Group name="techskills" label="Technological Skills">
-                <Form.SelectGroup canSelectMultiple pills>
+                <Form.SelectGroup canSelectMultiple pills onChange={this.onChange}>
                   <Form.SelectGroupItem
                     label="Adobe Photoshop"
                     name="adobephotoshop"
@@ -185,6 +210,8 @@ class Skills extends React.Component {
               </Form.Group>
             </Grid.Col>
           </Grid.Row>
+          <Button content='Cancel changes' floated='left' color='red' basic hidden={this.state.sShowCancelButton ? '' : 'hidden'} onClick={this.cancelChanges}/>
+          <Button content='Save changes' floated='right' color='green' basic hidden={this.state.showSaveButton ? '' : 'hidden'}/>
         </Card.Body>
       </div>
     );

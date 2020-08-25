@@ -10,24 +10,39 @@ class JobseekerExp extends React.Component {
     super(props);
     this.state = {
       // States from API, default data values. Hardcoded for testing
-      title: "test title",
-      company: "test company",
-      dates: "MAR 2016 - JAN 2020",
-      location: "test location",
+      title: "Product Manager",
+      company: "Company A",
+      startdate: "032016",
+      enddate: "032020",
+      location: "Melbourne, Vic",
       desc:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
 
       // States for editable form. Initial values set to the API data. Hardcoded for testing
-      formtitle: "test title",
-      formcompany: "test company",
-      formdates: "MAR 2016 - JAN 2020",
-      formlocation: "test location",
+      formtitle: "Product Manager",
+      formcompany: "Company A",
+      formstartdate: "032016",
+      formenddate: "032020",
+      formlocation: "Melbourne, Vic",
       formdesc:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
 
+      displaystart: "",
+      displayend: "",
+
       // Modal State
       open: false,
+
+      // Current Role Checkbox
+      isChecked: false,
+
+      // End Month (Disabled if current role is ticked)
+      isDisabled: false,
     };
+  }
+
+  componentDidMount() {
+    this.convertDate();
   }
 
   handleChange = (input) => (event) => {
@@ -36,19 +51,109 @@ class JobseekerExp extends React.Component {
     console.log(event.target.value);
   };
 
+  handleCheckbox = () => {
+    this.setState(
+      {
+        isChecked: !this.state.isChecked,
+      },
+      this.disableDateField
+    );
+  };
+
+  disableDateField = () => {
+    if (this.state.isChecked) {
+      this.setState({
+        isDisabled: true,
+      });
+    } else {
+      this.setState({
+        isDisabled: false,
+      });
+    }
+  };
+
+  convertDate = () => {
+    var months = [
+      "JAN",
+      "FEB",
+      "MAR",
+      "APR",
+      "MAY",
+      "JUN",
+      "JUL",
+      "AUG",
+      "SEP",
+      "OCT",
+      "NOV",
+      "DEC",
+    ];
+
+    // START DATE
+    var displayDateStart = this.state.startdate.substring(0, 2);
+    var displayYearStart = this.state.startdate.substring(2, 7);
+
+    // IF THERE IS A SLASH (FROM FORM INPUT), REMOVE IT SO IT WILL NOT DISPLAY
+    if (displayYearStart[0] == "/") {
+      displayYearStart =
+        displayYearStart[1] +
+        displayYearStart[2] +
+        displayYearStart[3] +
+        displayYearStart[4];
+    }
+
+    // IF THE MONTH NUMBER STARTS WITH A 0, REMOVE IT SO THE ARRAY CAN BE PROPERLY INDEXED
+    if (displayDateStart[0] == 0) {
+      displayDateStart = displayDateStart[1];
+    }
+
+    displayDateStart = months[displayDateStart - 1];
+
+    // END DATE
+    var displayDateEnd = this.state.enddate.substring(0, 2);
+    var displayYearEnd = this.state.enddate.substring(2, 7);
+
+    // IF THERE IS A SLASH (FROM FORM INPUT), REMOVE IT
+    if (displayYearEnd[0] == "/") {
+      displayYearEnd =
+        displayYearEnd[1] +
+        displayYearEnd[2] +
+        displayYearEnd[3] +
+        displayYearEnd[4];
+    }
+
+    if (displayDateEnd[0] == 0) {
+      displayDateEnd = displayDateEnd[1];
+    }
+
+    displayDateEnd = months[displayDateEnd - 1];
+
+    this.setState(() => ({
+      displaystart: displayDateStart + " " + displayYearStart,
+      displayend: displayDateEnd + " " + displayYearEnd,
+    }));
+  };
+
   handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.target);
 
-    this.setState((prevState) => ({
-      // If submitting new values, update the state to represent the new data
-      title: prevState.formtitle,
-      company: prevState.formcompany,
-      location: prevState.formlocation,
-      dates: prevState.formdates,
-      desc: prevState.formdesc,
-      open: false,
-    }));
+    console.log(this.state.title);
+
+    this.setState(
+      (prevState) => ({
+        // If submitting new values, update the state to represent the new data
+        title: prevState.formtitle,
+        company: prevState.formcompany,
+        location: prevState.formlocation,
+        startdate: prevState.formstartdate,
+        enddate: prevState.formenddate,
+        desc: prevState.formdesc,
+        open: false,
+      }),
+      this.convertDate
+    );
+
+    console.log(this.state.title);
 
     // Send the submitted form data to the API
     /*fetch('API URL', {
@@ -63,7 +168,8 @@ class JobseekerExp extends React.Component {
       formtitle: prevState.title,
       formcompany: prevState.company,
       formlocation: prevState.location,
-      formdates: prevState.dates,
+      formstartdate: prevState.startdate,
+      formenddate: prevState.enddate,
       formdesc: prevState.desc,
       open: false,
     }));
@@ -77,15 +183,18 @@ class JobseekerExp extends React.Component {
     const {
       title,
       company,
-      dates,
+      displaystart,
+      displayend,
       location,
       desc,
       formtitle,
       formcompany,
-      formdates,
+      formstartdate,
+      formenddate,
       formlocation,
       formdesc,
       open,
+      isDisabled,
     } = this.state;
 
     return (
@@ -107,7 +216,9 @@ class JobseekerExp extends React.Component {
             <Grid.Col md={5}>
               <Grid.Row>
                 <Container textAlign="right">
-                  <Header size="small">{dates}</Header>
+                  <Header size="small">
+                    {displaystart} - {displayend}
+                  </Header>
                 </Container>
               </Grid.Row>
               <Grid.Row>
@@ -171,46 +282,38 @@ class JobseekerExp extends React.Component {
 
               {/* ROW 2 */}
               <Grid.Row>
-              <Grid.Col md={3}>
+                <Grid.Col md={3}>
                   <Form.Group label="Current Role">
                     <Form.Checkbox
                       label="I am currently in this role"
                       name="current"
+                      checked="true"
+                      checked={this.state.isChecked}
+                      onChange={this.handleCheckbox}
                       // TO DO value=
                     />
                   </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={3}>
-                <Form.Group label="Starting Month">
-                  <Form.MaskedInput
-                    placeholder="00/0000"
-                    mask={[
-                      /\d/,
-                      /\d/,
-                      "/",
-                      /\d/,
-                      /\d/,
-                      /\d/,
-                      /\d/,
-                    ]}
-                  />
-                </Form.Group>
+                  <Form.Group label="Starting Month">
+                    <Form.MaskedInput
+                      placeholder="00/0000"
+                      mask={[/\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
+                      value={formstartdate}
+                      onChange={this.handleChange("formstartdate")}
+                    />
+                  </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={3}>
-                <Form.Group label="End Month">
-                  <Form.MaskedInput
-                    placeholder="00/0000"
-                    mask={[
-                      /\d/,
-                      /\d/,
-                      "/",
-                      /\d/,
-                      /\d/,
-                      /\d/,
-                      /\d/,
-                    ]}
-                  />
-                </Form.Group>
+                  <Form.Group label="End Month">
+                    <Form.MaskedInput
+                      placeholder="00/0000"
+                      mask={[/\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
+                      value={formenddate}
+                      onChange={this.handleChange("formenddate")}
+                      disabled={isDisabled}
+                    />
+                  </Form.Group>
                 </Grid.Col>
               </Grid.Row>
 
