@@ -1,7 +1,9 @@
 import * as React from "react";
-
+import axios from "axios";
 import { Form, Card, Grid } from "tabler-react";
 import { Button, Header, Icon, Modal } from "semantic-ui-react";
+
+const config = require('../config.json');
 
 class GeneralInformation extends React.Component {
   constructor(props) {
@@ -62,7 +64,7 @@ class GeneralInformation extends React.Component {
     console.log(event.target.value);
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.target);
 
@@ -73,17 +75,28 @@ class GeneralInformation extends React.Component {
       surname: prevState.formsurname,
       city: prevState.formcity,
       postcode: prevState.formpostcode,
-      state: prevState.formstate,
+      userState: prevState.formstate,
       about: prevState.formabout,
       open: false,
-    }));
-
-    // Send the submitted form data to the API
-    /*fetch('API URL', {
-      method: 'POST',
-      body: data,
-    });*/
-  };
+      
+    }))
+    try {
+      const params = {
+        "userEmail": "testapi12@gmail.com",
+        "userFirstName": this.state.formfirstname,
+        "userMiddleName": this.state.formmiddlename,
+        "userLastName": this.state.formsurname,
+        "userCity": this.state.formcity,
+        "userPostCode": this.state.formpostcode,
+        "userState": this.state.formstate,
+        "userAbout": this.state.formabout,
+        "userType": "jobseeker"
+      };
+      await axios.post('https://qrg3idkox4.execute-api.ap-southeast-2.amazonaws.com/prod/{userEmail}/', params);
+    }catch (err) {
+      console.log(`An error has occurred: ${err}`);
+  }
+ };
 
   cancelForm = () => {
     // If cancelling, reset any fields that have been changed to the original values so that when the modal is re-opened, the old values are shown

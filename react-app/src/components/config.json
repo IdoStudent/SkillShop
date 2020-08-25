@@ -1,0 +1,5 @@
+{
+    "putUserApi": {
+        "invokeUrl": "https://qrg3idkox4.execute-api.ap-southeast-2.amazonaws.com/prod"
+    }
+}
