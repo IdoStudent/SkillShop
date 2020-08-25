@@ -38,21 +38,21 @@ class GeneralInformation extends React.Component {
       .then(
         (result) => {
           this.setState({
-            firstname: result.firstname,
-            middlename: result.middlename,
-            surname: result.surname,
-            city: result.city,
-            postcode: result.postcode,
-            state: result.state,
-            about: result.about,
+            firstname: result.Item.userFirstName,
+            middlename: result.Item.userMiddleName,
+            surname: result.Item.userLastName,
+            city: result.Item.userCity,
+            postcode: result.Item.userPostCode,
+            state: result.Item.userState,
+            about: result.Item.userAbout,
 
-            formfirstname: result.firstname,
-            formmiddlename: result.middlename,
-            formsurname: result.surname,
-            formcity: result.city,
+            formfirstname: result.Item.userFirstName,
+            formmiddlename: result.Item.userMiddleName,
+            formsurname: result.Item.userLastName,
+            formcity: result.Item.userCity,
             formpostcode: result.postcode,
-            formstate: result.state,
-            formabout: result.about,
+            formstate: result.Item.userState,
+            formabout: result.Item.userAbout,
           });
         },
       )
