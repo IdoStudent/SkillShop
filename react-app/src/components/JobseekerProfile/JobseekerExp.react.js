@@ -10,22 +10,20 @@ class JobseekerExp extends React.Component {
     super(props);
     this.state = {
       // States from API, default data values. Hardcoded for testing
-      title: "Product Manager",
-      company: "Company A",
-      startdate: "032016",
-      enddate: "032020",
-      location: "Melbourne, Vic",
-      desc:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      title: props.jobinfo.title,
+      company: props.jobinfo.company,
+      startdate: props.jobinfo.startdate,
+      enddate: props.jobinfo.enddate,
+      location: props.jobinfo.location,
+      desc: props.jobinfo.desc,
 
       // States for editable form. Initial values set to the API data. Hardcoded for testing
-      formtitle: "Product Manager",
-      formcompany: "Company A",
-      formstartdate: "032016",
-      formenddate: "032020",
-      formlocation: "Melbourne, Vic",
-      formdesc:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      formtitle: props.jobinfo.title,
+      formcompany: props.jobinfo.company,
+      formstartdate: props.jobinfo.startdate,
+      formenddate: props.jobinfo.enddate,
+      formlocation: props.jobinfo.location,
+      formdesc: props.jobinfo.desc,
 
       displaystart: "",
       displayend: "",
@@ -213,7 +211,7 @@ class JobseekerExp extends React.Component {
                 <p>{desc}</p>
               </Grid.Row>
             </Grid.Col>
-            <Grid.Col md={5}>
+            <Grid.Col md={4}>
               <Grid.Row>
                 <Container textAlign="right">
                   <Header size="small">
@@ -226,7 +224,8 @@ class JobseekerExp extends React.Component {
                   <Header size="small">{location}</Header>
                 </Container>
               </Grid.Row>
-
+            </Grid.Col>
+            <Grid.Col md={1}>
               {/* MODAL BUTTON */}
               <Button
                 floated="right"
@@ -298,6 +297,7 @@ class JobseekerExp extends React.Component {
                   <Form.Group label="Starting Month">
                     <Form.MaskedInput
                       placeholder="00/0000"
+                      name="startdate"
                       mask={[/\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
                       value={formstartdate}
                       onChange={this.handleChange("formstartdate")}
@@ -308,6 +308,7 @@ class JobseekerExp extends React.Component {
                   <Form.Group label="End Month">
                     <Form.MaskedInput
                       placeholder="00/0000"
+                      name="enddate"
                       mask={[/\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
                       value={formenddate}
                       onChange={this.handleChange("formenddate")}

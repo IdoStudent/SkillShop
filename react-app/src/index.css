@@ -7,3 +7,7 @@ body {
 .page {
   background-color: #F8F8FB;
 }
+
+.ui.basic.button, .ui.basic.buttons .button {
+  box-shadow: none !important;
+}

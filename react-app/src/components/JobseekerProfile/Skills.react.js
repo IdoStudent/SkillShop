@@ -12,12 +12,18 @@ class Skills extends React.Component {
     };
   }
 
-  onChange = () => {
+  onChange = (event) => {
     this.setState(
       {
         showSaveButton: true,
         showCancelButton: true,
       });
+
+      if(event.target.checked){
+        console.log(event.target.checked)
+      } else {
+        console.log("not checked")
+      }
   }
 
   cancelChanges = () => {
@@ -40,7 +46,7 @@ class Skills extends React.Component {
                   <Form.SelectGroupItem
                     label="Communication"
                     name="communication"
-                    value=""
+                    value="Communication"
                   />
                   <Form.SelectGroupItem
                     label="Teamwork"
@@ -151,7 +157,7 @@ class Skills extends React.Component {
           </Grid.Row>
           <Grid.Row>
             <Grid.Col offset={1} md={10}>
-              <Form.Group name="techskills" label="Technological Skills">
+              <Form.Group name="techskills" label="Tech Skills">
                 <Form.SelectGroup canSelectMultiple pills onChange={this.onChange}>
                   <Form.SelectGroupItem
                     label="Adobe Photoshop"

@@ -3,6 +3,8 @@ import * as React from "react";
 import { Form, Card, Grid } from "tabler-react";
 import { Button, Header, Icon, Modal } from "semantic-ui-react";
 
+import '../../index.css';
+
 class GeneralInformation extends React.Component {
   constructor(props) {
     super(props);
@@ -31,7 +33,7 @@ class GeneralInformation extends React.Component {
   }
 
   componentDidMount() {
-    fetch("https://run.mocky.io/v3/f707b49e-b119-45e5-b6a1-0cca66fa3421")
+    fetch("https://run.mocky.io/v3/b97f304e-c5d8-4577-9ea1-55af1011664e")
       .then(res => res.json())
       .then(
         (result) => {
@@ -137,6 +139,7 @@ class GeneralInformation extends React.Component {
                   basic
                   icon="pencil"
                   type="button"
+                  compact
                   onClick={this.openModal}
                 />
               </Grid.Col>
