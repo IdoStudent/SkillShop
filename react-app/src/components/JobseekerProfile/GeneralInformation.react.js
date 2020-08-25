@@ -44,13 +44,13 @@ class GeneralInformation extends React.Component {
             state: result.Item.userState,
             about: result.Item.userAbout,
 
-            formfirstname: result.firstname,
-            formmiddlename: result.middlename,
-            formsurname: result.surname,
-            formcity: result.city,
+            formfirstname: result.Item.userFirstName,
+            formmiddlename: result.Item.userMiddleName,
+            formsurname: result.Item.userLastName,
+            formcity: result.Item.userCity,
             formpostcode: result.postcode,
-            formstate: result.state,
-            formabout: result.about,
+            formstate: result.Item.userState,
+            formabout: result.Item.userAbout,
           });
         },
       )
