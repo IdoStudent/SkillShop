@@ -5,8 +5,10 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
+    "aws-amplify": "^3.0.24",
     "d3-scale": "^3.0.0",
     "formik": "^1.0.2",
+    "latest-version": "^5.1.0",
     "prop-types": "^15.6.1",
     "react": "16.7.0-alpha.0",
     "react-c3js": "^0.1.20",

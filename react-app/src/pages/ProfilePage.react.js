@@ -17,11 +17,16 @@ class ProfilePage extends Component {
       <SiteWrapper>
         <Alert type="warning" isDismissible>
           <center>
-            All information on your profile is publically available to potential
+            All information on your profile is publicly available to potential
             employers.
           </center>
         </Alert>
         <div className="my-3 my-md-5">
+          {this.props.auth.isAuthenticated && this.props.auth.user && (
+            <p>
+              Hello {this.props.auth.user.get}
+            </p>
+          )}
           <Container>
             <Grid.Row>
               <Grid.Col lg={12}>
