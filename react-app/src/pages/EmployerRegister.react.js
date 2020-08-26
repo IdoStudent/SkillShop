@@ -48,7 +48,7 @@ class EmployerRegister extends Component {
             }
         });
         console.log(signUpResponse);
-        // this.props.history.push("/welcome");
+        this.props.history.push("/login");
     }catch(error){
         console.log('Error')
         // let err = null;
