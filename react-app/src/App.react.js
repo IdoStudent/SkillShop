@@ -47,7 +47,7 @@ class App extends React.Component {
             <Route exact path="/" render={(props) => <ProfilePage {...props} auth={authProps} />} />
             <Route exact path="/setup" render={(props) => <ProfileSetup {...props} auth={authProps} />}  />
             <Route exact path="/employersetup" render={(props) => <EmployerSetup {...props} auth={authProps} />}  />
-            {/* <Route exact path="/landingpage" component={LandingPage} /> */}
+            <Route exact path="/landingpage" component={LandingPage} />
             <Route exact path="/jobseekerregister" render={(props) => <JobseekerRegister {...props} auth={authProps} />} />
             <Route exact path="/employerregister" render={(props) => <EmployerRegister {...props} auth={authProps} />} />
             <Route exact path="/login" render={(props) => <Login {...props} auth={authProps} />} />

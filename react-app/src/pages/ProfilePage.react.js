@@ -24,7 +24,7 @@ class ProfilePage extends Component {
         <div className="my-3 my-md-5">
           {this.props.auth.isAuthenticated && this.props.auth.user && (
             <p>
-              Hello {this.props.auth.user.get}
+              Hello {this.props.auth.user}
             </p>
           )}
           <Container>
