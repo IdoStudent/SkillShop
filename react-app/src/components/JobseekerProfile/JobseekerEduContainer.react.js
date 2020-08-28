@@ -24,21 +24,19 @@ class JobseekerEduContainer extends React.Component {
       // Modal State
       open: false,
 
-      
-      // End Month (Disabled if current role is ticked)
-      isDisabled: false,
+      // Current Role Checkbox
+      isChecked: false,
     };
   }
 
   componentDidMount() {
-    fetch("https://run.mocky.io/v3/ae835888-7d45-43e3-a245-70a5fc104260")
+    fetch("https://run.mocky.io/v3/567c9b5e-ce10-45e3-91d0-b86bc52e183f")
       .then(res => res.json())
       .then(
         (result) => {
-          console.log(result.length)
           for(var i = 0; i < result.length; i++) {
             this.setState({
-              dataset: this.state.dataset.concat(<JobseekerEdu jobinfo={result[i]} />),
+              dataset: this.state.dataset.concat(<JobseekerEdu eduinfo={result[i]} />),
             });
           }
         },
@@ -47,19 +45,24 @@ class JobseekerEduContainer extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.target);
 
-    const jobinfo = {
-      title: data.get('title'),
-      institution: data.get('institution'),
-      location: data.get('location'),
-      startdate: data.get('startdate'),
-      enddate: data.get('enddate'),
-      desc: data.get('jobdesc'),
+    const eduinfo = {
+      title: this.state.formtitle,
+      institution: this.state.forminstitution,
+      location: this.state.formlocation,
+      startdate: this.state.formstartdate,
+      enddate: this.state.formenddate,
+      desc: this.state.formdesc,
+      current: this.state.isChecked
+    }
+    
+    // If role is current role, we don't need an end date so set this to a value that the JobseekerExp component knows to convert to "current"
+    if(eduinfo.current == true){
+      eduinfo.enddate = "00/0000"
     }
 
     this.setState({
-      dataset: this.state.dataset.concat(<JobseekerEdu jobinfo={jobinfo}/>),
+      dataset: this.state.dataset.concat(<JobseekerEdu eduinfo={eduinfo}/>),
       open: false
     });
 
@@ -81,8 +84,6 @@ class JobseekerEduContainer extends React.Component {
 
   handleChange = (input) => (event) => {
     this.setState({ [input]: event.target.value });
-
-    console.log(event.target.value);
   };
 
   openModal = () => {
@@ -93,21 +94,7 @@ class JobseekerEduContainer extends React.Component {
     this.setState(
       {
         isChecked: !this.state.isChecked,
-      },
-      this.disableDateField
-    );
-  };
-
-  disableDateField = () => {
-    if (this.state.isChecked) {
-      this.setState({
-        isDisabled: true,
       });
-    } else {
-      this.setState({
-        isDisabled: false,
-      });
-    }
   };
 
   render() {
@@ -119,13 +106,13 @@ class JobseekerEduContainer extends React.Component {
       formlocation,
       formdesc,
       open,
-      isDisabled
+      isChecked
     } = this.state;
 
     return (
       <div className="card" name="experience">
         <Card.Body>
-          <Card.Title>Education</Card.Title>
+          <Card.Title>Experience</Card.Title>
           {this.state.dataset}
           <Segment basic textAlign={"center"} size={"mini"}>
             <Button
@@ -144,12 +131,12 @@ class JobseekerEduContainer extends React.Component {
           closeOnDimmerClick={false}
           open={open}
         >
-          <Modal.Header>Edit Education Info</Modal.Header>
+          <Modal.Header>Edit Experience Info</Modal.Header>
           <Modal.Content>
             <Form onSubmit={this.handleSubmit}>
               <Grid.Row>
                 <Grid.Col md={4}>
-                  <Form.Group label="Job Title">
+                  <Form.Group label="Degree">
                     <Form.Input
                       name="title"
                       value={formtitle}
@@ -158,7 +145,7 @@ class JobseekerEduContainer extends React.Component {
                   </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={4}>
-                  <Form.Group label="institution">
+                  <Form.Group label="Institution">
                     <Form.Input
                       name="institution"
                       value={forminstitution}
@@ -180,7 +167,7 @@ class JobseekerEduContainer extends React.Component {
               {/* ROW 2 */}
               <Grid.Row>
                 <Grid.Col md={3}>
-                  <Form.Group label="Current">
+                  <Form.Group label="Current Study">
                     <Form.Checkbox
                       label="I am currently studying"
                       name="current"
@@ -210,7 +197,7 @@ class JobseekerEduContainer extends React.Component {
                       name="enddate"
                       value={formenddate}
                       onChange={this.handleChange("formenddate")}
-                      disabled={isDisabled}
+                      disabled={isChecked}
                     />
                   </Form.Group>
                 </Grid.Col>
@@ -219,9 +206,9 @@ class JobseekerEduContainer extends React.Component {
               {/* ROW 3 */}
               <Grid.Row>
                 <Grid.Col md={12}>
-                  <Form.Group className="mb=0" label="Job Description">
+                  <Form.Group className="mb=0" label="Description">
                     <Form.Textarea
-                      name="jobdesc"
+                      name="formdesc"
                       rows={3}
                       value={formdesc}
                       onChange={this.handleChange("formdesc")}

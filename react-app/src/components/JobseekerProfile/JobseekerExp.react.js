@@ -35,8 +35,6 @@ class JobseekerExp extends React.Component {
       // Current Role Checkbox
       isChecked: props.jobinfo.current
     };
-
-    console.log(props.jobinfo.current)
   }
 
   componentDidMount() {
@@ -45,8 +43,6 @@ class JobseekerExp extends React.Component {
 
   handleChange = (input) => (event) => {
     this.setState({ [input]: event.target.value });
-
-    console.log(event.target.value);
   };
 
   handleCheckbox = () => {

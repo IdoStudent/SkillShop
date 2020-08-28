@@ -34,7 +34,6 @@ class JobseekerExpContainer extends React.Component {
       .then(res => res.json())
       .then(
         (result) => {
-          console.log(result.length)
           for(var i = 0; i < result.length; i++) {
             this.setState({
               dataset: this.state.dataset.concat(<JobseekerExp jobinfo={result[i]} />),
@@ -85,8 +84,6 @@ class JobseekerExpContainer extends React.Component {
 
   handleChange = (input) => (event) => {
     this.setState({ [input]: event.target.value });
-
-    console.log(event.target.value);
   };
 
   openModal = () => {

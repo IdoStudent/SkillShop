@@ -60,8 +60,6 @@ class GeneralInformation extends React.Component {
 
   handleChange = (input) => (event) => {
     this.setState({ [input]: event.target.value });
-
-    console.log(event.target.value);
   };
 
   handleSubmit = (event) => {
