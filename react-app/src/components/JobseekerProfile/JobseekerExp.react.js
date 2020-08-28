@@ -16,6 +16,7 @@ class JobseekerExp extends React.Component {
       enddate: props.jobinfo.enddate,
       location: props.jobinfo.location,
       desc: props.jobinfo.desc,
+      current: props.jobinfo.current,
 
       // States for editable form. Initial values set to the API data. Hardcoded for testing
       formtitle: props.jobinfo.title,
@@ -32,11 +33,10 @@ class JobseekerExp extends React.Component {
       open: false,
 
       // Current Role Checkbox
-      isChecked: false,
-
-      // End Month (Disabled if current role is ticked)
-      isDisabled: false,
+      isChecked: props.jobinfo.current
     };
+
+    console.log(props.jobinfo.current)
   }
 
   componentDidMount() {
@@ -53,22 +53,9 @@ class JobseekerExp extends React.Component {
     this.setState(
       {
         isChecked: !this.state.isChecked,
-      },
-      this.disableDateField
-    );
+      });
   };
 
-  disableDateField = () => {
-    if (this.state.isChecked) {
-      this.setState({
-        isDisabled: true,
-      });
-    } else {
-      this.setState({
-        isDisabled: false,
-      });
-    }
-  };
 
   convertDate = () => {
     var months = [
@@ -110,54 +97,86 @@ class JobseekerExp extends React.Component {
     var displayDateEnd = this.state.enddate.substring(0, 2);
     var displayYearEnd = this.state.enddate.substring(2, 7);
 
-    // IF THERE IS A SLASH (FROM FORM INPUT), REMOVE IT
-    if (displayYearEnd[0] == "/") {
-      displayYearEnd =
-        displayYearEnd[1] +
-        displayYearEnd[2] +
-        displayYearEnd[3] +
-        displayYearEnd[4];
+    // IF displayDateEnd (THE MONTH) = 00 (or of for some reason it was stored incorrectly, check if current == true) IT MEANS THE ROLE IS CURRENT, SO DISPLAY THOSE WORDS INSTEAD
+    if(displayDateEnd == "00" || this.state.current == true){
+      this.setState(() => ({
+        displaystart: displayDateStart + " " + displayYearStart,
+        displayend: "CURRENT",
+      }));
+    } else {
+      // IF THERE IS A SLASH (FROM FORM INPUT), REMOVE IT
+      if (displayYearEnd[0] == "/") {
+        displayYearEnd =
+          displayYearEnd[1] +
+          displayYearEnd[2] +
+          displayYearEnd[3] +
+          displayYearEnd[4];
+      }
+
+      if (displayDateEnd[0] == 0) {
+        displayDateEnd = displayDateEnd[1];
+      }
+
+      displayDateEnd = months[displayDateEnd - 1];
+
+      this.setState(() => ({
+        displaystart: displayDateStart + " " + displayYearStart,
+        displayend: displayDateEnd + " " + displayYearEnd,
+      }));
     }
-
-    if (displayDateEnd[0] == 0) {
-      displayDateEnd = displayDateEnd[1];
-    }
-
-    displayDateEnd = months[displayDateEnd - 1];
-
-    this.setState(() => ({
-      displaystart: displayDateStart + " " + displayYearStart,
-      displayend: displayDateEnd + " " + displayYearEnd,
-    }));
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.target);
 
-    console.log(this.state.title);
+    this.setState(prevState => ({
+      title: prevState.formtitle,
+      company: prevState.formcompany,
+      location: prevState.formlocation,
+      startdate: prevState.formstartdate,
+      enddate: prevState.formenddate,
+      desc: prevState.formdesc,
+      open: false,
+      current: prevState.isChecked,
+    }), () => {                              
+      // Convert the date once state has updated (for front-end display purposes)
+      this.convertDate()
+    });
 
-    this.setState(
-      (prevState) => ({
-        // If submitting new values, update the state to represent the new data
-        title: prevState.formtitle,
-        company: prevState.formcompany,
-        location: prevState.formlocation,
-        startdate: prevState.formstartdate,
-        enddate: prevState.formenddate,
-        desc: prevState.formdesc,
-        open: false,
-      }),
-      this.convertDate
-    );
+    // If role is current role, we don't need an end date so set this to default value for database storarge
+    if(this.state.isChecked){
+      this.setState({
+        // For database
+        enddate: "00/0000",
 
-    console.log(this.state.title);
+        // For immediate display on front-end
+        formenddate: "00/0000"
+      }, () => {          
+        // Send the data to the database once the date value has been resolved                    
+        this.sendData()
+      });
+    } else {
+      this.setState(prevState => ({
+        enddate: prevState.formenddate
+      }), () => {                              
+        // Send the data to the database once the date value has been resolved
+        this.sendData()
+      });
+    }
+  };
 
-    // Send the submitted form data to the API
-    /*fetch('API URL', {
-      method: 'POST',
-      body: data,
-    });*/
+  sendData = () => {
+    const data = [
+      this.state.title, 
+      this.state.company,
+      this.state.location,
+      this.state.startdate,
+      this.state.enddate,
+      this.state.desc,
+      this.state.current
+    ]
+
+    // API CALL TO SEND DATA
   };
 
   cancelForm = () => {
@@ -192,7 +211,7 @@ class JobseekerExp extends React.Component {
       formlocation,
       formdesc,
       open,
-      isDisabled,
+      isChecked,
     } = this.state;
 
     return (
@@ -312,7 +331,7 @@ class JobseekerExp extends React.Component {
                       mask={[/\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
                       value={formenddate}
                       onChange={this.handleChange("formenddate")}
-                      disabled={isDisabled}
+                      disabled={isChecked}
                     />
                   </Form.Group>
                 </Grid.Col>

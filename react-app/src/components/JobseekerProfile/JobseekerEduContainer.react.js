@@ -1,31 +1,260 @@
 import * as React from "react";
 
-import { Form, Card, Button } from "tabler-react";
+import { Card } from "tabler-react";
+
+import { Button, Modal, Segment } from "semantic-ui-react";
+import { Form, Grid } from "tabler-react";
 
 import JobseekerEdu from "./JobseekerEdu.react";
 
 class JobseekerEduContainer extends React.Component {
-    state = { dataset: [ <JobseekerEdu /> ] }
+  constructor(props) {
+    super(props);
 
-    addData = () => {
-        this.setState({
-            dataset: this.state.dataset.concat(<JobseekerEdu />)
-          })
+    this.state = { 
+      dataset: [ ],
+
+      formtitle: "",
+      forminstitution: "",
+      formstartdate: "",
+      formenddate: "",
+      formlocation: "",
+      formdesc: "",
+
+      // Modal State
+      open: false,
+
+      
+      // End Month (Disabled if current role is ticked)
+      isDisabled: false,
+    };
+  }
+
+  componentDidMount() {
+    fetch("https://run.mocky.io/v3/ae835888-7d45-43e3-a245-70a5fc104260")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          console.log(result.length)
+          for(var i = 0; i < result.length; i++) {
+            this.setState({
+              dataset: this.state.dataset.concat(<JobseekerEdu jobinfo={result[i]} />),
+            });
+          }
+        },
+      )
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.target);
+
+    const jobinfo = {
+      title: data.get('title'),
+      institution: data.get('institution'),
+      location: data.get('location'),
+      startdate: data.get('startdate'),
+      enddate: data.get('enddate'),
+      desc: data.get('jobdesc'),
     }
 
-    render() {
-      return (
-              <div className="card" name="experience">
-                <Card.Body>
-                  <Card.Title>Education</Card.Title>
-                  {this.state.dataset}
+    this.setState({
+      dataset: this.state.dataset.concat(<JobseekerEdu jobinfo={jobinfo}/>),
+      open: false
+    });
 
-                  <Button color="secondary" icon="plus-circle" onClick={this.addData} type="button"/>
+    // ALSO NEED TO ADD LOGIC FOR SENDING TO DATABASE
+  };
 
-                </Card.Body>
-              </div>
-      );
+  cancelForm = () => {
+    // If cancelling, reset any fields that have been changed to the original values so that when the modal is re-opened, the old values are shown
+    this.setState((prevState) => ({
+      formtitle: "",
+      forminstitution: "",
+      formlocation: "",
+      formstartdate: "",
+      formenddate: "",
+      formdesc: "",
+      open: false,
+    }));
+  };
+
+  handleChange = (input) => (event) => {
+    this.setState({ [input]: event.target.value });
+
+    console.log(event.target.value);
+  };
+
+  openModal = () => {
+    this.setState({ open: true });
+  };
+
+  handleCheckbox = () => {
+    this.setState(
+      {
+        isChecked: !this.state.isChecked,
+      },
+      this.disableDateField
+    );
+  };
+
+  disableDateField = () => {
+    if (this.state.isChecked) {
+      this.setState({
+        isDisabled: true,
+      });
+    } else {
+      this.setState({
+        isDisabled: false,
+      });
     }
+  };
+
+  render() {
+    const {
+      formtitle,
+      forminstitution,
+      formstartdate,
+      formenddate,
+      formlocation,
+      formdesc,
+      open,
+      isDisabled
+    } = this.state;
+
+    return (
+      <div className="card" name="experience">
+        <Card.Body>
+          <Card.Title>Education</Card.Title>
+          {this.state.dataset}
+          <Segment basic textAlign={"center"} size={"mini"}>
+            <Button
+              basic
+              icon="plus"
+              type="button"
+              compact
+              onClick={this.openModal}
+            />
+          </Segment>
+        </Card.Body>
+
+        {/* MODAL CONTENT */}
+        <Modal
+          style={{ position: "relative" }}
+          closeOnDimmerClick={false}
+          open={open}
+        >
+          <Modal.Header>Edit Education Info</Modal.Header>
+          <Modal.Content>
+            <Form onSubmit={this.handleSubmit}>
+              <Grid.Row>
+                <Grid.Col md={4}>
+                  <Form.Group label="Job Title">
+                    <Form.Input
+                      name="title"
+                      value={formtitle}
+                      onChange={this.handleChange("formtitle")}
+                    />
+                  </Form.Group>
+                </Grid.Col>
+                <Grid.Col md={4}>
+                  <Form.Group label="institution">
+                    <Form.Input
+                      name="institution"
+                      value={forminstitution}
+                      onChange={this.handleChange("forminstitution")}
+                    />
+                  </Form.Group>
+                </Grid.Col>
+                <Grid.Col md={4}>
+                  <Form.Group label="Location">
+                    <Form.Input
+                      name="location"
+                      value={formlocation}
+                      onChange={this.handleChange("formlocation")}
+                    />
+                  </Form.Group>
+                </Grid.Col>
+              </Grid.Row>
+
+              {/* ROW 2 */}
+              <Grid.Row>
+                <Grid.Col md={3}>
+                  <Form.Group label="Current">
+                    <Form.Checkbox
+                      label="I am currently studying"
+                      name="current"
+                      checked="true"
+                      checked={this.state.isChecked}
+                      onChange={this.handleCheckbox}
+                      // TO DO value=
+                    />
+                  </Form.Group>
+                </Grid.Col>
+                <Grid.Col md={3}>
+                  <Form.Group label="Starting Month">
+                    <Form.MaskedInput
+                      placeholder="00/0000"
+                      mask={[/\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
+                      name="startdate"
+                      value={formstartdate}
+                      onChange={this.handleChange("formstartdate")}
+                    />
+                  </Form.Group>
+                </Grid.Col>
+                <Grid.Col md={3}>
+                  <Form.Group label="End Month">
+                    <Form.MaskedInput
+                      placeholder="00/0000"
+                      mask={[/\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
+                      name="enddate"
+                      value={formenddate}
+                      onChange={this.handleChange("formenddate")}
+                      disabled={isDisabled}
+                    />
+                  </Form.Group>
+                </Grid.Col>
+              </Grid.Row>
+
+              {/* ROW 3 */}
+              <Grid.Row>
+                <Grid.Col md={12}>
+                  <Form.Group className="mb=0" label="Job Description">
+                    <Form.Textarea
+                      name="jobdesc"
+                      rows={3}
+                      value={formdesc}
+                      onChange={this.handleChange("formdesc")}
+                    />
+                  </Form.Group>
+                </Grid.Col>
+              </Grid.Row>
+
+              {/* ROW 4 - SUBMIT */}
+              <Grid.Row>
+                <Grid.Col md={12}>
+                  <Button
+                    floated="left"
+                    basic
+                    type="button"
+                    color="red"
+                    onClick={this.cancelForm}
+                  >
+                    {" "}
+                    Cancel{" "}
+                  </Button>
+                  <Button floated="right" basic type="submit" color="green">
+                    {" "}
+                    Accept Changes{" "}
+                  </Button>
+                </Grid.Col>
+              </Grid.Row>
+            </Form>
+          </Modal.Content>
+        </Modal>
+      </div>
+    );
+  }
 }
 
 export default JobseekerEduContainer;

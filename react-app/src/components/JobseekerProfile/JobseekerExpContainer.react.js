@@ -24,14 +24,13 @@ class JobseekerExpContainer extends React.Component {
       // Modal State
       open: false,
 
-      
-      // End Month (Disabled if current role is ticked)
-      isDisabled: false,
+      // Current Role Checkbox
+      isChecked: false,
     };
   }
 
   componentDidMount() {
-    fetch("https://run.mocky.io/v3/ae835888-7d45-43e3-a245-70a5fc104260")
+    fetch("https://run.mocky.io/v3/ae18d559-f975-494a-94ce-5334637f05d2")
       .then(res => res.json())
       .then(
         (result) => {
@@ -47,15 +46,20 @@ class JobseekerExpContainer extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.target);
 
     const jobinfo = {
-      title: data.get('title'),
-      company: data.get('company'),
-      location: data.get('location'),
-      startdate: data.get('startdate'),
-      enddate: data.get('enddate'),
-      desc: data.get('jobdesc'),
+      title: this.state.formtitle,
+      company: this.state.formcompany,
+      location: this.state.formlocation,
+      startdate: this.state.formstartdate,
+      enddate: this.state.formenddate,
+      desc: this.state.formdesc,
+      current: this.state.isChecked
+    }
+    
+    // If role is current role, we don't need an end date so set this to a value that the JobseekerExp component knows to convert to "current"
+    if(jobinfo.current == true){
+      jobinfo.enddate = "00/0000"
     }
 
     this.setState({
@@ -93,21 +97,7 @@ class JobseekerExpContainer extends React.Component {
     this.setState(
       {
         isChecked: !this.state.isChecked,
-      },
-      this.disableDateField
-    );
-  };
-
-  disableDateField = () => {
-    if (this.state.isChecked) {
-      this.setState({
-        isDisabled: true,
       });
-    } else {
-      this.setState({
-        isDisabled: false,
-      });
-    }
   };
 
   render() {
@@ -119,7 +109,7 @@ class JobseekerExpContainer extends React.Component {
       formlocation,
       formdesc,
       open,
-      isDisabled
+      isChecked
     } = this.state;
 
     return (
@@ -210,7 +200,7 @@ class JobseekerExpContainer extends React.Component {
                       name="enddate"
                       value={formenddate}
                       onChange={this.handleChange("formenddate")}
-                      disabled={isDisabled}
+                      disabled={isChecked}
                     />
                   </Form.Group>
                 </Grid.Col>

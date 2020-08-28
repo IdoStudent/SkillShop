@@ -9,6 +9,7 @@ class Skills extends React.Component {
     this.state = {
      showSaveButton: false,
      showCancelButton: false,
+
     };
   }
 
@@ -47,6 +48,7 @@ class Skills extends React.Component {
                     label="Communication"
                     name="communication"
                     value="Communication"
+                    checked='true'
                   />
                   <Form.SelectGroupItem
                     label="Teamwork"
