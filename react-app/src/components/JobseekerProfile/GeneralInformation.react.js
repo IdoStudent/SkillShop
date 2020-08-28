@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { Form, Card, Grid } from "tabler-react";
-import { Button, Header, Icon, Modal } from "semantic-ui-react";
+import { Button, Modal } from "semantic-ui-react";
 
 import '../../index.css';
 
@@ -64,7 +64,6 @@ class GeneralInformation extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.target);
 
     this.setState((prevState) => ({
       // If submitting new values, update the state to represent the new data

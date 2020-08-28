@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 
-import { Container, Grid, Card, Form, Header, Alert } from "tabler-react";
+import { Container, Grid, Header, Alert } from "tabler-react";
 
 import SiteWrapper from "../SiteWrapper.react";
 

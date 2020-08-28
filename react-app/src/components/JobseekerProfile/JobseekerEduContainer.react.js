@@ -57,7 +57,7 @@ class JobseekerEduContainer extends React.Component {
     }
     
     // If role is current role, we don't need an end date so set this to a value that the JobseekerExp component knows to convert to "current"
-    if(eduinfo.current == true){
+    if(eduinfo.current === true){
       eduinfo.enddate = "00/0000"
     }
 

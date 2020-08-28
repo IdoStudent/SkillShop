@@ -74,7 +74,7 @@ class JobseekerExp extends React.Component {
     var displayYearStart = this.state.startdate.substring(2, 7);
 
     // IF THERE IS A SLASH (FROM FORM INPUT), REMOVE IT SO IT WILL NOT DISPLAY
-    if (displayYearStart[0] == "/") {
+    if (displayYearStart[0] === "/") {
       displayYearStart =
         displayYearStart[1] +
         displayYearStart[2] +
@@ -83,7 +83,7 @@ class JobseekerExp extends React.Component {
     }
 
     // IF THE MONTH NUMBER STARTS WITH A 0, REMOVE IT SO THE ARRAY CAN BE PROPERLY INDEXED
-    if (displayDateStart[0] == 0) {
+    if (displayDateStart[0] === "0") {
       displayDateStart = displayDateStart[1];
     }
 
@@ -93,15 +93,15 @@ class JobseekerExp extends React.Component {
     var displayDateEnd = this.state.enddate.substring(0, 2);
     var displayYearEnd = this.state.enddate.substring(2, 7);
 
-    // IF displayDateEnd (THE MONTH) = 00 (or of for some reason it was stored incorrectly, check if current == true) IT MEANS THE ROLE IS CURRENT, SO DISPLAY THOSE WORDS INSTEAD
-    if(displayDateEnd == "00" || this.state.current == true){
+    // IF displayDateEnd (THE MONTH) = 00 (or of for some reason it was stored incorrectly, check if current === true) IT MEANS THE ROLE IS CURRENT, SO DISPLAY THOSE WORDS INSTEAD
+    if(displayDateEnd === "00" || this.state.current === true){
       this.setState(() => ({
         displaystart: displayDateStart + " " + displayYearStart,
         displayend: "CURRENT",
       }));
     } else {
       // IF THERE IS A SLASH (FROM FORM INPUT), REMOVE IT
-      if (displayYearEnd[0] == "/") {
+      if (displayYearEnd[0] === "/") {
         displayYearEnd =
           displayYearEnd[1] +
           displayYearEnd[2] +
@@ -109,7 +109,7 @@ class JobseekerExp extends React.Component {
           displayYearEnd[4];
       }
 
-      if (displayDateEnd[0] == 0) {
+      if (displayDateEnd[0] === "0") {
         displayDateEnd = displayDateEnd[1];
       }
 
