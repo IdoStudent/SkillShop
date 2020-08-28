@@ -10,7 +10,8 @@ import {
   LandingPage,
   JobseekerRegister,
   EmployerRegister,
-  Login
+  Login,
+  Candidates
 } from "./pages";
 
 import "tabler-react/dist/Tabler.css";
@@ -46,6 +47,7 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/" render={(props) => <ProfilePage {...props} auth={authProps} />} />
             <Route exact path="/setup" render={(props) => <ProfileSetup {...props} auth={authProps} />}  />
+            <Route exact path="/candidates" render={(props) => <Candidates {...props} auth={authProps} />}  />
             <Route exact path="/employersetup" render={(props) => <EmployerSetup {...props} auth={authProps} />}  />
             <Route exact path="/landingpage" component={LandingPage} />
             <Route exact path="/jobseekerregister" render={(props) => <JobseekerRegister {...props} auth={authProps} />} />

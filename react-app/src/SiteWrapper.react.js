@@ -45,6 +45,13 @@ const navBarItems: Array<navItem> = [
     useExact: true,
   },
   {
+    value: "Candidates Screen (Employer - Placeholder)",
+    to: "/candidates",
+    icon: "home",
+    LinkComponent: withRouter(NavLink),
+    useExact: true,
+  },
+  {
     value: "Home (Employer - Placeholder)",
     icon: "home",
     to: "/EmployerSetup",
