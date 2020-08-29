@@ -33,26 +33,26 @@ class GeneralInformation extends React.Component {
   }
 
   componentDidMount() {
-    fetch("https://run.mocky.io/v3/f707b49e-b119-45e5-b6a1-0cca66fa3421")
+    fetch("https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata")
       .then(res => res.json())
       .then(
         (result) => {
           this.setState({
-            firstname: result.firstname,
-            middlename: result.middlename,
-            surname: result.surname,
-            city: result.city,
-            postcode: result.postcode,
-            state: result.state,
-            about: result.about,
+            firstname: result.Item.userFirstName,
+            middlename: result.Item.userMiddleName,
+            surname: result.Item.userLastName,
+            city: result.Item.userCity,
+            postcode: result.Item.userPostCode,
+            state: result.Item.userState,
+            about: result.Item.userAbout,
 
-            formfirstname: result.firstname,
-            formmiddlename: result.middlename,
-            formsurname: result.surname,
-            formcity: result.city,
+            formfirstname: result.Item.userFirstName,
+            formmiddlename: result.Item.userMiddleName,
+            formsurname: result.Item.userLastName,
+            formcity: result.Item.userCity,
             formpostcode: result.postcode,
-            formstate: result.state,
-            formabout: result.about,
+            formstate: result.Item.userState,
+            formabout: result.Item.userAbout,
           });
         },
       )
@@ -82,7 +82,7 @@ class GeneralInformation extends React.Component {
     }))
     try {
       const params = {
-        "userEmail": "testapi12@gmail.com",
+        "userEmail": "shaahin@gmail.com",
         "userFirstName": this.state.formfirstname,
         "userMiddleName": this.state.formmiddlename,
         "userLastName": this.state.formsurname,
