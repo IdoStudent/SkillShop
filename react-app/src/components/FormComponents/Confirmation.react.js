@@ -2,8 +2,6 @@
 import React, { Component } from "react";
 import { Button, Header, Icon, List } from "semantic-ui-react";
 
-import { Form, Grid, Container } from "tabler-react";
-
 class Confirmation extends Component {
   saveAndContinue = (e) => {
     e.preventDefault();
@@ -26,7 +24,6 @@ class Confirmation extends Component {
         state,
         relocate,
         about,
-        communication,
       },
     } = this.props;
 

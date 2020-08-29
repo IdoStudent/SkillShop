@@ -10,51 +10,169 @@ class JobseekerExp extends React.Component {
     super(props);
     this.state = {
       // States from API, default data values. Hardcoded for testing
-      title: "test title",
-      company: "test company",
-      dates: "MAR 2016 - JAN 2020",
-      location: "test location",
-      desc:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      title: props.jobinfo.title,
+      company: props.jobinfo.company,
+      startdate: props.jobinfo.startdate,
+      enddate: props.jobinfo.enddate,
+      location: props.jobinfo.location,
+      desc: props.jobinfo.desc,
+      current: props.jobinfo.current,
 
       // States for editable form. Initial values set to the API data. Hardcoded for testing
-      formtitle: "test title",
-      formcompany: "test company",
-      formdates: "MAR 2016 - JAN 2020",
-      formlocation: "test location",
-      formdesc:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      formtitle: props.jobinfo.title,
+      formcompany: props.jobinfo.company,
+      formstartdate: props.jobinfo.startdate,
+      formenddate: props.jobinfo.enddate,
+      formlocation: props.jobinfo.location,
+      formdesc: props.jobinfo.desc,
+
+      displaystart: "",
+      displayend: "",
 
       // Modal State
       open: false,
+
+      // Current Role Checkbox
+      isChecked: props.jobinfo.current
     };
+  }
+
+  componentDidMount() {
+    this.convertDate();
   }
 
   handleChange = (input) => (event) => {
     this.setState({ [input]: event.target.value });
+  };
 
-    console.log(event.target.value);
+  handleCheckbox = () => {
+    this.setState(
+      {
+        isChecked: !this.state.isChecked,
+      });
+  };
+
+
+  convertDate = () => {
+    var months = [
+      "JAN",
+      "FEB",
+      "MAR",
+      "APR",
+      "MAY",
+      "JUN",
+      "JUL",
+      "AUG",
+      "SEP",
+      "OCT",
+      "NOV",
+      "DEC",
+    ];
+
+    // START DATE
+    var displayDateStart = this.state.startdate.substring(0, 2);
+    var displayYearStart = this.state.startdate.substring(2, 7);
+
+    // IF THERE IS A SLASH (FROM FORM INPUT), REMOVE IT SO IT WILL NOT DISPLAY
+    if (displayYearStart[0] === "/") {
+      displayYearStart =
+        displayYearStart[1] +
+        displayYearStart[2] +
+        displayYearStart[3] +
+        displayYearStart[4];
+    }
+
+    // IF THE MONTH NUMBER STARTS WITH A 0, REMOVE IT SO THE ARRAY CAN BE PROPERLY INDEXED
+    if (displayDateStart[0] === "0") {
+      displayDateStart = displayDateStart[1];
+    }
+
+    displayDateStart = months[displayDateStart - 1];
+
+    // END DATE
+    var displayDateEnd = this.state.enddate.substring(0, 2);
+    var displayYearEnd = this.state.enddate.substring(2, 7);
+
+    // IF displayDateEnd (THE MONTH) = 00 (or of for some reason it was stored incorrectly, check if current === true) IT MEANS THE ROLE IS CURRENT, SO DISPLAY THOSE WORDS INSTEAD
+    if(displayDateEnd === "00" || this.state.current === true){
+      this.setState(() => ({
+        displaystart: displayDateStart + " " + displayYearStart,
+        displayend: "CURRENT",
+      }));
+    } else {
+      // IF THERE IS A SLASH (FROM FORM INPUT), REMOVE IT
+      if (displayYearEnd[0] === "/") {
+        displayYearEnd =
+          displayYearEnd[1] +
+          displayYearEnd[2] +
+          displayYearEnd[3] +
+          displayYearEnd[4];
+      }
+
+      if (displayDateEnd[0] === "0") {
+        displayDateEnd = displayDateEnd[1];
+      }
+
+      displayDateEnd = months[displayDateEnd - 1];
+
+      this.setState(() => ({
+        displaystart: displayDateStart + " " + displayYearStart,
+        displayend: displayDateEnd + " " + displayYearEnd,
+      }));
+    }
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.target);
 
-    this.setState((prevState) => ({
-      // If submitting new values, update the state to represent the new data
+    this.setState(prevState => ({
       title: prevState.formtitle,
       company: prevState.formcompany,
       location: prevState.formlocation,
-      dates: prevState.formdates,
+      startdate: prevState.formstartdate,
+      enddate: prevState.formenddate,
       desc: prevState.formdesc,
       open: false,
-    }));
+      current: prevState.isChecked,
+    }), () => {                              
+      // Convert the date once state has updated (for front-end display purposes)
+      this.convertDate()
+    });
 
-    // Send the submitted form data to the API
-    /*fetch('API URL', {
-      method: 'POST',
-      body: data,
-    });*/
+    // If role is current role, we don't need an end date so set this to default value for database storarge
+    if(this.state.isChecked){
+      this.setState({
+        // For database
+        enddate: "00/0000",
+
+        // For immediate display on front-end
+        formenddate: "00/0000"
+      }, () => {          
+        // Send the data to the database once the date value has been resolved                    
+        this.sendData()
+      });
+    } else {
+      this.setState(prevState => ({
+        enddate: prevState.formenddate
+      }), () => {                              
+        // Send the data to the database once the date value has been resolved
+        this.sendData()
+      });
+    }
+  };
+
+  sendData = () => {
+    const data = [
+      this.state.title, 
+      this.state.company,
+      this.state.location,
+      this.state.startdate,
+      this.state.enddate,
+      this.state.desc,
+      this.state.current
+    ]
+
+    // API CALL TO SEND DATA
   };
 
   cancelForm = () => {
@@ -63,7 +181,8 @@ class JobseekerExp extends React.Component {
       formtitle: prevState.title,
       formcompany: prevState.company,
       formlocation: prevState.location,
-      formdates: prevState.dates,
+      formstartdate: prevState.startdate,
+      formenddate: prevState.enddate,
       formdesc: prevState.desc,
       open: false,
     }));
@@ -77,15 +196,18 @@ class JobseekerExp extends React.Component {
     const {
       title,
       company,
-      dates,
+      displaystart,
+      displayend,
       location,
       desc,
       formtitle,
       formcompany,
-      formdates,
+      formstartdate,
+      formenddate,
       formlocation,
       formdesc,
       open,
+      isChecked,
     } = this.state;
 
     return (
@@ -104,10 +226,12 @@ class JobseekerExp extends React.Component {
                 <p>{desc}</p>
               </Grid.Row>
             </Grid.Col>
-            <Grid.Col md={5}>
+            <Grid.Col md={4}>
               <Grid.Row>
                 <Container textAlign="right">
-                  <Header size="small">{dates}</Header>
+                  <Header size="small">
+                    {displaystart} - {displayend}
+                  </Header>
                 </Container>
               </Grid.Row>
               <Grid.Row>
@@ -115,7 +239,8 @@ class JobseekerExp extends React.Component {
                   <Header size="small">{location}</Header>
                 </Container>
               </Grid.Row>
-
+            </Grid.Col>
+            <Grid.Col md={1}>
               {/* MODAL BUTTON */}
               <Button
                 floated="right"
@@ -171,46 +296,40 @@ class JobseekerExp extends React.Component {
 
               {/* ROW 2 */}
               <Grid.Row>
-              <Grid.Col md={3}>
+                <Grid.Col md={3}>
                   <Form.Group label="Current Role">
                     <Form.Checkbox
                       label="I am currently in this role"
                       name="current"
+                      checked="true"
+                      checked={this.state.isChecked}
+                      onChange={this.handleCheckbox}
                       // TO DO value=
                     />
                   </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={3}>
-                <Form.Group label="Starting Month">
-                  <Form.MaskedInput
-                    placeholder="00/0000"
-                    mask={[
-                      /\d/,
-                      /\d/,
-                      "/",
-                      /\d/,
-                      /\d/,
-                      /\d/,
-                      /\d/,
-                    ]}
-                  />
-                </Form.Group>
+                  <Form.Group label="Starting Month">
+                    <Form.MaskedInput
+                      placeholder="00/0000"
+                      name="startdate"
+                      mask={[/\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
+                      value={formstartdate}
+                      onChange={this.handleChange("formstartdate")}
+                    />
+                  </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={3}>
-                <Form.Group label="End Month">
-                  <Form.MaskedInput
-                    placeholder="00/0000"
-                    mask={[
-                      /\d/,
-                      /\d/,
-                      "/",
-                      /\d/,
-                      /\d/,
-                      /\d/,
-                      /\d/,
-                    ]}
-                  />
-                </Form.Group>
+                  <Form.Group label="End Month">
+                    <Form.MaskedInput
+                      placeholder="00/0000"
+                      name="enddate"
+                      mask={[/\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
+                      value={formenddate}
+                      onChange={this.handleChange("formenddate")}
+                      disabled={isChecked}
+                    />
+                  </Form.Group>
                 </Grid.Col>
               </Grid.Row>
 

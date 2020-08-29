@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 
-import { Container, Grid, Card, Form, Header, Alert } from "tabler-react";
+import { Container, Grid, Header, Alert } from "tabler-react";
 
 import SiteWrapper from "../SiteWrapper.react";
 
@@ -10,18 +10,23 @@ import GeneralInformation from "../components/JobseekerProfile/GeneralInformatio
 import Skills from "../components/JobseekerProfile/Skills.react";
 import JobseekerExpContainer from "../components/JobseekerProfile/JobseekerExpContainer.react";
 import JobseekerEduContainer from "../components/JobseekerProfile/JobseekerEduContainer.react";
-
+import RemoveUser from "../components/JobseekerProfile/RemoveUser.react";
 class ProfilePage extends Component {
   render() {
     return (
       <SiteWrapper>
         <Alert type="warning" isDismissible>
           <center>
-            All information on your profile is publically available to potential
+            All information on your profile is publicly available to potential
             employers.
           </center>
         </Alert>
         <div className="my-3 my-md-5">
+          {this.props.auth.isAuthenticated && this.props.auth.user && (
+            <p>
+              Hello {this.props.auth.user}
+            </p>
+          )}
           <Container>
             <Grid.Row>
               <Grid.Col lg={12}>
@@ -38,6 +43,9 @@ class ProfilePage extends Component {
 
                 {/* Jobseeker Education Set */}
                 <JobseekerEduContainer />
+
+                {/* Remove User Set */}
+                <RemoveUser />
               </Grid.Col>
             </Grid.Row>
           </Container>

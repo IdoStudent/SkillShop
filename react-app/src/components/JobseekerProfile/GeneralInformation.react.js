@@ -1,7 +1,9 @@
 import * as React from "react";
 import axios from "axios";
 import { Form, Card, Grid } from "tabler-react";
-import { Button, Header, Icon, Modal } from "semantic-ui-react";
+import { Button, Modal } from "semantic-ui-react";
+
+import '../../index.css';
 
 const config = require('../config.json');
 
@@ -60,13 +62,10 @@ class GeneralInformation extends React.Component {
 
   handleChange = (input) => (event) => {
     this.setState({ [input]: event.target.value });
-
-    console.log(event.target.value);
   };
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.target);
 
     this.setState((prevState) => ({
       // If submitting new values, update the state to represent the new data
@@ -150,6 +149,7 @@ class GeneralInformation extends React.Component {
                   basic
                   icon="pencil"
                   type="button"
+                  compact
                   onClick={this.openModal}
                 />
               </Grid.Col>
