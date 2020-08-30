@@ -38,12 +38,14 @@ class Login extends Component {
     try {
       const user = await Auth.signIn(this.state.username, this.state.password);
       console.log(user);
-      console.log('Auth')
+      // console.log('Auth')
       this.props.auth.setAuthStatus(true);
-      console.log('authStatus');
+      // console.log('authStatus');
       this.props.auth.setUser(user);
-      console.log('user');
+      // console.log('user');
+      // this.props.history.push("/testuser");
       this.props.history.push("/");
+
     }catch(error) {
       console.log('Error')
       let err = null;

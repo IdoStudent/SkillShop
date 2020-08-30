@@ -37,7 +37,8 @@ class LandingPage extends Component {
 
     handleJobseekerRegister = () => {
         console.log('jobseeker register')
-        this.setState({ jobseekerRegisterWindow: true });
+        this.props.history.push("/jobseekerregister");
+        // this.setState({ jobseekerRegisterWindow: true });
     };
 
     handleEmployerRegister = () => {

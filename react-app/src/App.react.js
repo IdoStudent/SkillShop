@@ -11,7 +11,8 @@ import {
   JobseekerRegister,
   EmployerRegister,
   Login,
-  Candidates
+  Candidates,
+  TestUser
 } from "./pages";
 
 import "tabler-react/dist/Tabler.css";
@@ -28,10 +29,12 @@ class App extends React.Component {
 
   setAuthStatus = authenticated => {
     this.setState({ isAuthenticated: authenticated });
+    console.log('set auth');
   }
 
   setUser = user => {
     this.setState({ user: user });
+    console.log('set user');
   }
 
   render(){
@@ -49,11 +52,12 @@ class App extends React.Component {
             <Route exact path="/setup" render={(props) => <ProfileSetup {...props} auth={authProps} />}  />
             <Route exact path="/candidates" render={(props) => <Candidates {...props} auth={authProps} />}  />
             <Route exact path="/employersetup" render={(props) => <EmployerSetup {...props} auth={authProps} />}  />
-            
-            <Route exact path="/landingpage" component={LandingPage} />
+
+            <Route exact path="/landingpage" render={(props) => <LandingPage {...props} auth={authProps} />} />
             <Route exact path="/jobseekerregister" render={(props) => <JobseekerRegister {...props} auth={authProps} />} />
             <Route exact path="/employerregister" render={(props) => <EmployerRegister {...props} auth={authProps} />} />
             <Route exact path="/login" render={(props) => <Login {...props} auth={authProps} />} />
+            <Route exact path="/testuser" render={(props) => <TestUser {...props} auth={authProps} name="ido" />} />
             <Route component={Error404} />
           </Switch>
         </Router>

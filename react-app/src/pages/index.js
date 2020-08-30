@@ -7,6 +7,7 @@ import JobseekerRegister from "./JobseekerRegister.react";
 import EmployerRegister from "./EmployerRegister.react";
 import Login from "./Login.react";
 import Candidates from "./Candidates.react";
+import TestUser from "./TestUser.react"
 
 export {
   Error404,
@@ -17,5 +18,6 @@ export {
   JobseekerRegister,
   EmployerRegister,
   Login,
-  Candidates
+  Candidates,
+  TestUser
 };
