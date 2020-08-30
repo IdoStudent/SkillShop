@@ -38,6 +38,7 @@ class EmployerRegister extends Component {
     // }
 
     // AWS Cognito integration here
+    this.state.username = this.state.email;
     const { username, email, password} = this.state;
     try{
         const signUpResponse = await Auth.signUp({
@@ -77,7 +78,7 @@ class EmployerRegister extends Component {
           {/* <FormErrors formerrors={this.state.errors} /> */}
 
           <form onSubmit={this.handleSubmit}>
-            <div className="field">
+            {/* <div className="field">
               <p className="control">
                 <input 
                   className="input" 
@@ -89,7 +90,7 @@ class EmployerRegister extends Component {
                   onChange={this.onInputChange}
                 />
               </p>
-            </div>
+            </div> */}
             <div className="field">
               <p className="control has-icons-left has-icons-right">
                 <input 

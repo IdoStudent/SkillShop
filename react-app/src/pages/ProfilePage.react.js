@@ -22,11 +22,6 @@ class ProfilePage extends Component {
           </center>
         </Alert>
         <div className="my-3 my-md-5">
-          {this.props.auth.isAuthenticated && this.props.auth.user && (
-            <p>
-              Hello {this.props.auth.user}
-            </p>
-          )}
           <Container>
             <Grid.Row>
               <Grid.Col lg={12}>
