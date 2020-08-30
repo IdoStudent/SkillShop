@@ -7,6 +7,7 @@ class EmployerRegister extends Component {
     email: "",
     password: "",
     confirmpassword: "",
+    role: "Employer",
     errors: {
       cognito: null,
       blankfield: false,
@@ -39,13 +40,14 @@ class EmployerRegister extends Component {
 
     // AWS Cognito integration here
     this.state.username = this.state.email;
-    const { username, email, password} = this.state;
+    const { username, email, password } = this.state;
     try{
         const signUpResponse = await Auth.signUp({
             username,
             password,
             attributes: {
-                email: email
+                email: email,
+                'custom:role': this.state.role
             }
         });
         console.log(signUpResponse);
