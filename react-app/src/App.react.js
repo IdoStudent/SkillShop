@@ -8,11 +8,11 @@ import {
   ProfileSetup,
   EmployerSetup,
   LandingPage,
-  JobseekerRegister,
-  EmployerRegister,
   Login,
   Candidates,
-  TestUser
+  TestUser,
+  RegistrationPageEmployer,
+  RegistrationPageJobseeker
 } from "./pages";
 
 import "tabler-react/dist/Tabler.css";
@@ -54,10 +54,10 @@ class App extends React.Component {
             <Route exact path="/employersetup" render={(props) => <EmployerSetup {...props} auth={authProps} />}  />
 
             <Route exact path="/landingpage" render={(props) => <LandingPage {...props} auth={authProps} />} />
-            <Route exact path="/jobseekerregister" render={(props) => <JobseekerRegister {...props} auth={authProps} />} />
-            <Route exact path="/employerregister" render={(props) => <EmployerRegister {...props} auth={authProps} />} />
+            <Route exact path="/registrationpageemployer" render={(props) => <RegistrationPageEmployer {...props} auth={authProps} />} />
+            <Route exact path="/registrationpagejobseeker" render={(props) => <RegistrationPageJobseeker {...props} auth={authProps} />} />
             <Route exact path="/login" render={(props) => <Login {...props} auth={authProps} />} />
-            <Route exact path="/testuser" render={(props) => <TestUser {...props} auth={authProps} name="ido" />} />
+            <Route exact path="/testuser" render={(props) => <TestUser {...props} auth={authProps} />} />
             <Route component={Error404} />
           </Switch>
         </Router>

@@ -22,7 +22,7 @@ class TestUser extends Component {
                 alert(err);
                 return;
             }
-            console.log(result[2].getValue());
+            console.log(result);
         });
     }
     render() {

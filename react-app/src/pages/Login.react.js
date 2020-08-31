@@ -1,49 +1,22 @@
 import React, { Component } from 'react';
-// import FormErrors from "../FormErrors";
-// import Validate from "../utility/FormValidation";
 import { Auth } from "aws-amplify";
+
+import { Header,Form,Button,Grid,Message } from "semantic-ui-react";
 
 class Login extends Component {
   state = {
     username: "",
     password: "",
-    errors: {
-      cognito: null,
-      blankfield: false
-    }
   };
-
-//   clearErrorState = () => {
-//     this.setState({
-//       errors: {
-//         cognito: null,
-//         blankfield: false
-//       }
-//     });
-//   };
 
   handleSubmit = async event => {
     event.preventDefault();
 
-    // Form validation
-    // this.clearErrorState();
-    // const error = Validate(event, this.state);
-    // if (error) {
-    //   this.setState({
-    //     errors: { ...this.state.errors, ...error }
-    //   });
-    // }
-
     // AWS Cognito integration here
     try {
       const user = await Auth.signIn(this.state.username, this.state.password);
-      console.log(user);
-      // console.log('Auth')
       this.props.auth.setAuthStatus(true);
-      // console.log('authStatus');
       this.props.auth.setUser(user);
-      // console.log('user');
-      // this.props.history.push("/testuser");
       this.props.history.push("/");
 
     }catch(error) {
@@ -68,55 +41,42 @@ class Login extends Component {
 
   render() {
     return (
-      <section className="section auth">
-        <div className="container">
-          <h1>Log in</h1>
-          {/* <FormErrors formerrors={this.state.errors} /> */}
-
-          <form onSubmit={this.handleSubmit}>
-            <div className="field">
-              <p className="control">
-                <input 
-                  className="input" 
-                  type="text"
-                  id="username"
-                  aria-describedby="usernameHelp"
-                  placeholder="Enter username or email"
-                  value={this.state.username}
-                  onChange={this.onInputChange}
-                />
-              </p>
-            </div>
-            <div className="field">
-              <p className="control has-icons-left">
-                <input 
-                  className="input" 
-                  type="password"
-                  id="password"
-                  placeholder="Password"
-                  value={this.state.password}
-                  onChange={this.onInputChange}
-                />
-                <span className="icon is-small is-left">
-                  <i className="fas fa-lock"></i>
-                </span>
-              </p>
-            </div>
-            <div className="field">
-              <p className="control">
-                <a href="/forgotpassword">Forgot password?</a>
-              </p>
-            </div>
-            <div className="field">
-              <p className="control">
-                <button className="button is-success">
-                  Login
-                </button>
-              </p>
-            </div>
-          </form>
-        </div>
-      </section>
+      <div>
+        <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
+          <Grid.Column style={{ maxWidth: 450 }}>
+              <Header as="h1" size="huge">Login</Header>
+              <Form onSubmit={this.handleSubmit}>
+                  <Form.Field>
+                      <label>Email</label>
+                      <input 
+                        className="input" 
+                        type="text"
+                        id="username"
+                        aria-describedby="usernameHelp"
+                        placeholder="Enter username or email"
+                        value={this.state.username}
+                        onChange={this.onInputChange}
+                      />
+                  </Form.Field>
+                  <Form.Field>
+                      <label>Password</label>
+                      <input 
+                          className="input" 
+                          type="password"
+                          id="password"
+                          placeholder="Password"
+                          value={this.state.password}
+                          onChange={this.onInputChange}
+                      />
+                  </Form.Field>
+                  <Button type='submit'>Submit</Button>
+                  <Message>
+                      Don't have an account? <a href='/landingpage'>Go Back</a>
+                  </Message>
+              </Form>
+          </Grid.Column>
+        </Grid>
+      </div>
     );
   }
 }

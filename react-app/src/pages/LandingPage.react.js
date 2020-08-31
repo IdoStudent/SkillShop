@@ -10,8 +10,6 @@ import {
     Button,
   } from "tabler-react";
 
-import EmployerRegister from "./EmployerRegister.react";
-
 import background from '../img/background.png';
 import logo from '../img/middlelogo.png';
 
@@ -37,13 +35,13 @@ class LandingPage extends Component {
 
     handleJobseekerRegister = () => {
         console.log('jobseeker register')
-        this.props.history.push("/jobseekerregister");
+        this.props.history.push("/registrationpagejobseeker");
         // this.setState({ jobseekerRegisterWindow: true });
     };
 
     handleEmployerRegister = () => {
         console.log('employer register')
-        this.props.history.push("/employerregister");
+        this.props.history.push("/registrationpageemployer");
         // this.setState({ employerRegisterWindow: true });
         // this.setState({ landingPageWindow: false });
     };
