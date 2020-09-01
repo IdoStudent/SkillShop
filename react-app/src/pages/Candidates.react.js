@@ -8,7 +8,9 @@ import { Button, Modal } from "semantic-ui-react";
 
 import SiteWrapper from "../SiteWrapper.react";
 
-import JobEditModal from "./JobEditModal.react"
+import JobEditModal from "../components/JobEditModal.react";
+import JobFiltersModal from "../components/JobFiltersModal.react";
+import JobNewModal from "../components/JobNewModal.react";
 
 class Candidates extends React.Component {
   constructor(props) {
@@ -27,11 +29,11 @@ class Candidates extends React.Component {
       // For example, if the first job profile in the list is selected, our value will be 0 (index 0). If we want to get the industry of this job profile, we can do so by typing: {this.state.data[this.state.selectValue].industry}
       selectValue: 0,
 
-        // Modal State for information edit
-        openInfo: false,
+      // Modal State for information edit
+      openInfo: false,
 
-        // Modal State for filters edit
-        openFilter: false,
+      // Modal State for filters edit
+      openFilter: false,
     };
   }
 
@@ -74,6 +76,14 @@ class Candidates extends React.Component {
     this.setState({ openFilter: false });
   };
 
+  openModalNew = () => {
+    this.setState({ openNew: true });
+  };
+
+  closeModalNew = () => {
+    this.setState({ openNew: false });
+  };
+
   createSelectItems() {
     let items = [];
     for (var i = 0; i < this.state.data.length; i++) {
@@ -90,10 +100,42 @@ class Candidates extends React.Component {
   }
 
   handleSelect = (event) => {
+    this.setState({
+      selectValue: event.target.value,
+    });
+  };
+
+  acceptChangesInfo = (newInfo) => {
+    let tmpdata = [...this.state.data];
+
+    tmpdata[this.state.selectValue].title = newInfo[0];
+    tmpdata[this.state.selectValue].industry = newInfo[1];
+    tmpdata[this.state.selectValue].location = newInfo[2];
+    tmpdata[this.state.selectValue].about = newInfo[3];
+
+    console.log(tmpdata);
+
     this.setState(
       {
-        selectValue: event.target.value,
-      });
+        openInfo: false,
+        data: tmpdata,
+      },
+      () => {
+        console.log(this.state.data);
+        this.createSelectItems();
+      }
+    );
+
+    // After the above code has been executed, the new data needs to be sent to the database to update the record for the job profile
+    // Can use either the state data or the newInfo data, it will be the same
+  };
+
+  createNewProfile = (newInfo) => {
+    // This can be done in a few ways but I think the best way (in terms of reliability) would be to first send the data to the database, and then just force a reload of this component so it does a new API call and collects the newly created data
+    // I think if we append the data to the state directly it leaves too many possibilities for a mistmatch between what is on the front-end and what's on the database
+    // It's doable both ways though so doesn't really matter
+
+    this.setState({openNew: false})
   };
 
   render() {
@@ -120,7 +162,6 @@ class Candidates extends React.Component {
                           </Form.Select>
                         </Form.Group>
                       </Grid.Col>
-
                       <Grid.Col offset={4} md={4}>
                         <Button
                           floated="right"
@@ -138,6 +179,13 @@ class Candidates extends React.Component {
                         />
                       </Grid.Col>
                     </Grid.Row>
+                    <Button
+                      floated="right"
+                      basic
+                      icon="plus"
+                      type="button"
+                      onClick={this.openModalNew}
+                    />
                   </Card.Body>
                 </Container>
 
@@ -149,27 +197,52 @@ class Candidates extends React.Component {
             </Grid.Row>
           </Container>
 
+          {/* Edit Job Info */}
           <Modal
-          style={{ position: "relative" }}
-          closeOnDimmerClick={false}
-          open={this.state.openInfo}
-        >
-          <Modal.Header>Edit Job Profile Info</Modal.Header>
-          <Modal.Content>
-            <JobEditModal closeModal={this.closeModalInfo} data={this.state.data[this.state.selectValue]} />
-          </Modal.Content>
-        </Modal>
+            style={{ position: "relative" }}
+            closeOnDimmerClick={false}
+            open={this.state.openInfo}
+          >
+            <Modal.Header>Edit Job Profile Info</Modal.Header>
+            <Modal.Content>
+              <JobEditModal
+                closeModal={this.closeModalInfo}
+                acceptChanges={this.acceptChangesInfo}
+                data={this.state.data[this.state.selectValue]}
+              />
+            </Modal.Content>
+          </Modal>
 
-        <Modal
-          style={{ position: "relative" }}
-          closeOnDimmerClick={false}
-          open={this.state.openFilter}
-        >
-          <Modal.Header>Change Filters</Modal.Header>
-          <Modal.Content>
+          {/* Edit Filters */}
+          <Modal
+            style={{ position: "relative" }}
+            closeOnDimmerClick={false}
+            open={this.state.openFilter}
+          >
+            <Modal.Header>Change Filters</Modal.Header>
+            <Modal.Content>
+              <JobFiltersModal
+                closeModal={this.closeModalFilter}
+                data={this.state.data[this.state.selectValue]}
+              />
+            </Modal.Content>
+          </Modal>
 
-          </Modal.Content>
-        </Modal>
+          {/* Create New Profile*/}
+          <Modal
+            style={{ position: "relative" }}
+            closeOnDimmerClick={false}
+            open={this.state.openNew}
+          >
+            <Modal.Header>Create a new Job Profile</Modal.Header>
+            
+            <Modal.Content>
+              <JobNewModal
+                closeModal={this.closeModalNew}
+                acceptChanges={this.createNewProfile}
+              />
+            </Modal.Content>
+          </Modal>
         </div>
       </SiteWrapper>
     );

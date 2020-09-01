@@ -304,7 +304,6 @@ class JobseekerExp extends React.Component {
                       checked="true"
                       checked={this.state.isChecked}
                       onChange={this.handleCheckbox}
-                      // TO DO value=
                     />
                   </Form.Group>
                 </Grid.Col>
