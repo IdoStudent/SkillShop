@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios";
 
 import { Card } from "tabler-react";
 
@@ -43,7 +44,7 @@ class JobseekerExpContainer extends React.Component {
       )
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
 
     const jobinfo = {
@@ -64,9 +65,7 @@ class JobseekerExpContainer extends React.Component {
     this.setState({
       dataset: this.state.dataset.concat(<JobseekerExp jobinfo={jobinfo}/>),
       open: false
-    });
-
-    // ALSO NEED TO ADD LOGIC FOR SENDING TO DATABASE
+    })
   };
 
   cancelForm = () => {

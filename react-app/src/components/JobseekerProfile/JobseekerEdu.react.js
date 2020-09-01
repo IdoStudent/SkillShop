@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from "react";
-
+import axios from "axios";
 import { Container, Divider, Header, Button, Modal } from "semantic-ui-react";
 import { Form, Grid } from "tabler-react";
 
@@ -172,7 +172,22 @@ class JobseekerEdu extends React.Component {
       this.state.current
     ]
 
-    // API CALL TO SEND DATA
+    //API functionality
+    try {
+      const params = {
+        
+        "userEmail": "placeholder",
+        "userEducationTitle": this.state.title,
+        "userEducationInstitution": this.state.institution,
+        "userEducationStartDate": this.state.startdate,
+        "userEducationEndDate": this.state.enddate,
+        "userEducationLocation": this.state.location,
+        "userEducationDescription": this.state.desc
+      };
+      axios.post('https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/education/', params);
+    }catch (err) {
+      console.log(`An error has occurred: ${err}`);
+    }
   };
 
   cancelForm = () => {

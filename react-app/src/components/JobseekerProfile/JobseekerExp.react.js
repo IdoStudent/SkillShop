@@ -1,7 +1,8 @@
 // @flow
 
 import * as React from "react";
-
+import axios from "axios";
+import { Auth } from 'aws-amplify';
 import { Container, Divider, Header, Button, Modal } from "semantic-ui-react";
 import { Form, Grid } from "tabler-react";
 
@@ -172,7 +173,21 @@ class JobseekerExp extends React.Component {
       this.state.current
     ]
 
-    // API CALL TO SEND DATA
+    //API functionality
+    try {
+      const params = {
+        "userEmail": "placeholder",
+        "userJobTitle": this.state.title,
+        "userJobCompany": this.state.company,
+        "userJobStartDate": this.state.startdate,
+        "userJobEndDate": this.state.enddate,
+        "userJobLocation": this.state.location,
+        "userJobDescription": this.state.desc
+      };
+      axios.post('https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/jobexperience/', params);
+    }catch (err) {
+      console.log(`An error has occurred: ${err}`);
+    }
   };
 
   cancelForm = () => {
