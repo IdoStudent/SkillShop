@@ -26,8 +26,6 @@ class Skills extends React.Component {
           // We can just do a straight copy of the array we received into our var array
          dbSkills = result.skills
 
-         console.log(dbSkills)
-
           // After the skills are added into the array from the API, we set the state based on the given values
          this.initialiseState();
         },
@@ -64,7 +62,6 @@ class Skills extends React.Component {
       selectedSkills = selectedSkills.filter((val) => val !== name);
     }
 
-    console.log(selectedSkills);
   };
 
   /*cancelChanges = () => {
@@ -81,8 +78,6 @@ class Skills extends React.Component {
       showSaveButton: false,
       //showCancelButton: false,
     });
-
-    console.log(selectedSkills)
 
     // ADD LOGIC FOR SUBMITTING TO DATABASE, CAN JUST TAKE THE ENTIRE SELECTEDSKILLS ARRAY AND POST IT
   };
