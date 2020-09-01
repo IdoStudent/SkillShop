@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { throws } from "assert";
 
 import { Button, Header, Icon } from "semantic-ui-react";
 

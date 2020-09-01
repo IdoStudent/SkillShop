@@ -36,7 +36,7 @@ class JobseekerEduContainer extends React.Component {
         (result) => {
           for(var i = 0; i < result.length; i++) {
             this.setState({
-              dataset: this.state.dataset.concat(<JobseekerEdu eduinfo={result[i]} />),
+              dataset: this.state.dataset.concat(<JobseekerEdu key={i} eduinfo={result[i]} />),
             });
           }
         },

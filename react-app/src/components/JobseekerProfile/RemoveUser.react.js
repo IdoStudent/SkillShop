@@ -1,7 +1,6 @@
 import * as React from "react";
-import AWSUserPoolsSignIn from "react";
 import { Form, Card, Grid } from "tabler-react";
-import { Button, Header, Icon, Modal } from "semantic-ui-react";
+import { Button, Modal } from "semantic-ui-react";
 
 import '../../index.css';
 
@@ -65,20 +64,6 @@ class RemoveUser extends React.Component {
   
     render() {
         const {
-          firstname,
-          middlename,
-          surname,
-          city,
-          postcode,
-          state,
-          about,
-          formfirstname,
-          formmiddlename,
-          formsurname,
-          formcity,
-          formpostcode,
-          formstate,
-          formabout,
           open,
         } = this.state;
     

@@ -2,8 +2,8 @@
 
 import * as React from "react";
 
-import { Container, Header, Button, Modal } from "semantic-ui-react";
-import { Form, Grid, Card } from "tabler-react";
+import { Container, Button } from "semantic-ui-react";
+import { Form, Grid } from "tabler-react";
 
 class JobEditModal extends React.Component {
   constructor(props) {
@@ -13,6 +13,8 @@ class JobEditModal extends React.Component {
         location: props.data.location,
         about: props.data.about,
         industry: props.data.industry,
+
+        newInfo: [],
         
 
       // Modal State
@@ -22,6 +24,15 @@ class JobEditModal extends React.Component {
 
   closeModal = () => {
     this.props.closeModal();
+  };
+
+  acceptChanges = () => {
+    this.setState({ 
+      newInfo: [this.state.title, this.state.industry, this.state.location, this.state.about]
+    }, () => {                              
+      this.props.acceptChanges(this.state.newInfo);
+    });
+    
   };
 
   handleChange = (input) => (event) => {
@@ -45,23 +56,23 @@ class JobEditModal extends React.Component {
           <Grid.Col>
             <Form.Group label="Industry" isRequired>
               <Form.Select value={this.state.industry} onChange={this.handleChange("industry")}>
-                <option value="marketing">Marketing & communication</option>
-                <option value="banking">Banking & finance</option>
-                <option value="building">Building, metal & civil construction industries</option>
-                <option value="sales">Commercial sales</option>
-                <option value="education">Educational services</option>
-                <option value="hospitality">Hospitality</option>
-                <option value="service">Service</option>
-                <option value="art">Graphic arts</option>
-                <option value="journalism">Journalism</option>
-              </Form.Select>
-            </Form.Group>
-          </Grid.Col>
-          <Grid.Col>
-            <Form.Group label="Sub-Category" >
-              <Form.Select>
-                <option>Research & annalysis</option>
-                <option>...</option>
+                <option value="accounting">Accounting</option>
+                <option value="administration">Administration & Office Support</option>
+                <option value="banking">Baking & Financial Services</option>
+                <option value="customeservice">Customer Service</option>
+                <option value="construction">Construction</option>
+                <option value="consulting">Consulting</option>
+                <option value="education">Education</option>
+                <option value="engineering">Engineering</option>
+                <option value="government">Government & Defence</option>
+                <option value="healthcare">Healthcare & Medical</option>
+                <option value="hospitality">Hospitality & Tourism</option>
+                <option value="hr">Human Resources</option>
+                <option value="it">Information Technology</option>
+                <option value="legal">Legal</option>
+                <option value="marketing">Marketing & Communication</option>
+                <option value="retail">Retail</option>
+                <option value="sales">Sales</option>
               </Form.Select>
             </Form.Group>
           </Grid.Col>
@@ -101,7 +112,7 @@ class JobEditModal extends React.Component {
               {" "}
               Cancel{" "}
             </Button>
-            <Button floated="right" basic type="submit" color="green">
+            <Button floated="right" basic type="submit" color="green" onClick={this.acceptChanges}>
               {" "}
               Accept Changes{" "}
             </Button>

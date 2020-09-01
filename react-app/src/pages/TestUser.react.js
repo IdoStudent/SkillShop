@@ -1,13 +1,7 @@
 import React,{Component} from "react";
-import { Auth } from 'aws-amplify';
+//import { auth } from 'aws-amplify';
 
 import {
-    Container,
-    Card,
-    Form,
-    Grid,
-    Alert,
-    Header,
     Button,
   } from "tabler-react";
 
