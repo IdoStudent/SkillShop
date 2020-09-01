@@ -24,6 +24,7 @@ class App extends React.Component {
 
   state = {
     isAuthenticated: false,
+    isAuthenticating: true,
     user: null
   }
 
@@ -37,6 +38,18 @@ class App extends React.Component {
     console.log('set user');
   }
 
+  async componentDidMount() {
+    try {
+    const session = await Auth.currentSession();
+    this.setAuthStatus(true);
+    console.log(session);
+    const user = await Auth.currentAuthenticatedUser();
+    this.state.setUser(user);
+    }catch(error) {
+      console.log(error);
+    }
+    this.setState({ isAuthenticating: false });
+  }
   render(){
     const authProps = {
       isAuthenticated: this.state.isAuthenticated,
@@ -44,8 +57,10 @@ class App extends React.Component {
       setAuthStatus: this.setAuthStatus,
       setUser: this.setUser
     }
+
     return (
-      <React.StrictMode>
+      !this.state.isAuthenticating &&
+      <React.StrictMode>     
         <Router>
           <Switch>
             <Route exact path="/" render={(props) => <ProfilePage {...props} auth={authProps} />} />
