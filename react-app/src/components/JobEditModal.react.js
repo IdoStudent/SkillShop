@@ -2,8 +2,8 @@
 
 import * as React from "react";
 
-import { Container, Header, Button, Modal } from "semantic-ui-react";
-import { Form, Grid, Card } from "tabler-react";
+import { Container, Button } from "semantic-ui-react";
+import { Form, Grid } from "tabler-react";
 
 class JobEditModal extends React.Component {
   constructor(props) {

@@ -5,7 +5,7 @@ import { Button, Modal } from "semantic-ui-react";
 
 import '../../index.css';
 
-const config = require('../config.json');
+//const config = require('../config.json');
 
 class GeneralInformation extends React.Component {
   constructor(props) {
