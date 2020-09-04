@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import axios from "axios";
 import { Form, Card, Grid } from "tabler-react";
 import { Button } from "semantic-ui-react";
 
@@ -73,13 +73,22 @@ class Skills extends React.Component {
     this.initialiseState()
   };*/
 
-  submitChanges = () => {
+  submitChanges = async () => {
     this.setState({
       showSaveButton: false,
       //showCancelButton: false,
     });
 
     // ADD LOGIC FOR SUBMITTING TO DATABASE, CAN JUST TAKE THE ENTIRE SELECTEDSKILLS ARRAY AND POST IT
+    try {
+      const params = {
+        "userEmail": "placeholder",
+        "userSkills": "test"
+      };
+      await axios.post('https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/skills', params);
+    }catch (err) {
+      console.log(`An error has occurred: ${err}`);
+    }
   };
 
   render() {
