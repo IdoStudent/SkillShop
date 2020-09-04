@@ -83,7 +83,7 @@ class Skills extends React.Component {
     try {
       const params = {
         "userEmail": "placeholder",
-        "userSkills": "test"
+        "userSkills": selectedSkills
       };
       await axios.post('https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/skills', params);
     }catch (err) {
