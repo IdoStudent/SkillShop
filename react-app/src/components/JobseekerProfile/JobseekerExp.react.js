@@ -30,6 +30,17 @@ class JobseekerExp extends React.Component {
       displaystart: "",
       displayend: "",
 
+      errors: {
+        title: '',
+        company: '',
+        startdate: '',
+        enddate: '',
+        location: '',
+        desc: '',
+      },
+
+      test: 'isRequired',
+
       // Modal State
       open: false,
 
@@ -43,7 +54,10 @@ class JobseekerExp extends React.Component {
   }
 
   handleChange = (input) => (event) => {
-    this.setState({ [input]: event.target.value });
+    let value = event.target.value
+
+    this.setState({ [input]: value });
+
   };
 
   handleCheckbox = () => {
@@ -157,7 +171,7 @@ class JobseekerExp extends React.Component {
         enddate: prevState.formenddate
       }), () => {                              
         // Send the data to the database once the date value has been resolved
-        this.sendData()
+        //this.sendData()
       });
     }
   };
@@ -281,16 +295,17 @@ class JobseekerExp extends React.Component {
             <Form onSubmit={this.handleSubmit}>
               <Grid.Row>
                 <Grid.Col md={4}>
-                  <Form.Group label="Job Title">
+                  <Form.Group label="Job Title" isRequired>
                     <Form.Input
                       name="firstname"
                       value={formtitle}
                       onChange={this.handleChange("formtitle")}
+                      required='true'
                     />
                   </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={4}>
-                  <Form.Group label="Company">
+                  <Form.Group label="Company" isRequired>
                     <Form.Input
                       name="company"
                       value={formcompany}
@@ -323,7 +338,7 @@ class JobseekerExp extends React.Component {
                   </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={3}>
-                  <Form.Group label="Starting Month">
+                  <Form.Group label="Starting Month" isRequired>
                     <Form.MaskedInput
                       placeholder="00/0000"
                       name="startdate"
@@ -350,7 +365,7 @@ class JobseekerExp extends React.Component {
               {/* ROW 3 */}
               <Grid.Row>
                 <Grid.Col md={12}>
-                  <Form.Group className="mb=0" label="Job Description">
+                  <Form.Group className="mb=0" label="Job Description" isRequired>
                     <Form.Textarea
                       name="jobdesc"
                       rows={3}

@@ -2,6 +2,7 @@ import * as React from "react";
 import axios from "axios";
 import { Form, Card, Grid } from "tabler-react";
 import { Button, Modal } from "semantic-ui-react";
+import Auth from '@aws-amplify/auth';
 
 import '../../index.css';
 
@@ -34,31 +35,40 @@ class GeneralInformation extends React.Component {
     };
   }
 
-  componentDidMount() {
-    fetch("https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            firstname: result.Item.userFirstName,
-            middlename: result.Item.userMiddleName,
-            surname: result.Item.userLastName,
-            city: result.Item.userCity,
-            postcode: result.Item.userPostCode,
-            state: result.Item.userState,
-            about: result.Item.userAbout,
-
-            formfirstname: result.Item.userFirstName,
-            formmiddlename: result.Item.userMiddleName,
-            formsurname: result.Item.userLastName,
-            formcity: result.Item.userCity,
-            formpostcode: result.postcode,
-            formstate: result.Item.userState,
-            formabout: result.Item.userAbout,
-          });
-        },
-      )
+  getFirstApi() {
+    return Auth.currentAuthenticatedUser().then((user) => {
+       this.setState({email: user.attributes.email, formemail: user.attributes.email})
+     });
   }
+
+ //${encodeURIComponent(data.foo)}
+   getSecondApi(email) {
+     fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?foo=${encodeURIComponent(email)}`)
+       .then(res => res.json())
+       .then(
+         console.log("THIS IS RESULT2 " + email),
+         (result) => {
+           this.setState({
+             firstname: result.Item.userFirstName,
+             middlename: result.Item.userMiddleName,
+             surname: result.Item.userLastName,
+             city: result.Item.userCity,
+             postcode: result.Item.userPostcode,
+             state: result.Item.userState,
+             about: result.Item.userAbout,
+
+             formfirstname: result.Item.userFirstName,
+             formmiddlename: result.Item.userMiddleName,
+             formsurname: result.Item.userLastName,
+             formcity: result.Item.userCity,
+             formpostcode: result.postcode,
+             formstate: result.Item.userState,
+             formabout: result.Item.userAbout,
+
+           });
+           console.log("THIS IS RESULT1 " + result)} ,
+       )
+   }
 
   handleChange = (input) => (event) => {
     this.setState({ [input]: event.target.value });

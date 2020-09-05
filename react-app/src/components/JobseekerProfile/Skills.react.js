@@ -30,8 +30,6 @@ class Skills extends React.Component {
          this.initialiseState();
         },
       )
-
-    
   }
 
   initialiseState() {

@@ -24,12 +24,9 @@ class JobNewModal extends React.Component {
   };
 
   acceptChanges = () => {
-    this.setState({ 
-      newInfo: [this.state.title, this.state.industry, this.state.location, this.state.about]
-    }, () => {                              
-      this.props.acceptChanges(this.state.newInfo);
-    });
-    
+      let newInfo = [this.state.title, this.state.industry, this.state.location, this.state.about]
+                        
+      this.props.acceptChanges(newInfo);
   };
 
   handleChange = (input) => (event) => {

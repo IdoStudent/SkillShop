@@ -2,8 +2,54 @@
 
 import * as React from "react";
 
-import { Container, Button } from "semantic-ui-react";
+import { Container, Button, Dropdown } from "semantic-ui-react";
 import { Form, Grid } from "tabler-react";
+
+const softSkillsOptions = [
+  { key: 'communication', text: 'Communication', value: 'communication' },
+  { key: 'teamwork', text: 'Teamwork', value: 'teamwork' },
+  { key: 'creativity', text: 'Creativity', value: 'creativity' },
+  { key: 'responsible', text: 'Responsibility', value: 'responsible' },
+  { key: 'timemanagement', text: 'Time Management', value: 'timemanagement' },
+  { key: 'criticalthinking', text: 'Critical Thinking', value: 'criticalthinking' },
+  { key: 'organisation', text: 'Organisation', value: 'organisation' },
+  { key: 'emotionalintelligence', text: 'Emotional Intelligence', value: 'emotionalintelligence' },
+  { key: 'attdetail', text: 'Attention to Detail', value: 'attdetail' },
+  { key: 'flexibility', text: 'Flexibility', value: 'flexibility' },
+  { key: 'customerservice', text: 'Customer Service', value: 'customerservice' },
+]
+
+const hardSkillsOptions = [
+  { key: 'design', text: 'Design', value: 'design' },
+  { key: 'dataanalysis', text: 'Data Analysis', value: 'dataanalysis' },
+  { key: 'mathmetics', text: 'Mathmetics', value: 'mathmetics' },
+  { key: 'copywriting', text: 'Copy Writing', value: 'copywriting' },
+  { key: 'marketing', text: 'Marketing', value: 'marketing' },
+  { key: 'negotiation', text: 'Negotiation', value: 'negotiation' },
+  { key: 'projectmanagement', text: 'Project Management', value: 'projectmanagement' },
+  { key: 'administration', text: 'Administration', value: 'administration' },
+  { key: 'language', text: 'Foreign Languages', value: 'language' },
+]
+
+const techSkillsOptions = [
+  { key: 'adobephotoshop', text: 'Adobe Photoshop', value: 'adobephotoshop' },
+  { key: 'adobexd', text: 'Adobe XD', value: 'adobexd' },
+  { key: 'adobepremier', text: 'Adobe Premier', value: 'adobepremier' },
+  { key: 'excel', text: 'Excel', value: 'excel' },
+  { key: 'microsoftoffice', text: 'Microsoft Office', value: 'microsoftoffice' },
+  { key: 'webdevelopment', text: 'Web Development', value: 'webdevelopment' },
+  { key: 'frontend', text: 'Front-End', value: 'frontend' },
+  { key: 'backend', text: 'Back-End', value: 'backend' },
+  { key: 'javascript', text: 'Javascript', value: 'javascript' },
+  { key: 'php', text: 'PHP', value: 'php' },
+  { key: 'c++', text: 'C++', value: 'c++' },
+  { key: 'java', text: 'Java', value: 'java' },
+  { key: 'cloudcomputing', text: 'Cloud Computing', value: 'cloudcomputing' },
+]
+
+var softSkillsSelected = []
+var hardSkillsSelected = []
+var techSkillsSelected = []
 
 class JobFiltersModal extends React.Component {
   constructor(props) {
@@ -11,10 +57,6 @@ class JobFiltersModal extends React.Component {
     this.state = {
       experience: props.data.experience,
       education: props.data.education,
-
-      softskills: props.data.softskills,
-      hardskills: props.data.hardskills,
-      techskills: props.data.techskills,
 
       // Modal State
       open: false,
@@ -25,21 +67,38 @@ class JobFiltersModal extends React.Component {
     this.props.closeModal();
   };
 
+  acceptChanges = () => {
+    let skills = softSkillsSelected.concat(hardSkillsSelected).concat(techSkillsSelected) 
+
+    let filters = {
+      skills: skills,
+      experience: this.state.experience,
+      education: this.state.education
+    }
+
+    this.props.acceptChanges(filters)
+  };
+
   handleChange = (input) => (event) => {
     this.setState({ [input]: event.target.value });
   };
+
+  handleSelectSoft = (e, { value }) => softSkillsSelected = value
+  handleSelectHard = (e, { value }) => hardSkillsSelected = value
+  handleSelectTech = (e, { value }) => techSkillsSelected = value
 
   componentDidMount() {
     console.log("Editing filters for " + this.props.data.title);
   }
 
   render() {
+    const { value } = this.state
     return (
       <Container>
         <Grid.Row>
           <Grid.Col>
             <Form.Group label="Years of Experience">
-              <Form.Ratio defaultValue={this.state.experience} max={10} min={0} step={1} />
+              <Form.Ratio value={this.state.experience} onChange={this.handleChange("experience")} max={10} min={0} step={1} />
             </Form.Group>
           </Grid.Col>
           <Grid.Col>
@@ -55,183 +114,28 @@ class JobFiltersModal extends React.Component {
         </Grid.Row>
 
         <Grid.Row>
-            <Grid.Col md={11}>
+            <Grid.Col md={12}>
               <Form.Group name="softskills" label="Soft Skills">
-                <Form.SelectGroup canSelectMultiple pills onChange={this.onChange}>
-                  <Form.SelectGroupItem
-                    label="Communication"
-                    name="communication"
-                    value="Communication"
-                    checked='true'
-                  />
-                  <Form.SelectGroupItem
-                    label="Teamwork"
-                    name="teamwork"
-                    value="Teamwork"
-                  />
-                  <Form.SelectGroupItem
-                    label="Creativity"
-                    name="creativity"
-                    value="Creativity"
-                  />
-                  <Form.SelectGroupItem
-                    label="Responsible"
-                    name="responsible"
-                    value="Responsible"
-                  />
-                  <Form.SelectGroupItem
-                    label="Time Management"
-                    name="timemanagement"
-                    value="Time Management"
-                  />
-                  <Form.SelectGroupItem
-                    label="Critical Thinking"
-                    name="criticalthinking"
-                    value="Critical Thinking"
-                  />
-                  <Form.SelectGroupItem
-                    label="Organisation"
-                    name="organisation"
-                    value="Organisation"
-                  />
-                  <Form.SelectGroupItem
-                    label="Emotional Intelligence"
-                    name="emotionalintelligence"
-                    value="Emotional Intelligence"
-                  />
-                  <Form.SelectGroupItem
-                    label="Attention to Detail"
-                    name="attdetail"
-                    value="Attention to Detail"
-                  />
-                  <Form.SelectGroupItem
-                    label="Flexibility"
-                    name="flexibility"
-                    value="Flexibility"
-                  />
-                  <Form.SelectGroupItem
-                    label="Customer Service"
-                    name="customerservice"
-                    value="Customer Service"
-                  />
-                </Form.SelectGroup>
-              </Form.Group>
+              <Dropdown placeholder='Soft Skills' fluid multiple selection options={softSkillsOptions} onChange={this.handleSelectSoft}/>
+              </Form.Group> 
             </Grid.Col>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Col md={11}>
+            <Grid.Col md={12}>
               <Form.Group name="hardskills" label="Hard Skills">
-                <Form.SelectGroup canSelectMultiple pills onChange={this.onChange}>
-                  <Form.SelectGroupItem
-                    label="Design"
-                    name="design"
-                    value="Design"
-                  />
-                  <Form.SelectGroupItem
-                    label="Data Analysis"
-                    name="dataanalysis"
-                    value="Data Analysis"
-                  />
-                  <Form.SelectGroupItem
-                    label="Mathmetics"
-                    name="mathmetics"
-                    value="Mathmetics"
-                  />
-                  <Form.SelectGroupItem
-                    label="Copy Writing"
-                    name="copywriting"
-                    value="Copy Writing"
-                  />
-                  <Form.SelectGroupItem
-                    label="Marketing"
-                    name="marketing"
-                    value="Marketing"
-                  />
-                  <Form.SelectGroupItem
-                    label="Negotiation"
-                    name="negotiation"
-                    value="Negotiation"
-                  />
-                  <Form.SelectGroupItem
-                    label="Project Management"
-                    name="projectmanagement"
-                    value="Project Management"
-                  />
-                  <Form.SelectGroupItem
-                    label="Administration"
-                    name="administration"
-                    value="Administration"
-                  />
-                  <Form.SelectGroupItem
-                    label="Foreign Languages"
-                    name="language"
-                    value="Foreign Languages"
-                  />
-                </Form.SelectGroup>
+              <Dropdown placeholder='Soft Skills' fluid multiple selection options={hardSkillsOptions} onChange={this.handleSelectHard}/>
               </Form.Group>
             </Grid.Col>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Col md={11}>
+            <Grid.Col md={12}>
               <Form.Group name="techskills" label="Tech Skills">
-                <Form.SelectGroup canSelectMultiple pills onChange={this.onChange}>
-                  <Form.SelectGroupItem
-                    label="Adobe Photoshop"
-                    name="adobephotoshop"
-                    value="Adobe Photoshop"
-                  />
-                  <Form.SelectGroupItem
-                    label="Adobe XD"
-                    name="adobexd"
-                    value="Adobe XD"
-                  />
-                  <Form.SelectGroupItem
-                    label="Adobe Premier"
-                    name="adobepremier"
-                    value="Adobe Premier"
-                  />
-                  <Form.SelectGroupItem
-                    label="Excel"
-                    name="excel"
-                    value="Excel"
-                  />
-                  <Form.SelectGroupItem
-                    label="Microsoft Office"
-                    name="microsoftoffice"
-                    value="Microsoft Office"
-                  />
-                  <Form.SelectGroupItem
-                    label="Web Development"
-                    name="webdevelopment"
-                    value="Web Development"
-                  />
-                  <Form.SelectGroupItem
-                    label="Front-End"
-                    name="frontend"
-                    value="Front-End"
-                  />
-                  <Form.SelectGroupItem
-                    label="Back-End"
-                    name="backend"
-                    value="Back-End"
-                  />
-                  <Form.SelectGroupItem
-                    label="Javascript"
-                    name="javascript"
-                    value="Javascript"
-                  />
-                  <Form.SelectGroupItem label="PHP" name="php" value="PHP" />
-                  <Form.SelectGroupItem label="C++" name="c++" value="C++" />
-                  <Form.SelectGroupItem label="Java" name="java" value="Java" />
-                  <Form.SelectGroupItem
-                    label="Cloud Computing"
-                    name="cloudcomputing"
-                    value="Cloud Computing"
-                  />
-                </Form.SelectGroup>
+              <Dropdown placeholder='Soft Skills' fluid multiple selection options={techSkillsOptions} onChange={this.handleSelectTech}/>
               </Form.Group>
             </Grid.Col>
           </Grid.Row>
+
+          {value}
 
         {/* ROW 4 - SUBMIT */}
         <Grid.Row>
@@ -246,7 +150,7 @@ class JobFiltersModal extends React.Component {
               {" "}
               Cancel{" "}
             </Button>
-            <Button floated="right" basic type="submit" color="green">
+            <Button floated="right" basic type="submit" color="green" onClick={this.acceptChanges}>
               {" "}
               Accept Changes{" "}
             </Button>

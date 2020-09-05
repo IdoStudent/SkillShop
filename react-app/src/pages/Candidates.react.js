@@ -135,7 +135,19 @@ class Candidates extends React.Component {
     // I think if we append the data to the state directly it leaves too many possibilities for a mistmatch between what is on the front-end and what's on the database
     // It's doable both ways though so doesn't really matter
 
+    console.log(newInfo)
+
     this.setState({openNew: false})
+  };
+
+  setFilters = (filters) => {
+    // filters will return an object with all the filters
+    // access individual filters like: filters.experience, filters.education, filters.skills
+    // filters.skills is an array of skills (strings). anything in the array has been selected
+ 
+
+    // Probably need to post this info to the database otherwise I don't see a feasible way to store the information
+
   };
 
   render() {
@@ -215,7 +227,7 @@ class Candidates extends React.Component {
 
           {/* Edit Filters */}
           <Modal
-            style={{ position: "relative" }}
+            style={{ position: "relative", overflow: "visible" }}
             closeOnDimmerClick={false}
             open={this.state.openFilter}
           >
@@ -224,6 +236,7 @@ class Candidates extends React.Component {
               <JobFiltersModal
                 closeModal={this.closeModalFilter}
                 data={this.state.data[this.state.selectValue]}
+                acceptChanges={this.setFilters}
               />
             </Modal.Content>
           </Modal>
