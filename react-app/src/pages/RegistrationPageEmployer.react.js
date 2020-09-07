@@ -15,23 +15,28 @@ class RegistrationPageEmployer extends Component {
     handleSubmit = async event => {
         event.preventDefault();
     
-        // AWS Cognito integration here
-        this.state.username = this.state.email;
-        const { username, email, password } = this.state;
-        try{
-            const signUpResponse = await Auth.signUp({
-                username,
-                password,
-                attributes: {
-                    email: email,
-                    'custom:role': this.state.role
-                }
-            });
-            console.log(signUpResponse);
-            this.props.history.push("/login");
-        }catch(error){
-            console.log('Error')
+        // console.log(document.getElementById('password').value)
+        // console.log(document.getElementById('confirmpassword').value)
+        if(document.getElementById('password').value == document.getElementById('confirmpassword').value){
+            // AWS Cognito registration
+            this.state.username = this.state.email;
+            const { username, email, password } = this.state;
+            try{
+                const signUpResponse = await Auth.signUp({
+                    username,
+                    password,
+                    attributes: {
+                        email: email,
+                        'custom:role': this.state.role
+                    }
+                });
+                console.log(signUpResponse);
+                this.props.history.push("/login");
+            }catch(error){
+                console.log('Error')
+            }
         }
+
     };
 
     onInputChange = event => {
@@ -39,6 +44,22 @@ class RegistrationPageEmployer extends Component {
           [event.target.id]: event.target.value
         });
         document.getElementById(event.target.id).classList.remove("is-danger");
+    }
+
+    confirmPassword = event => {
+        this.setState({
+            [event.target.id]: event.target.value
+        });
+        document.getElementById(event.target.id).classList.remove("is-danger");
+
+        if (document.getElementById('password').value ==
+            document.getElementById('confirmpassword').value) {
+            document.getElementById('message').style.color = 'green';
+            document.getElementById('message').innerHTML = 'matching';
+        } else {
+            document.getElementById('message').style.color = 'red';
+            document.getElementById('message').innerHTML = 'Passwords are not matching!';
+        }
     }
 
     render(){
@@ -73,7 +94,7 @@ class RegistrationPageEmployer extends Component {
                                     onChange={this.onInputChange}
                                 />
                             </Form.Field>
-                            {/* <Form.Field>
+                            <Form.Field>
                                 <label>Confirm Password</label>
                                 <input 
                                     className="input" 
@@ -81,9 +102,10 @@ class RegistrationPageEmployer extends Component {
                                     id="confirmpassword"
                                     placeholder="Confirm password"
                                     value={this.state.confirmpassword}
-                                    onChange={this.onInputChange}
+                                    onChange={this.confirmPassword}
                                 />
-                            </Form.Field> */}
+                                <span id="message"></span>
+                            </Form.Field>
                             <Button type='submit'>Submit</Button>
                             <Message>
                                 Already have an account? <a href='/landingpage'>Go Back</a>
