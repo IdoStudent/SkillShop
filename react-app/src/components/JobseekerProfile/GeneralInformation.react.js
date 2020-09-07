@@ -2,9 +2,9 @@ import * as React from "react";
 import axios from "axios";
 import { Form, Card, Grid } from "tabler-react";
 import { Button, Modal } from "semantic-ui-react";
-import Auth from '@aws-amplify/auth';
+import Auth from "@aws-amplify/auth";
 
-import '../../index.css';
+import "../../index.css";
 
 //const config = require('../config.json');
 
@@ -43,9 +43,6 @@ class GeneralInformation extends React.Component {
       postcodeInvalid: false,
       postcodeErrorMsg: "",
 
-      stateInvalid: false,
-      stateErrorMsg: "",
-
       aboutInvalid: false,
       aboutErrorMsg: "",
     };
@@ -53,67 +50,72 @@ class GeneralInformation extends React.Component {
 
   getFirstApi() {
     return Auth.currentAuthenticatedUser().then((user) => {
-       this.setState({email: user.attributes.email, formemail: user.attributes.email})
-     });
+      this.setState({
+        email: user.attributes.email,
+        formemail: user.attributes.email,
+      });
+    });
   }
- 
- //${encodeURIComponent(data.foo)}
-   getSecondApi(email) {
-     fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?foo=${encodeURIComponent(email)}`)
-       .then(res => res.json())
-       .then(
-         console.log("THIS IS RESULT2 " + email),
-         (result) => {
-           this.setState({
-             firstname: result.Item.userFirstName,
-             middlename: result.Item.userMiddleName,
-             surname: result.Item.userLastName,
-             city: result.Item.userCity,
-             postcode: result.Item.userPostcode,
-             state: result.Item.userState,
-             about: result.Item.userAbout,
- 
-             formfirstname: result.Item.userFirstName,
-             formmiddlename: result.Item.userMiddleName,
-             formsurname: result.Item.userLastName,
-             formcity: result.Item.userCity,
-             formpostcode: result.postcode,
-             formstate: result.Item.userState,
-             formabout: result.Item.userAbout,
-             
-           });
-           console.log("THIS IS RESULT1 " + result)} ,
-       )
-   }
 
- //${encodeURIComponent(data.foo)}
-   getSecondApi(email) {
-     fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?foo=${encodeURIComponent(email)}`)
-       .then(res => res.json())
-       .then(
-         console.log("THIS IS RESULT2 " + email),
-         (result) => {
-           this.setState({
-             firstname: result.Item.userFirstName,
-             middlename: result.Item.userMiddleName,
-             surname: result.Item.userLastName,
-             city: result.Item.userCity,
-             postcode: result.Item.userPostcode,
-             state: result.Item.userState,
-             about: result.Item.userAbout,
+  //${encodeURIComponent(data.foo)}
+  getSecondApi(email) {
+    fetch(
+      `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?foo=${encodeURIComponent(
+        email
+      )}`
+    )
+      .then((res) => res.json())
+      .then(console.log("THIS IS RESULT2 " + email), (result) => {
+        this.setState({
+          firstname: result.Item.userFirstName,
+          middlename: result.Item.userMiddleName,
+          surname: result.Item.userLastName,
+          city: result.Item.userCity,
+          postcode: result.Item.userPostcode,
+          state: result.Item.userState,
+          about: result.Item.userAbout,
 
-             formfirstname: result.Item.userFirstName,
-             formmiddlename: result.Item.userMiddleName,
-             formsurname: result.Item.userLastName,
-             formcity: result.Item.userCity,
-             formpostcode: result.postcode,
-             formstate: result.Item.userState,
-             formabout: result.Item.userAbout,
+          formfirstname: result.Item.userFirstName,
+          formmiddlename: result.Item.userMiddleName,
+          formsurname: result.Item.userLastName,
+          formcity: result.Item.userCity,
+          formpostcode: result.postcode,
+          formstate: result.Item.userState,
+          formabout: result.Item.userAbout,
+        });
+        console.log("THIS IS RESULT1 " + result);
+      });
+  }
 
-           });
-           console.log("THIS IS RESULT1 " + result)} ,
-       )
-   }
+  //${encodeURIComponent(data.foo)}
+  getSecondApi(email) {
+    fetch(
+      `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?foo=${encodeURIComponent(
+        email
+      )}`
+    )
+      .then((res) => res.json())
+      .then(console.log("THIS IS RESULT2 " + email), (result) => {
+        this.setState({
+          firstname: result.Item.userFirstName,
+          middlename: result.Item.userMiddleName,
+          surname: result.Item.userLastName,
+          city: result.Item.userCity,
+          postcode: result.Item.userPostcode,
+          state: result.Item.userState,
+          about: result.Item.userAbout,
+
+          formfirstname: result.Item.userFirstName,
+          formmiddlename: result.Item.userMiddleName,
+          formsurname: result.Item.userLastName,
+          formcity: result.Item.userCity,
+          formpostcode: result.postcode,
+          formstate: result.Item.userState,
+          formabout: result.Item.userAbout,
+        });
+        console.log("THIS IS RESULT1 " + result);
+      });
+  }
 
   handleChange = (input) => (event) => {
     this.setState({ [input]: event.target.value });
@@ -122,98 +124,114 @@ class GeneralInformation extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
 
-    if(this.validateForm()){
-    this.setState((prevState) => ({
-      // If submitting new values, update the state to represent the new data
-      firstname: prevState.formfirstname,
-      middlename: prevState.formmiddlename,
-      surname: prevState.formsurname,
-      city: prevState.formcity,
-      postcode: prevState.formpostcode,
-      userState: prevState.formstate,
-      about: prevState.formabout,
-      open: false,
-      
-    }))
-    try {
-      const params = {
-        "userEmail": "shaahin@gmail.com",
-        "userFirstName": this.state.formfirstname,
-        "userMiddleName": this.state.formmiddlename,
-        "userLastName": this.state.formsurname,
-        "userCity": this.state.formcity,
-        "userPostCode": this.state.formpostcode,
-        "userState": this.state.formstate,
-        "userAbout": this.state.formabout,
-        "userType": "jobseeker"
-      };
-      await axios.post('https://qrg3idkox4.execute-api.ap-southeast-2.amazonaws.com/prod/{userEmail}/', params);
-    }catch (err) {
-      console.log(`An error has occurred: ${err}`);
-  }
-}
- };
+    if (this.validateForm()) {
+      this.setState((prevState) => ({
+        // If submitting new values, update the state to represent the new data
+        firstname: prevState.formfirstname,
+        middlename: prevState.formmiddlename,
+        surname: prevState.formsurname,
+        city: prevState.formcity,
+        postcode: prevState.formpostcode,
+        userState: prevState.formstate,
+        about: prevState.formabout,
+        open: false,
+      }));
+      try {
+        const params = {
+          userEmail: "shaahin@gmail.com",
+          userFirstName: this.state.formfirstname,
+          userMiddleName: this.state.formmiddlename,
+          userLastName: this.state.formsurname,
+          userCity: this.state.formcity,
+          userPostCode: this.state.formpostcode,
+          userState: this.state.formstate,
+          userAbout: this.state.formabout,
+          userType: "jobseeker",
+        };
+        await axios.post(
+          "https://qrg3idkox4.execute-api.ap-southeast-2.amazonaws.com/prod/{userEmail}/",
+          params
+        );
+      } catch (err) {
+        console.log(`An error has occurred: ${err}`);
+      }
+    }
+  };
 
- validateForm = () => {
-  let fName = this.state.formfirstname
-  let surname = this.state.formsurname
-  let postcode = this.state.formpostcode
-  let state = this.state.formstate
-  let about = this.state.formabout
+  validateForm = () => {
+    let fName = this.state.formfirstname;
+    let surname = this.state.formsurname;
+    let postcode = this.state.formpostcode;
+    let about = this.state.formabout;
 
-  this.setState({
-    fNameInvalid: false,
-    surnameInvalid: false,
-    postcodeInvalid: false,
-    stateInvalid: false,
-    aboutInvalid: false,
-  });
+    this.setState({
+      fNameInvalid: false,
+      surnameInvalid: false,
+      postcodeInvalid: false,
+      aboutInvalid: false,
+    });
 
-  let validInput = true
+    let validInput = true;
 
-  if(!fName){
-    this.setState({ fNameErrorMsg: "First name cannot be empty", fNameInvalid: true });
-    validInput = false
-  } else if (fName.length < 2) {
-    this.setState({ fNameErrorMsg: "First name needs to be 2 or more characters", fNameInvalid: true });
-    validInput = false
-  } 
+    if (!fName) {
+      this.setState({
+        fNameErrorMsg: "First name cannot be empty",
+        fNameInvalid: true,
+      });
+      validInput = false;
+    } else if (fName.length < 2) {
+      this.setState({
+        fNameErrorMsg: "First name needs to be 2 or more characters",
+        fNameInvalid: true,
+      });
+      validInput = false;
+    }
 
-  if(!surname){
-    this.setState({ surnameErrorMsg: "Surname cannot be empty", surnameInvalid: true });
-    validInput = false
-  } else if (surname.length < 2) {
-    this.setState({ surnameErrorMsg: "Surname needs to be 2 or more characters", surnameInvalid: true });
-    validInput = false
-  }
+    if (!surname) {
+      this.setState({
+        surnameErrorMsg: "Surname cannot be empty",
+        surnameInvalid: true,
+      });
+      validInput = false;
+    } else if (surname.length < 2) {
+      this.setState({
+        surnameErrorMsg: "Surname needs to be 2 or more characters",
+        surnameInvalid: true,
+      });
+      validInput = false;
+    }
 
-  if(!postcode){
-    this.setState({ postcodeErrorMsg: "Postcode cannot be empty", postcodeInvalid: true });
-    validInput = false
-  } else if (postcode.length != 4) {
-    this.setState({ postcodeErrorMsg: "Postcode need to be 4 numbers!", postcodeInvalid: true });
-    validInput = false
-  }
+    if (!postcode) {
+      this.setState({
+        postcodeErrorMsg: "Postcode cannot be empty",
+        postcodeInvalid: true,
+      });
+      validInput = false;
+    } else if (postcode.includes("_")) {
+      this.setState({
+        postcodeErrorMsg: "Please fill out the full postcode",
+        postcodeInvalid: true,
+      });
+      validInput = false;
+    }
 
-  if(!state){
-    this.setState({ stateErrorMsg: "State cannot be empty", stateInvalid: true });
-    validInput = false
-  } else if (state.length < 3) {
-    this.setState({ stateErrorMsg: "Please enter a valid state name", stateInvalid: true });
-    validInput = false
-  }
+    if (!about) {
+      this.setState({
+        aboutErrorMsg: "Description cannot be empty",
+        aboutInvalid: true,
+      });
+      validInput = false;
+    } else if (about.length < 100) {
+      this.setState({
+        aboutErrorMsg: "Tell us more about you! (100+ characters)",
+        aboutInvalid: true,
+      });
+      validInput = false;
+    }
 
-  if(!about){
-    this.setState({ aboutErrorMsg: "Description cannot be empty", aboutInvalid: true });
-    validInput = false
-  } else if (about.length < 100) {
-    this.setState({ aboutErrorMsg: "Tell us more about you! (100+ characters)", aboutInvalid: true });
-    validInput = false
-  }
-
-  // Return the status of valid input. If any of the above error conditions are met, this will return false
-  return validInput
-};
+    // Return the status of valid input. If any of the above error conditions are met, this will return false
+    return validInput;
+  };
 
   cancelForm = () => {
     // If cancelling, reset any fields that have been changed to the original values so that when the modal is re-opened, the old values are shown
@@ -380,8 +398,10 @@ class GeneralInformation extends React.Component {
                 </Grid.Col>
                 <Grid.Col md={2}>
                   <Form.Group label="Post Code" isRequired>
-                    <Form.Input
-                      name="postcode"
+                    <Form.MaskedInput
+                      placeholder="0000"
+                      mask={[/\d/, /\d/, /\d/, /\d/]}
+                      name="startdate"
                       value={formpostcode}
                       onChange={this.handleChange("formpostcode")}
                       invalid={this.state.postcodeInvalid}
@@ -391,13 +411,19 @@ class GeneralInformation extends React.Component {
                 </Grid.Col>
                 <Grid.Col md={3}>
                   <Form.Group label="State" isRequired>
-                    <Form.Input
+                    <Form.Select
                       name="state"
                       value={formstate}
                       onChange={this.handleChange("formstate")}
-                      invalid={this.state.stateInvalid}
-                      feedback={this.state.stateErrorMsg}
-                    />
+                    >
+                      <option value="NSW">NSW</option>
+                      <option value="NT">NT</option>
+                      <option value="QLD">QLD</option>
+                      <option value="SA">SA</option>
+                      <option value="TAS">TAS</option>
+                      <option value="VIC">VIC</option>
+                      <option value="WA">WA</option>
+                    </Form.Select>
                   </Form.Group>
                 </Grid.Col>
               </Grid.Row>
@@ -431,7 +457,13 @@ class GeneralInformation extends React.Component {
                     {" "}
                     Cancel{" "}
                   </Button>
-                  <Button floated="right" basic type="button" color="green" onClick={this.handleSubmit}>
+                  <Button
+                    floated="right"
+                    basic
+                    type="button"
+                    color="green"
+                    onClick={this.handleSubmit}
+                  >
                     {" "}
                     Accept Changes{" "}
                   </Button>
