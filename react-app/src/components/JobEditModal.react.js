@@ -15,6 +15,12 @@ class JobEditModal extends React.Component {
         industry: props.data.industry,
 
         newInfo: [],
+
+        titleInvalid: false,
+        titleErrorMsg: "",
+
+        aboutInvalid: false,
+        aboutErrorMsg: "",
         
 
       // Modal State
@@ -27,13 +33,46 @@ class JobEditModal extends React.Component {
   };
 
   acceptChanges = () => {
-    this.setState({ 
-      newInfo: [this.state.title, this.state.industry, this.state.location, this.state.about]
-    }, () => {                              
-      this.props.acceptChanges(this.state.newInfo);
-    });
-    
+    // If validate form returns true (meaning there are no input errors), submit the form
+    if(this.validateForm()) {
+      this.setState({ 
+        newInfo: [this.state.title, this.state.industry, this.state.location, this.state.about]
+      }, () => {                              
+        this.props.acceptChanges(this.state.newInfo);
+      });
+    }
   };
+
+  validateForm = () => {
+    let title = this.state.title
+    let about = this.state.about
+
+    let validInput = true
+
+    if(!title){
+      this.setState({ titleErrorMsg: "Job title cannot be empty", titleInvalid: true });
+      validInput = false
+    } else if (title.length < 3) {
+      this.setState({ titleErrorMsg: "Please enter a more descriptive job title", titleInvalid: true });
+      validInput = false
+    } else {
+      this.setState({ titleInvalid: false });
+    }
+
+    if(!about){
+      this.setState({ aboutErrorMsg: "Job description cannot be empty", aboutInvalid: true });
+      validInput = false
+    } else if (about.length < 100) {
+      this.setState({ aboutErrorMsg: "Please enter a more descriptive job description (100+ characters)", aboutInvalid: true });
+      validInput = false
+    } else {
+      this.setState({ aboutInvalid: false });
+    }
+
+    // Return the status of valid input. If any of the above error conditions are met, this will return false
+    return validInput
+  };
+
 
   handleChange = (input) => (event) => {
     this.setState({ [input]: event.target.value });
@@ -47,10 +86,11 @@ class JobEditModal extends React.Component {
   render() {
     return (
       <Container>
+        <Form>
         <Grid.Row>
           <Grid.Col sm={6} md={6}>
             <Form.Group label="Job Title" isRequired>
-              <Form.Input name="jobtitle" value={this.state.title} onChange={this.handleChange("title")}/>
+              <Form.Input name="jobtitle" value={this.state.title} onChange={this.handleChange("title")} invalid={this.state.titleInvalid} feedback={this.state.titleErrorMsg}/>
             </Form.Group>
           </Grid.Col>
           <Grid.Col>
@@ -94,6 +134,8 @@ class JobEditModal extends React.Component {
                 rows={3}
                 value={this.state.about}
                 onChange={this.handleChange("about")}
+                invalid={this.state.aboutInvalid}
+                feedback={this.state.aboutErrorMsg}
               />
             </Form.Group>
           </Grid.Col>
@@ -112,12 +154,13 @@ class JobEditModal extends React.Component {
               {" "}
               Cancel{" "}
             </Button>
-            <Button floated="right" basic type="submit" color="green" onClick={this.acceptChanges}>
+            <Button floated="right" basic type="button" color="green" onClick={this.acceptChanges}>
               {" "}
               Accept Changes{" "}
             </Button>
           </Grid.Col>
         </Grid.Row>
+        </Form>
       </Container>
     );
   }

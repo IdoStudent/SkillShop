@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import axios from "axios";
-import { Auth } from 'aws-amplify';
+import { Auth } from "aws-amplify";
 import { Container, Divider, Header, Button, Modal } from "semantic-ui-react";
 import { Form, Grid } from "tabler-react";
 
@@ -30,22 +30,27 @@ class JobseekerExp extends React.Component {
       displaystart: "",
       displayend: "",
 
-      errors: {
-        title: '',
-        company: '',
-        startdate: '',
-        enddate: '',
-        location: '',
-        desc: '',
-      },
-
-      test: 'isRequired',
-
       // Modal State
       open: false,
 
       // Current Role Checkbox
-      isChecked: props.jobinfo.current
+      isChecked: props.jobinfo.current,
+
+      // Form Validation stuff
+      titleInvalid: false,
+      titleErrorMsg: "",
+
+      companyInvalid: false,
+      companyErrorMsg: "",
+
+      startMonthInvalid: false,
+      startMonthErrorMsg: "",
+
+      endMonthInvalid: false,
+      endMonthErrorMsg: "",
+
+      descInvalid: false,
+      descErrorMsg: "",
     };
   }
 
@@ -54,19 +59,17 @@ class JobseekerExp extends React.Component {
   }
 
   handleChange = (input) => (event) => {
-    let value = event.target.value
+    let value = event.target.value;
 
     this.setState({ [input]: value });
-
   };
 
   handleCheckbox = () => {
-    this.setState(
-      {
-        isChecked: !this.state.isChecked,
-      });
+    this.setState({
+      isChecked: !this.state.isChecked,
+      endMonthInvalid: false,
+    });
   };
-
 
   convertDate = () => {
     var months = [
@@ -109,7 +112,7 @@ class JobseekerExp extends React.Component {
     var displayYearEnd = this.state.enddate.substring(2, 7);
 
     // IF displayDateEnd (THE MONTH) = 00 (or of for some reason it was stored incorrectly, check if current === true) IT MEANS THE ROLE IS CURRENT, SO DISPLAY THOSE WORDS INSTEAD
-    if(displayDateEnd === "00" || this.state.current === true){
+    if (displayDateEnd === "00" || this.state.current === true) {
       this.setState(() => ({
         displaystart: displayDateStart + " " + displayYearStart,
         displayend: "CURRENT",
@@ -140,66 +143,280 @@ class JobseekerExp extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    this.setState(prevState => ({
-      title: prevState.formtitle,
-      company: prevState.formcompany,
-      location: prevState.formlocation,
-      startdate: prevState.formstartdate,
-      enddate: prevState.formenddate,
-      desc: prevState.formdesc,
-      open: false,
-      current: prevState.isChecked,
-    }), () => {                              
-      // Convert the date once state has updated (for front-end display purposes)
-      this.convertDate()
+    // Only submit the form if all input is valid
+    if (this.validateForm()) {
+      this.setState(
+        (prevState) => ({
+          title: prevState.formtitle,
+          company: prevState.formcompany,
+          location: prevState.formlocation,
+          startdate: prevState.formstartdate,
+          enddate: prevState.formenddate,
+          desc: prevState.formdesc,
+          open: false,
+          current: prevState.isChecked,
+        }),
+        () => {
+          // Convert the date once state has updated (for front-end display purposes)
+          this.convertDate();
+        }
+      );
+
+      // If role is current role, we don't need an end date so set this to default value for database storarge
+      if (this.state.isChecked) {
+        this.setState(
+          {
+            // For database
+            enddate: "00/0000",
+
+            // For immediate display on front-end
+            formenddate: "00/0000",
+          },
+          () => {
+            // Send the data to the database once the date value has been resolved
+            //this.sendData()
+          }
+        );
+      } else {
+        this.setState(
+          (prevState) => ({
+            enddate: prevState.formenddate,
+          }),
+          () => {
+            // Send the data to the database once the date value has been resolved
+            //this.sendData()
+          }
+        );
+      }
+    }
+
+  };
+
+  validateForm = () => {
+    let title = this.state.formtitle;
+    let company = this.state.formcompany;
+    let startdate = this.state.formstartdate;
+    let enddate = this.state.formenddate;
+    let desc = this.state.formdesc;
+
+    this.setState({
+      titleInvalid: false,
+      companyInvalid: false,
+      startMonthInvalid: false,
+      endMonthInvalid: false,
+      descInvalid: false,
     });
 
-    // If role is current role, we don't need an end date so set this to default value for database storarge
-    if(this.state.isChecked){
-      this.setState({
-        // For database
-        enddate: "00/0000",
+    let validInput = true;
 
-        // For immediate display on front-end
-        formenddate: "00/0000"
-      }, () => {          
-        // Send the data to the database once the date value has been resolved                    
-        this.sendData()
-      });
-    } else {
-      this.setState(prevState => ({
-        enddate: prevState.formenddate
-      }), () => {                              
-        // Send the data to the database once the date value has been resolved
-        //this.sendData()
-      });
+    // Get the current month and year so we can compare the input
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth() + 1;
+    currentMonth = ("0" + currentMonth).slice(-2);
+
+    // Seperate the date inputs in month / year for comparison
+    var startDateMonth = startdate.substring(0, 2);
+    var startDateYear = startdate.substring(2, 7);
+    if (startDateYear[0] === "/") {
+      startDateYear =
+        startDateYear[1] +
+        startDateYear[2] +
+        startDateYear[3] +
+        startDateYear[4];
     }
+
+    if (!this.state.isChecked) {
+      var endDateMonth = enddate.substring(0, 2);
+      var endDateYear = enddate.substring(2, 7);
+      if (endDateYear[0] === "/") {
+        endDateYear =
+          endDateYear[1] + endDateYear[2] + endDateYear[3] + endDateYear[4];
+      }
+    }
+
+    // title
+    if (!title) {
+      this.setState({
+        titleErrorMsg: "Job title cannot be empty",
+        titleInvalid: true,
+      });
+      validInput = false;
+    } else if (title.length < 3) {
+      this.setState({
+        titleErrorMsg: "Please enter a more descriptive job title",
+        titleInvalid: true,
+      });
+      validInput = false;
+    }
+
+    // company
+    if (!company) {
+      this.setState({
+        companyErrorMsg: "Company cannot be empty",
+        companyInvalid: true,
+      });
+      validInput = false;
+    }
+
+    /* START DATE BLOCK START */
+    if (startDateYear == currentYear) {
+      if (startDateMonth > currentMonth) {
+        this.setState({
+          startMonthErrorMsg: "Month cannot be in the future!",
+          startMonthInvalid: true,
+        });
+        validInput = false;
+      }
+    } else if (startDateYear > currentYear) {
+      this.setState({
+        startMonthErrorMsg: "Year cannot be in the future!",
+        startMonthInvalid: true,
+      });
+      validInput = false;
+    }
+    // IF THE MONTH DOES NOT START WITH 0 OR 1, IT IS INVALID
+    if (startdate[0] > 1) {
+      this.setState({
+        startMonthErrorMsg: "Please enter a valid month",
+        startMonthInvalid: true,
+      });
+      validInput = false;
+    }
+    // IF THE MONTH STARTS WITH 1, CHECK THAT THE SECOND VALUE IS NOT > 2, OTHERWISE THAT IS INVALID
+    if (startdate[0] == 1) {
+      if (startdate[1] > 2) {
+        this.setState({
+          startMonthErrorMsg: "Please enter a valid month",
+          startMonthInvalid: true,
+        });
+        validInput = false;
+      }
+    }
+    if (!startdate) {
+      this.setState({
+        startMonthErrorMsg: "Date cannot be empty",
+        startMonthInvalid: true,
+      });
+      validInput = false;
+    }
+    // IF DATE INCLUDES _ IT MEANS THE WHOLE DATE HAS NOT BEEN FILLED OUT
+    if (startdate.includes("_")) {
+      this.setState({
+        startMonthErrorMsg: "Please fill out the full date",
+        startMonthInvalid: true,
+      });
+      validInput = false;
+    }
+    /* START DATE BLOCK END */
+
+    /* END DATE BLOCK START */
+    if (!this.state.isChecked) {
+      if (endDateYear == currentYear) {
+        if (endDateMonth > currentMonth) {
+          this.setState({
+            endMonthErrorMsg: "Month cannot be in the future!",
+            startMonthInvalid: true,
+          });
+          validInput = false;
+        }
+      } else if (endDateYear > currentYear) {
+        this.setState({
+          endMonthErrorMsg: "Year cannot be in the future!",
+          endMonthInvalid: true,
+        });
+        validInput = false;
+      }
+      // IF THE MONTH DOES NOT START WITH 0 OR 1, IT IS INVALID
+      if (enddate[0] > 1) {
+        this.setState({
+          endMonthErrorMsg: "Please enter a valid month",
+          endMonthInvalid: true,
+        });
+        validInput = false;
+      }
+      // IF THE MONTH STARTS WITH 1, CHECK THAT THE SECOND VALUE IS NOT > 2, OTHERWISE THAT IS INVALID
+      if (enddate[0] == 1) {
+        if (enddate[1] > 2) {
+          this.setState({
+            endMonthErrorMsg: "Please enter a valid month",
+            endMonthInvalid: true,
+          });
+          validInput = false;
+        }
+      }
+      if (!enddate) {
+        this.setState({
+          endMonthErrorMsg: "Date cannot be empty",
+          endMonthInvalid: true,
+        });
+        validInput = false;
+      }
+      // IF DATE INCLUDES _ IT MEANS THE WHOLE DATE HAS NOT BEEN FILLED OUT
+      if (enddate.includes("_")) {
+        this.setState({
+          endMonthErrorMsg: "Please fill out the full date",
+          endMonthInvalid: true,
+        });
+        validInput = false;
+      }
+      // IF THE YEARS ARE THE SAME, MAKE SURE THE START MONTH IS BEFORE THE END MONTH
+      if (startDateYear == endDateYear) {
+        if (startDateMonth >= endDateMonth) {
+          this.setState({
+            endMonthErrorMsg: "End date must be after start date",
+            endMonthInvalid: true,
+          });
+          validInput = false;
+        }
+      }
+      // IF THE START YEAR IS BEFORE THE END YEAR
+      if (startDateYear > endDateYear) {
+        this.setState({
+          endMonthErrorMsg: "End date must be after start date",
+          endMonthInvalid: true,
+        });
+        validInput = false;
+      }
+    }
+    /* END DATE BLOCK END */
+
+    // desc
+    if (!desc) {
+      this.setState({
+        descErrorMsg: "Job description cannot be empty",
+        descInvalid: true,
+      });
+      validInput = false;
+    } else if (desc.length < 100) {
+      this.setState({
+        descErrorMsg:
+          "Please enter a more descriptive job description (100+ characters)",
+        descInvalid: true,
+      });
+      validInput = false;
+    }
+
+    // Return the status of valid input. If any of the above error conditions are met, this will return false
+    return validInput;
   };
 
   sendData = () => {
-    const data = [
-      this.state.title, 
-      this.state.company,
-      this.state.location,
-      this.state.startdate,
-      this.state.enddate,
-      this.state.desc,
-      this.state.current
-    ]
-
     //API functionality
     try {
       const params = {
-        "userEmail": "placeholder",
-        "userJobTitle": this.state.title,
-        "userJobCompany": this.state.company,
-        "userJobStartDate": this.state.startdate,
-        "userJobEndDate": this.state.enddate,
-        "userJobLocation": this.state.location,
-        "userJobDescription": this.state.desc
+        userEmail: "placeholder",
+        userJobTitle: this.state.title,
+        userJobCompany: this.state.company,
+        userJobStartDate: this.state.startdate,
+        userJobEndDate: this.state.enddate,
+        userJobLocation: this.state.location,
+        userJobDescription: this.state.desc,
       };
-      axios.post('https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/jobexperience/', params);
-    }catch (err) {
+      axios.post(
+        "https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/jobexperience/",
+        params
+      );
+    } catch (err) {
       console.log(`An error has occurred: ${err}`);
     }
   };
@@ -214,6 +431,11 @@ class JobseekerExp extends React.Component {
       formenddate: prevState.enddate,
       formdesc: prevState.desc,
       open: false,
+      titleInvalid: false,
+      companyInvalid: false,
+      startMonthInvalid: false,
+      endMonthInvalid: false,
+      descInvalid: false,
     }));
   };
 
@@ -292,15 +514,16 @@ class JobseekerExp extends React.Component {
         >
           <Modal.Header>Edit Experience Info</Modal.Header>
           <Modal.Content>
-            <Form onSubmit={this.handleSubmit}>
+            <Form>
               <Grid.Row>
                 <Grid.Col md={4}>
                   <Form.Group label="Job Title" isRequired>
                     <Form.Input
-                      name="firstname"
+                      name="title"
                       value={formtitle}
                       onChange={this.handleChange("formtitle")}
-                      required='true'
+                      invalid={this.state.titleInvalid}
+                      feedback={this.state.titleErrorMsg}
                     />
                   </Form.Group>
                 </Grid.Col>
@@ -310,6 +533,8 @@ class JobseekerExp extends React.Component {
                       name="company"
                       value={formcompany}
                       onChange={this.handleChange("formcompany")}
+                      invalid={this.state.companyInvalid}
+                      feedback={this.state.companyErrorMsg}
                     />
                   </Form.Group>
                 </Grid.Col>
@@ -345,11 +570,13 @@ class JobseekerExp extends React.Component {
                       mask={[/\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
                       value={formstartdate}
                       onChange={this.handleChange("formstartdate")}
+                      invalid={this.state.startMonthInvalid}
+                      feedback={this.state.startMonthErrorMsg}
                     />
                   </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={3}>
-                  <Form.Group label="End Month">
+                  <Form.Group label="End Month" isRequired={!isChecked}>
                     <Form.MaskedInput
                       placeholder="00/0000"
                       name="enddate"
@@ -357,6 +584,8 @@ class JobseekerExp extends React.Component {
                       value={formenddate}
                       onChange={this.handleChange("formenddate")}
                       disabled={isChecked}
+                      invalid={this.state.endMonthInvalid}
+                      feedback={this.state.endMonthErrorMsg}
                     />
                   </Form.Group>
                 </Grid.Col>
@@ -365,12 +594,18 @@ class JobseekerExp extends React.Component {
               {/* ROW 3 */}
               <Grid.Row>
                 <Grid.Col md={12}>
-                  <Form.Group className="mb=0" label="Job Description" isRequired>
+                  <Form.Group
+                    className="mb=0"
+                    label="Job Description"
+                    isRequired
+                  >
                     <Form.Textarea
                       name="jobdesc"
                       rows={3}
                       value={formdesc}
                       onChange={this.handleChange("formdesc")}
+                      invalid={this.state.descInvalid}
+                      feedback={this.state.descErrorMsg}
                     />
                   </Form.Group>
                 </Grid.Col>
@@ -389,7 +624,13 @@ class JobseekerExp extends React.Component {
                     {" "}
                     Cancel{" "}
                   </Button>
-                  <Button floated="right" basic type="submit" color="green">
+                  <Button
+                    floated="right"
+                    basic
+                    type="button"
+                    color="green"
+                    onClick={this.handleSubmit}
+                  >
                     {" "}
                     Accept Changes{" "}
                   </Button>

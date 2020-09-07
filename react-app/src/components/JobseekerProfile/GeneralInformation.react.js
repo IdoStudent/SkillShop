@@ -32,6 +32,22 @@ class GeneralInformation extends React.Component {
 
       // Modal State
       open: false,
+
+      // Form Validation stuff
+      fNameInvalid: false,
+      fNameErrorMsg: "",
+
+      surnameInvalid: false,
+      surnameErrorMsg: "",
+
+      postcodeInvalid: false,
+      postcodeErrorMsg: "",
+
+      stateInvalid: false,
+      stateErrorMsg: "",
+
+      aboutInvalid: false,
+      aboutErrorMsg: "",
     };
   }
 
@@ -106,6 +122,7 @@ class GeneralInformation extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
 
+    if(this.validateForm()){
     this.setState((prevState) => ({
       // If submitting new values, update the state to represent the new data
       firstname: prevState.formfirstname,
@@ -134,7 +151,69 @@ class GeneralInformation extends React.Component {
     }catch (err) {
       console.log(`An error has occurred: ${err}`);
   }
+}
  };
+
+ validateForm = () => {
+  let fName = this.state.formfirstname
+  let surname = this.state.formsurname
+  let postcode = this.state.formpostcode
+  let state = this.state.formstate
+  let about = this.state.formabout
+
+  this.setState({
+    fNameInvalid: false,
+    surnameInvalid: false,
+    postcodeInvalid: false,
+    stateInvalid: false,
+    aboutInvalid: false,
+  });
+
+  let validInput = true
+
+  if(!fName){
+    this.setState({ fNameErrorMsg: "First name cannot be empty", fNameInvalid: true });
+    validInput = false
+  } else if (fName.length < 2) {
+    this.setState({ fNameErrorMsg: "First name needs to be 2 or more characters", fNameInvalid: true });
+    validInput = false
+  } 
+
+  if(!surname){
+    this.setState({ surnameErrorMsg: "Surname cannot be empty", surnameInvalid: true });
+    validInput = false
+  } else if (surname.length < 2) {
+    this.setState({ surnameErrorMsg: "Surname needs to be 2 or more characters", surnameInvalid: true });
+    validInput = false
+  }
+
+  if(!postcode){
+    this.setState({ postcodeErrorMsg: "Postcode cannot be empty", postcodeInvalid: true });
+    validInput = false
+  } else if (postcode.length != 4) {
+    this.setState({ postcodeErrorMsg: "Postcode need to be 4 numbers!", postcodeInvalid: true });
+    validInput = false
+  }
+
+  if(!state){
+    this.setState({ stateErrorMsg: "State cannot be empty", stateInvalid: true });
+    validInput = false
+  } else if (state.length < 3) {
+    this.setState({ stateErrorMsg: "Please enter a valid state name", stateInvalid: true });
+    validInput = false
+  }
+
+  if(!about){
+    this.setState({ aboutErrorMsg: "Description cannot be empty", aboutInvalid: true });
+    validInput = false
+  } else if (about.length < 100) {
+    this.setState({ aboutErrorMsg: "Tell us more about you! (100+ characters)", aboutInvalid: true });
+    validInput = false
+  }
+
+  // Return the status of valid input. If any of the above error conditions are met, this will return false
+  return validInput
+};
 
   cancelForm = () => {
     // If cancelling, reset any fields that have been changed to the original values so that when the modal is re-opened, the old values are shown
@@ -253,14 +332,16 @@ class GeneralInformation extends React.Component {
         >
           <Modal.Header>Edit Info</Modal.Header>
           <Modal.Content>
-            <Form onSubmit={this.handleSubmit}>
+            <Form>
               <Grid.Row>
                 <Grid.Col md={4}>
-                  <Form.Group label="First Name">
+                  <Form.Group label="First Name" isRequired>
                     <Form.Input
                       name="firstname"
                       value={formfirstname}
                       onChange={this.handleChange("formfirstname")}
+                      invalid={this.state.fNameInvalid}
+                      feedback={this.state.fNameErrorMsg}
                     />
                   </Form.Group>
                 </Grid.Col>
@@ -274,11 +355,13 @@ class GeneralInformation extends React.Component {
                   </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={4}>
-                  <Form.Group label="Surname">
+                  <Form.Group label="Surname" isRequired>
                     <Form.Input
                       name="surname"
                       value={formsurname}
                       onChange={this.handleChange("formsurname")}
+                      invalid={this.state.surnameInvalid}
+                      feedback={this.state.surnameErrorMsg}
                     />
                   </Form.Group>
                 </Grid.Col>
@@ -296,20 +379,24 @@ class GeneralInformation extends React.Component {
                   </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={2}>
-                  <Form.Group label="Post Code">
+                  <Form.Group label="Post Code" isRequired>
                     <Form.Input
                       name="postcode"
                       value={formpostcode}
                       onChange={this.handleChange("formpostcode")}
+                      invalid={this.state.postcodeInvalid}
+                      feedback={this.state.postcodeErrorMsg}
                     />
                   </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={3}>
-                  <Form.Group label="State">
+                  <Form.Group label="State" isRequired>
                     <Form.Input
                       name="state"
                       value={formstate}
                       onChange={this.handleChange("formstate")}
+                      invalid={this.state.stateInvalid}
+                      feedback={this.state.stateErrorMsg}
                     />
                   </Form.Group>
                 </Grid.Col>
@@ -318,12 +405,14 @@ class GeneralInformation extends React.Component {
               {/* ROW 3 */}
               <Grid.Row>
                 <Grid.Col md={12}>
-                  <Form.Group className="mb=0" label="About Me">
+                  <Form.Group className="mb=0" label="About Me" isRequired>
                     <Form.Textarea
                       name="aboutme"
                       rows={3}
                       value={formabout}
                       onChange={this.handleChange("formabout")}
+                      invalid={this.state.aboutInvalid}
+                      feedback={this.state.aboutErrorMsg}
                     />
                   </Form.Group>
                 </Grid.Col>
@@ -342,7 +431,7 @@ class GeneralInformation extends React.Component {
                     {" "}
                     Cancel{" "}
                   </Button>
-                  <Button floated="right" basic type="submit" color="green">
+                  <Button floated="right" basic type="button" color="green" onClick={this.handleSubmit}>
                     {" "}
                     Accept Changes{" "}
                   </Button>
