@@ -65,7 +65,8 @@ class Login extends Component {
                         type="text"
                         id="username"
                         aria-describedby="usernameHelp"
-                        placeholder="Enter username or email"
+                        placeholder="xxxxxxxxxxx@gmail.com"
+                        pattern="[A-Za-z0-9]*[@].*"
                         value={this.state.username}
                         onChange={this.onInputChange}
                       />
@@ -76,7 +77,8 @@ class Login extends Component {
                           className="input" 
                           type="password"
                           id="password"
-                          placeholder="Password"
+                          placeholder="Minimum length of 8 characters"
+                          minLength = "8"
                           value={this.state.password}
                           onChange={this.onInputChange}
                       />

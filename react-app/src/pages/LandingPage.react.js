@@ -116,7 +116,7 @@ class LandingPage extends Component {
                                 </Grid.Col>
                             </Grid.Row>
                             </div>
-                            <div style={{ height:"65px" }}>
+                            <div style={{ height:"45px" }}>
                                 <Grid.Row>
                                     <div style={{ color:"white",position:"absolute",right:"0",bottom:"0",padding:"20px 20px",fontSize:"20px" }}>
                                         Already have an account? <button onClick={this.handleLogin} style={{ backgroundColor:"transparent",color:"white",border:"none",textDecoration:"underline" }}>Log in</button>
