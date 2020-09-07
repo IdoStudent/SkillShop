@@ -7,6 +7,7 @@ class Login extends Component {
   state = {
     username: "",
     password: "",
+    role: ""
   };
 
   handleSubmit = async event => {
@@ -17,7 +18,18 @@ class Login extends Component {
       const user = await Auth.signIn(this.state.username, this.state.password);
       this.props.auth.setAuthStatus(true);
       this.props.auth.setUser(user);
-      this.props.history.push("/");
+      // this.props.history.push("/");
+
+      let role = user.attributes['custom:role'];
+      // console.log(role);
+
+      if (role == 'Employer'){
+        // console.log('route to employer profile');
+        this.props.history.push("/employerSetup");
+      } else if (role == 'Jobseeker') {
+        // console.log('route to jobseeker profile');
+        this.props.history.push("/");
+      }
 
     }catch(error) {
       console.log('Error')
