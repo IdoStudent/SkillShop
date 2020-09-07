@@ -2,12 +2,13 @@
 
 import * as React from "react";
 
-import { Container, Grid, Card, Form, Header } from "tabler-react";
+import {Container, Grid, Card, Form, Header} from "tabler-react";
+import {Button} from "semantic-ui-react";
 
 import SiteWrapper from "../SiteWrapper.react";
 
-var users = [];
-var jobseekers = [];
+var num = 0;
+
 
 class JobCandidates extends React.Component {
 
@@ -17,6 +18,8 @@ class JobCandidates extends React.Component {
       users: [],
 
       jobseekers: [],
+
+      finalJobSeekers: [],
     };
   }
 
@@ -41,11 +44,12 @@ class JobCandidates extends React.Component {
           );
         },
       )
-  }
+    }
 
   getJobseekers() {
     let items = [];
-     for(var i = 0; i < this.state.users.length; i++){
+
+      for (var i = 0; i < this.state.users.length; i++){
        if(this.state.users[i].userType === "jobseeker"){
          items.push(
            <Card>
@@ -90,15 +94,59 @@ class JobCandidates extends React.Component {
                  </Form.Group>
                </Grid.Col>
              </Grid.Row>
+             <Grid.Row>
+               <Grid.Col md={12}>
+                 <Button
+                   floated="left"
+                   negative
+                   type="button"
+                   color="red"
+                   onClick={this.acceptChanges}
+                 >
+                   {" "}
+                   Dislike{" "}
+                 </Button>
+                 <Button floated="right" positive type="submit" color="green" onClick={this.acceptChanges}>
+                   {" "}
+                   Like{" "}
+                 </Button>
+               </Grid.Col>
+             </Grid.Row>
            </Card.Body>
            </Card>
            );
        }
-     }
+
      this.setState({
        jobseekers: items,
-     });
+     },
+     () => {
+       this.chooseToDisplay();
+     }
+   );
+ }
+}
+
+chooseToDisplay(){
+  let items = [];
+
+   if(num < this.state.jobseekers.length){
+     items.push(
+       this.state.jobseekers[num]
+     );
    }
+     this.setState({
+       finalJobSeekers: items,
+     }
+  );
+}
+
+
+ acceptChanges = () => {
+   num++;
+   console.log(num);
+   this.getJobseekers();
+ };
 
 
   render() {
@@ -106,7 +154,7 @@ class JobCandidates extends React.Component {
 
         <Container>
           <Header.H1>Candidates</Header.H1>
-          {this.state.jobseekers}
+          {this.state.finalJobSeekers}
         </Container>
     );
   }
