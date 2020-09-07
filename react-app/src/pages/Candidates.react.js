@@ -11,6 +11,7 @@ import SiteWrapper from "../SiteWrapper.react";
 import JobEditModal from "../components/JobEditModal.react";
 import JobFiltersModal from "../components/JobFiltersModal.react";
 import JobNewModal from "../components/JobNewModal.react";
+import JobCandidates from "../components/JobCandidates.react"
 
 class Candidates extends React.Component {
   constructor(props) {
@@ -203,7 +204,9 @@ class Candidates extends React.Component {
 
                 {/* Candidate Info */}
                 <Container className="card" name="generalInfo">
-                  <Card.Body>{/* Insert candidate info component */}</Card.Body>
+                  <Card.Body>{/* Insert candidate info component */}
+                    <JobCandidates />
+                  </Card.Body>
                 </Container>
               </Grid.Col>
             </Grid.Row>
@@ -248,7 +251,7 @@ class Candidates extends React.Component {
             open={this.state.openNew}
           >
             <Modal.Header>Create a new Job Profile</Modal.Header>
-            
+
             <Modal.Content>
               <JobNewModal
                 closeModal={this.closeModalNew}
