@@ -55,7 +55,8 @@ class RegistrationPageJobseeker extends Component {
                                     type="email"
                                     id="email"
                                     aria-describedby="emailHelp"
-                                    placeholder="Enter email"
+                                    placeholder="xxxxxxxxxxx@gmail.com"
+                                    pattern="[A-Za-z0-9]*[@].*"
                                     value={this.state.email}
                                     onChange={this.onInputChange}
                                 />
@@ -66,12 +67,13 @@ class RegistrationPageJobseeker extends Component {
                                     className="input" 
                                     type="password"
                                     id="password"
-                                    placeholder="Password"
+                                    placeholder="Minimum length of 8 characters"
+                                    minLength = "8"
                                     value={this.state.password}
                                     onChange={this.onInputChange}
                                 />
                             </Form.Field>
-                            <Form.Field>
+                            {/* <Form.Field>
                                 <label>Confirm Password</label>
                                 <input 
                                     className="input" 
@@ -81,7 +83,7 @@ class RegistrationPageJobseeker extends Component {
                                     value={this.state.confirmpassword}
                                     onChange={this.onInputChange}
                                 />
-                            </Form.Field>
+                            </Form.Field> */}
                             <Button type='submit'>Submit</Button>
                             <Message>
                                 Already have an account? <a href='/landingpage'>Go Back</a>
