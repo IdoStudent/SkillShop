@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import axios from "axios";
 import { Card } from "tabler-react";
 
 import { Button, Modal, Segment } from "semantic-ui-react";
@@ -81,10 +81,25 @@ class JobseekerEduContainer extends React.Component {
       this.setState({
         dataset: this.state.dataset.concat(<JobseekerEdu eduinfo={eduinfo} />),
         open: false,
-      });
+      })
     }
 
     // TO-DO: ADD LOGIC FOR SENDING TO DATABASE
+
+    try {
+      const params = {
+        "userEmail": "placeholder2",
+        "userEducationTitle": this.state.formtitle,
+        "userEducationInstitution": this.state.forminstitution,
+        "userEducationStartDate": this.state.formstartdate,
+        "userEducationEndDate": this.state.formenddate,
+        "userEducationLocation": this.state.formlocation,
+        "userEducationDescription": this.state.formdesc
+      };
+      axios.post('https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/education/', params);
+    }catch (err) {
+      console.log(`An error has occurred: ${err}`);
+    }
   };
 
   validateForm = () => {
@@ -144,14 +159,14 @@ class JobseekerEduContainer extends React.Component {
       validInput = false;
     }
 
-    // institution
-    if (!institution) {
-      this.setState({
-        institutionErrorMsg: "Institution cannot be empty",
-        institutionInvalid: true,
-      });
-      validInput = false;
-    }
+    // // institution
+    // if (!institution) {
+    //   this.setState({
+    //     institutionErrorMsg: "Institution cannot be empty",
+    //     institutionInvalid: true,
+    //   });
+    //   validInput = false;
+    // }
 
     /* START DATE BLOCK START */
 

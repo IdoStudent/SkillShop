@@ -82,10 +82,24 @@ class JobseekerExpContainer extends React.Component {
       this.setState({
         dataset: this.state.dataset.concat(<JobseekerExp jobinfo={jobinfo} />),
         open: false,
-      });
+      })
     }
 
     // TO-DO: ADD LOGIC FOR SENDING TO DATABASE
+    try {
+      const params = {
+        "userEmail": "placeholder2",
+        "userJobTitle": this.state.formtitle,
+        "userJobCompany": this.state.formcompany,
+        "userJobStartDate": this.state.formstartdate,
+        "userJobEndDate": this.state.formenddate,
+        "userJobLocation": this.state.formlocation,
+        "userJobDescription": this.state.formdesc
+      };
+      axios.post('https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/jobexperience/', params);
+    }catch (err) {
+      console.log(`An error has occurred: ${err}`);
+    }
   };
 
   validateForm = () => {

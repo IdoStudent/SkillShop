@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react";
-
+import axios from "axios";
 import { Container, Grid, Card, Form, Header } from "tabler-react";
 
 import { Button, Modal } from "semantic-ui-react";
@@ -125,8 +125,26 @@ class Candidates extends React.Component {
         console.log(this.state.data);
         this.createSelectItems();
       }
+
+      
     );
 
+    try {
+      const params = {
+        userEmail: "placeholder2",
+        jobKey: "5",
+        jobTitle: newInfo[0],
+        jobLocation: newInfo[1],
+        jobIndustry: newInfo[2],
+        jobAbout: newInfo[3]
+        //educationFilter: educationFilter,
+        //experienceFilter: experienceFilter,
+        //skillsFilter: skillsFilter
+      };
+      axios.post('https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod', params);
+    }catch (err) {
+      console.log(`An error has occurred: ${err}`);
+  }
     // After the above code has been executed, the new data needs to be sent to the database to update the record for the job profile
     // Can use either the state data or the newInfo data, it will be the same
   };
@@ -135,6 +153,21 @@ class Candidates extends React.Component {
     // This can be done in a few ways but I think the best way (in terms of reliability) would be to first send the data to the database, and then just force a reload of this component so it does a new API call and collects the newly created data
     // I think if we append the data to the state directly it leaves too many possibilities for a mistmatch between what is on the front-end and what's on the database
     // It's doable both ways though so doesn't really matter
+
+    try {
+      const params = {
+        userEmail: "placeholder2",
+        jobKey: "5",
+        jobTitle: newInfo[0],
+        jobLocation: newInfo[1],
+        jobIndustry: newInfo[2],
+        jobAbout: newInfo[3]
+        //don't need to add filters here because this is a new Job 
+      };
+      axios.post('https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod', params);
+    }catch (err) {
+      console.log(`An error has occurred: ${err}`);
+  }
 
     console.log(newInfo)
 
@@ -148,6 +181,24 @@ class Candidates extends React.Component {
  
 
     // Probably need to post this info to the database otherwise I don't see a feasible way to store the information
+
+    try {
+      console.log();
+      const params = {
+        userEmail: "placeholder2",
+        jobKey: "5",
+        jobTitle: this.state.title,
+        jobLocation: this.state.location,
+        jobIndustry: this.state.industry,
+        jobAbout: this.state.about
+        //educationFilter: educationFilter,
+        //experienceFilter: experienceFilter,
+        //skillsFilter: skillsFilter
+      };
+      axios.post('https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod', params);
+    }catch (err) {
+      console.log(`An error has occurred: ${err}`);
+  }
 
   };
 

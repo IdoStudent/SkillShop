@@ -237,14 +237,14 @@ class JobseekerEdu extends React.Component {
       validInput = false;
     }
 
-    // institution
-    if (!institution) {
-      this.setState({
-        institutionErrorMsg: "Institution cannot be empty",
-        institutionInvalid: true,
-      });
-      validInput = false;
-    }
+    // // institution
+    // if (!institution) {
+    //   this.setState({
+    //     institutionErrorMsg: "Institution cannot be empty",
+    //     institutionInvalid: true,
+    //   });
+    //   validInput = false;
+    // }
 
     /* START DATE BLOCK START */
 
@@ -404,7 +404,7 @@ class JobseekerEdu extends React.Component {
     try {
       const params = {
         
-        "userEmail": "placeholder",
+        "userEmail": "placeholder2",
         "userEducationTitle": this.state.title,
         "userEducationInstitution": this.state.institution,
         "userEducationStartDate": this.state.startdate,
