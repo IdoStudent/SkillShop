@@ -17,38 +17,72 @@ class JobCandidates extends React.Component {
     this.state = {
       users: [],
 
-      jobseekers: [],
+      candidates: [],
 
-      finalJobSeekers: [],
+      filteredCandidates: [],
+
+      jobExperience: [],
+
+      education: [],
+
+      skills: {
+        "userEmail": "testUser1@gmail.com",
+        "userSkills": [
+          "teamwork",
+          "Responsibility",
+          "Flexibility",
+          "Administration",
+          "Adobe Photoshop",
+          "Adobe XD",
+          "Adobe Premier",
+          "Excel",
+          "Microsoft Office"
+        ]
+      },
+
+      filters: [
+        "teamwork",
+        "Responsibility",
+        "Excel",
+        "Microsoft Office"
+      ],
+
     };
   }
 
   componentDidMount() {
-    fetch("https://8tyuiglaca.execute-api.ap-southeast-2.amazonaws.com/prod/")
-      .then(res => res.json())
-      .then((result) => {
-
-        let items = [];
-        for (var i = 0; i < result.length; i++) {
-          items.push(result[i]);
-        }
-
-          this.setState(
-            {
-            users: items,
-            },
-            () => {
-
-              this.getJobseekers();
-            }
-          );
-        },
-      )
+    this.getAllUsers();
     }
+
+    getAllUsers(){
+      fetch("https://8tyuiglaca.execute-api.ap-southeast-2.amazonaws.com/prod/")
+        .then(res => res.json())
+        .then((result) => {
+
+          let items = [];
+          for (var i = 0; i < result.length; i++) {
+            items.push(result[i]);
+          }
+
+            this.setState(
+              {
+              users: items,
+              },
+              () => {
+
+                this.getJobseekers();
+
+              }
+            );
+          },
+        )
+    }
+
+
 
   getJobseekers() {
     let items = [];
-
+    // console.log(this.state.users)
       for (var i = 0; i < this.state.users.length; i++){
        if(this.state.users[i].userType === "jobseeker"){
          items.push(
@@ -118,25 +152,70 @@ class JobCandidates extends React.Component {
        }
 
      this.setState({
-       jobseekers: items,
+       candidates: items,
      },
      () => {
-       this.chooseToDisplay();
+       this.filteredCandidates();
      }
    );
  }
 }
 
-chooseToDisplay(){
+//    code for fetching filters from the database once the API is set up
+//
+// addFilters(){
+//   fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/skillsFilter`)
+//     .then(res => res.json())
+//     .then((result) => {
+//         this.setState(
+//           {
+//           filters: result,
+//           }
+//         );
+//       },
+//     )
+// }
+
+
+
+// code to pull users skills (based off user email) from the database once the API is working
+
+// addSkills(){
+//   fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/skills?userEmail=${this.state.users[num].userEmail}`)
+//     .then(res => res.json())
+//     .then((result) => {
+//
+//        let items = [];
+//        items.push(result[i].userSkills);
+//       }
+//
+//         this.setState(
+//           {
+//           skills: items,
+//           }
+//         );
+//       },
+//     )
+// }
+
+filteredCandidates(){
   let items = [];
 
-   if(num < this.state.jobseekers.length){
+   if(num < this.state.candidates.length && this.state.filters.every(r => this.state.skills.userSkills.includes(r))){
      items.push(
-       this.state.jobseekers[num]
+       this.state.candidates[num]
+     );
+   } else {
+     items.push(
+      <Card>
+        <Card.Body>
+          <Header.H5>No More Candidates At This Time</Header.H5>
+        </Card.Body>
+      </Card>
      );
    }
      this.setState({
-       finalJobSeekers: items,
+       filteredCandidates: items,
      }
   );
 }
@@ -154,7 +233,7 @@ chooseToDisplay(){
 
         <Container>
           <Header.H1>Candidates</Header.H1>
-          {this.state.finalJobSeekers}
+          {this.state.filteredCandidates}
         </Container>
     );
   }

@@ -68,7 +68,7 @@ class JobFiltersModal extends React.Component {
   };
 
   acceptChanges = () => {
-    let skills = softSkillsSelected.concat(hardSkillsSelected).concat(techSkillsSelected) 
+    let skills = softSkillsSelected.concat(hardSkillsSelected).concat(techSkillsSelected)
 
     let filters = {
       skills: skills,
@@ -117,20 +117,20 @@ class JobFiltersModal extends React.Component {
             <Grid.Col md={12}>
               <Form.Group name="softskills" label="Soft Skills">
               <Dropdown placeholder='Soft Skills' fluid multiple selection options={softSkillsOptions} onChange={this.handleSelectSoft}/>
-              </Form.Group> 
+              </Form.Group>
             </Grid.Col>
           </Grid.Row>
           <Grid.Row>
             <Grid.Col md={12}>
               <Form.Group name="hardskills" label="Hard Skills">
-              <Dropdown placeholder='Soft Skills' fluid multiple selection options={hardSkillsOptions} onChange={this.handleSelectHard}/>
+              <Dropdown placeholder='Hard Skills' fluid multiple selection options={hardSkillsOptions} onChange={this.handleSelectHard}/>
               </Form.Group>
             </Grid.Col>
           </Grid.Row>
           <Grid.Row>
             <Grid.Col md={12}>
               <Form.Group name="techskills" label="Tech Skills">
-              <Dropdown placeholder='Soft Skills' fluid multiple selection options={techSkillsOptions} onChange={this.handleSelectTech}/>
+              <Dropdown placeholder='Tech Skills' fluid multiple selection options={techSkillsOptions} onChange={this.handleSelectTech}/>
               </Form.Group>
             </Grid.Col>
           </Grid.Row>
