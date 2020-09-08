@@ -5,8 +5,6 @@ import { Auth } from 'aws-amplify';
 import {
   Error404,
   ProfilePage,
-  ProfileSetup,
-  EmployerSetup,
   LandingPage,
   Login,
   Candidates,
@@ -63,14 +61,22 @@ class App extends React.Component {
       <React.StrictMode>     
         <Router>
           <Switch>
-            <Route exact path="/" render={(props) => <ProfilePage {...props} auth={authProps} />} />
-            <Route exact path="/setup" render={(props) => <ProfileSetup {...props} auth={authProps} />}  />
-            <Route exact path="/candidates" render={(props) => <Candidates {...props} auth={authProps} />}  />
-            <Route exact path="/landingpage" render={(props) => <LandingPage {...props} auth={authProps} />} />
+
+            {/* NO USER PAGES */}
+            <Route exact path="/" render={(props) => <LandingPage {...props} auth={authProps} />} />
+            <Route exact path="/login" render={(props) => <Login {...props} auth={authProps} />} />
             <Route exact path="/registrationpageemployer" render={(props) => <RegistrationPageEmployer {...props} auth={authProps} />} />
             <Route exact path="/registrationpagejobseeker" render={(props) => <RegistrationPageJobseeker {...props} auth={authProps} />} />
-            <Route exact path="/login" render={(props) => <Login {...props} auth={authProps} />} />
+
+            {/* JOBSEEKER PAGES */}
+            <Route exact path="/myprofile" render={(props) => <ProfilePage {...props} auth={authProps} />} />
+
+            {/* EMPLOYER PAGES */}
+            <Route exact path="/candidates" render={(props) => <Candidates {...props} auth={authProps} />}  />
+
             <Route exact path="/testuser" render={(props) => <TestUser {...props} auth={authProps} />} />
+
+            {/* ERROR PAGE (NO VALID ROUTE) */}
             <Route component={Error404} />
           </Switch>
         </Router>

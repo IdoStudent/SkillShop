@@ -25,10 +25,10 @@ class Login extends Component {
 
       if (role == 'Employer'){
         // console.log('route to employer profile');
-        this.props.history.push("/employerSetup");
+        this.props.history.push("/candidates");
       } else if (role == 'Jobseeker') {
         // console.log('route to jobseeker profile');
-        this.props.history.push("/");
+        this.props.history.push("/myprofile");
       }
 
     }catch(error) {
@@ -85,7 +85,7 @@ class Login extends Component {
                   </Form.Field>
                   <Button type='submit'>Submit</Button>
                   <Message>
-                      Don't have an account? <a href='/landingpage'>Go Back</a>
+                      Don't have an account? <a href='/'>Go Back</a>
                   </Message>
               </Form>
           </Grid.Column>
