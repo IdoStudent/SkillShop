@@ -94,9 +94,8 @@ class GeneralInformation extends React.Component {
     this.setState({ [input]: event.target.value });
   };
 
-  handleSubmit = async (event) => {
+  handleSubmit = async (event , email) => {
     event.preventDefault();
-
     this.setState((prevState) => ({
       // If submitting new values, update the state to represent the new data
       firstname: prevState.formfirstname,
@@ -104,14 +103,16 @@ class GeneralInformation extends React.Component {
       surname: prevState.formsurname,
       city: prevState.formcity,
       postcode: prevState.formpostcode,
-      email: prevState.formemail,
+      email: this.state.formemail,
       userState: prevState.formstate,
       about: prevState.formabout,
       open: false,
       
     }))
+
     try {
       const params = {
+        "userEmail": this.state.formemail,
         "userFirstName": this.state.formfirstname,
         "userMiddleName": this.state.formmiddlename,
         "userLastName": this.state.formsurname,
@@ -122,7 +123,9 @@ class GeneralInformation extends React.Component {
         "userAbout": this.state.formabout,
         "userType": "jobseeker"
       };
-      await axios.post('https://qrg3idkox4.execute-api.ap-southeast-2.amazonaws.com/prod/{userEmail}/', params);
+      
+      await axios.post('https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata', params);
+      console.log(`EMAIL:  ` + this.state.formemail);
     }catch (err) {
       console.log(`An error has occurred: ${err}`);
   }
