@@ -55,8 +55,8 @@ class JobFiltersModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      experience: props.data.experience,
-      education: props.data.education,
+      experience: props.data.experienceFilter,
+      education: props.data.educationFilter,
 
       // Modal State
       open: false,
@@ -88,7 +88,7 @@ class JobFiltersModal extends React.Component {
   handleSelectTech = (e, { value }) => techSkillsSelected = value
 
   componentDidMount() {
-    console.log("Editing filters for " + this.props.data.title);
+    console.log("Editing filters for " + this.props.data.jobTitle);
   }
 
   render() {

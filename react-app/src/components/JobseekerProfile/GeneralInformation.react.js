@@ -56,24 +56,28 @@ class GeneralInformation extends React.Component {
       .then(res => res.json())
       .then(
         (result) => {
-          this.setState({
-            firstname: result.Item.userFirstName,
-            middlename: result.Item.userMiddleName,
-            surname: result.Item.userLastName,
-            city: result.Item.userCity,
-            postcode: result.Item.userPostcode,
-            state: result.Item.userState,
-            about: result.Item.userAbout,
 
-            formfirstname: result.Item.userFirstName,
-            formmiddlename: result.Item.userMiddleName,
-            formsurname: result.Item.userLastName,
-            formcity: result.Item.userCity,
-            formpostcode: result.postcode,
-            formstate: result.Item.userState,
-            formabout: result.Item.userAbout,
-            
-          });
+          // If length is undefined, that means for some reason it's not returning data at all, so dont try and access fields that dont exist
+          if(!result.length == undefined){
+            this.setState({
+              firstname: result.Item.userFirstName,
+              middlename: result.Item.userMiddleName,
+              surname: result.Item.userLastName,
+              city: result.Item.userCity,
+              postcode: result.Item.userPostcode,
+              state: result.Item.userState,
+              about: result.Item.userAbout,
+  
+              formfirstname: result.Item.userFirstName,
+              formmiddlename: result.Item.userMiddleName,
+              formsurname: result.Item.userLastName,
+              formcity: result.Item.userCity,
+              formpostcode: result.postcode,
+              formstate: result.Item.userState,
+              formabout: result.Item.userAbout,
+            });
+          }
+          
           console.log("THIS IS RESULT1 " + this.state.email)} ,
       )
   }
@@ -90,9 +94,8 @@ class GeneralInformation extends React.Component {
     this.setState({ [input]: event.target.value });
   };
 
-  handleSubmit = async (event) => {
+  handleSubmit = async (event , email) => {
     event.preventDefault();
-
     this.setState((prevState) => ({
       // If submitting new values, update the state to represent the new data
       firstname: prevState.formfirstname,
@@ -100,14 +103,16 @@ class GeneralInformation extends React.Component {
       surname: prevState.formsurname,
       city: prevState.formcity,
       postcode: prevState.formpostcode,
-      email: prevState.formemail,
+      email: this.state.formemail,
       userState: prevState.formstate,
       about: prevState.formabout,
       open: false,
       
     }))
+
     try {
       const params = {
+        "userEmail": this.state.formemail,
         "userFirstName": this.state.formfirstname,
         "userMiddleName": this.state.formmiddlename,
         "userLastName": this.state.formsurname,
@@ -118,7 +123,9 @@ class GeneralInformation extends React.Component {
         "userAbout": this.state.formabout,
         "userType": "jobseeker"
       };
-      await axios.post('https://qrg3idkox4.execute-api.ap-southeast-2.amazonaws.com/prod/{userEmail}/', params);
+      
+      await axios.post('https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata', params);
+      console.log(`EMAIL:  ` + this.state.formemail);
     }catch (err) {
       console.log(`An error has occurred: ${err}`);
   }

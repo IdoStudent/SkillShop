@@ -9,10 +9,10 @@ class JobEditModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        title: props.data.title,
-        location: props.data.location,
-        about: props.data.about,
-        industry: props.data.industry,
+        title: props.data.jobTitle,
+        location: props.data.jobLocation,
+        about: props.data.jobAbout,
+        industry: props.data.jobIndustry,
 
         newInfo: [],
 
@@ -79,7 +79,7 @@ class JobEditModal extends React.Component {
   };
 
   componentDidMount() {
-    console.log("Editing info for " + this.props.data.title)
+    console.log("Editing info for " + this.props.data.jobTitle)
   }
 
 

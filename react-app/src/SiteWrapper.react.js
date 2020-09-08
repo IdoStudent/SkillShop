@@ -8,6 +8,7 @@ import {
   RouterContextProvider,
 } from "tabler-react";
 
+
 import type { NotificationProps } from "tabler-react";
 
 type Props = {|
@@ -39,7 +40,7 @@ type navItem = {|
 const navBarItems: Array<navItem> = [
   {
     value: "Home (Jobseeker - Placeholder)",
-    to: "/",
+    to: "/myprofile",
     icon: "home",
     LinkComponent: withRouter(NavLink),
     useExact: true,
@@ -74,7 +75,7 @@ const accountDropdownProps = {
   name: "Jane Pearson",
   description: "Administrator",
   options: [
-    { icon: "user", value: "Profile", to: "/", LinkComponent: withRouter(NavLink) },
+    { icon: "user", value: "Profile", to: "/myprofile", LinkComponent: withRouter(NavLink) },
     { icon: "mail", value: "Inbox", badge: "6" },
     { isDivider: true },
     { icon: "log-out", value: "Sign out" },

@@ -105,7 +105,7 @@ class RegistrationPageJobseeker extends Component {
                             </Form.Field>
                             <Button type='submit'>Submit</Button>
                             <Message>
-                                Already have an account? <a href='/landingpage'>Go Back</a>
+                                Already have an account? <a href='/'>Go Back</a>
                             </Message>
                         </Form>
                     </Grid.Column>
