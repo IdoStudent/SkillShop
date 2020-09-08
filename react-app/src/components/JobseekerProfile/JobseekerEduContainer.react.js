@@ -104,7 +104,7 @@ class JobseekerEduContainer extends React.Component {
 
   validateForm = () => {
     let title = this.state.formtitle;
-    let institution = this.state.formcompany;
+    let institution = this.state.forminstitution;
     let startdate = this.state.formstartdate;
     let enddate = this.state.formenddate;
     let desc = this.state.formdesc;
@@ -378,7 +378,7 @@ class JobseekerEduContainer extends React.Component {
           closeOnDimmerClick={false}
           open={open}
         >
-          <Modal.Header>Edit Experience Info</Modal.Header>
+          <Modal.Header>Add new Education Information</Modal.Header>
           <Modal.Content>
             <Form>
               <Grid.Row>

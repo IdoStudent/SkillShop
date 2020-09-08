@@ -8,6 +8,13 @@ import {
   RouterContextProvider,
 } from "tabler-react";
 
+import {
+  Sidebar,
+  Menu,
+  Icon,
+  Segment
+} from 'semantic-ui-react'
+
 import type { NotificationProps } from "tabler-react";
 
 type Props = {|

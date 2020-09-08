@@ -378,7 +378,7 @@ class JobseekerExpContainer extends React.Component {
           closeOnDimmerClick={false}
           open={open}
         >
-          <Modal.Header>Edit Experience Info</Modal.Header>
+          <Modal.Header>Add new Experience Information</Modal.Header>
           <Modal.Content>
             <Form>
               <Grid.Row>

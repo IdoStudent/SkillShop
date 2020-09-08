@@ -56,24 +56,28 @@ class GeneralInformation extends React.Component {
       .then(res => res.json())
       .then(
         (result) => {
-          this.setState({
-            firstname: result.Item.userFirstName,
-            middlename: result.Item.userMiddleName,
-            surname: result.Item.userLastName,
-            city: result.Item.userCity,
-            postcode: result.Item.userPostcode,
-            state: result.Item.userState,
-            about: result.Item.userAbout,
 
-            formfirstname: result.Item.userFirstName,
-            formmiddlename: result.Item.userMiddleName,
-            formsurname: result.Item.userLastName,
-            formcity: result.Item.userCity,
-            formpostcode: result.postcode,
-            formstate: result.Item.userState,
-            formabout: result.Item.userAbout,
-            
-          });
+          // If length is undefined, that means for some reason it's not returning data at all, so dont try and access fields that dont exist
+          if(!result.length == undefined){
+            this.setState({
+              firstname: result.Item.userFirstName,
+              middlename: result.Item.userMiddleName,
+              surname: result.Item.userLastName,
+              city: result.Item.userCity,
+              postcode: result.Item.userPostcode,
+              state: result.Item.userState,
+              about: result.Item.userAbout,
+  
+              formfirstname: result.Item.userFirstName,
+              formmiddlename: result.Item.userMiddleName,
+              formsurname: result.Item.userLastName,
+              formcity: result.Item.userCity,
+              formpostcode: result.postcode,
+              formstate: result.Item.userState,
+              formabout: result.Item.userAbout,
+            });
+          }
+          
           console.log("THIS IS RESULT1 " + this.state.email)} ,
       )
   }

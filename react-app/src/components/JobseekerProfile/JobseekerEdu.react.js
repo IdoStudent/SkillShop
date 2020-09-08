@@ -182,7 +182,7 @@ class JobseekerEdu extends React.Component {
 
   validateForm = () => {
     let title = this.state.formtitle;
-    let institution = this.state.formcompany;
+    let institution = this.state.forminstitution;
     let startdate = this.state.formstartdate;
     let enddate = this.state.formenddate;
     let desc = this.state.formdesc;

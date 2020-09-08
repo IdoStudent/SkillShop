@@ -39,9 +39,10 @@ class Candidates extends React.Component {
   }
 
   componentDidMount() {
-    fetch("https://run.mocky.io/v3/289c10f5-da75-41b1-aa2e-116c2757fd1b")
+    fetch("http://demo5322112.mockable.io/TESTTEST")
       .then((res) => res.json())
       .then((result) => {
+        console.log(result)
         // Create a temporary array to hold our individual items (job profiles)
         let items = [];
         for (var i = 0; i < result.length; i++) {
@@ -90,7 +91,7 @@ class Candidates extends React.Component {
     for (var i = 0; i < this.state.data.length; i++) {
       items.push(
         <option key={i} value={i}>
-          {this.state.data[i].title}
+          {this.state.data[i].jobTitle}
         </option>
       );
     }
@@ -109,10 +110,10 @@ class Candidates extends React.Component {
   acceptChangesInfo = (newInfo) => {
     let tmpdata = [...this.state.data];
 
-    tmpdata[this.state.selectValue].title = newInfo[0];
-    tmpdata[this.state.selectValue].industry = newInfo[1];
-    tmpdata[this.state.selectValue].location = newInfo[2];
-    tmpdata[this.state.selectValue].about = newInfo[3];
+    tmpdata[this.state.selectValue].jobTitle = newInfo[0];
+    tmpdata[this.state.selectValue].jobIndustry = newInfo[1];
+    tmpdata[this.state.selectValue].jobLocation = newInfo[2];
+    tmpdata[this.state.selectValue].jobAbout = newInfo[3];
 
     console.log(tmpdata);
 
@@ -125,28 +126,27 @@ class Candidates extends React.Component {
         console.log(this.state.data);
         this.createSelectItems();
       }
-
-      
     );
+
+    // Get current profile information so we can save the filters
+    let currentProfile = this.state.data[this.state.selectValue]
 
     try {
       const params = {
-        userEmail: "placeholder2",
-        jobKey: "5",
+        userEmail: currentProfile.userEmail,
+        jobKey: currentProfile.jobKey,
         jobTitle: newInfo[0],
         jobLocation: newInfo[1],
         jobIndustry: newInfo[2],
-        jobAbout: newInfo[3]
-        //educationFilter: educationFilter,
-        //experienceFilter: experienceFilter,
-        //skillsFilter: skillsFilter
+        jobAbout: newInfo[3],
+        educationFilter: currentProfile.educationFilter,
+        experienceFilter: currentProfile.experienceFilter,
+        skillsFilter: currentProfile.skillsFilter
       };
       axios.post('https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod', params);
     }catch (err) {
       console.log(`An error has occurred: ${err}`);
   }
-    // After the above code has been executed, the new data needs to be sent to the database to update the record for the job profile
-    // Can use either the state data or the newInfo data, it will be the same
   };
 
   createNewProfile = (newInfo) => {
@@ -178,23 +178,26 @@ class Candidates extends React.Component {
     // filters will return an object with all the filters
     // access individual filters like: filters.experience, filters.education, filters.skills
     // filters.skills is an array of skills (strings). anything in the array has been selected
- 
 
-    // Probably need to post this info to the database otherwise I don't see a feasible way to store the information
+    // Get current profile information
+    let currentProfile = this.state.data[this.state.selectValue]
 
     try {
-      console.log();
+
+      // Map the data so it sends the current profile information with the new filters
+
       const params = {
-        userEmail: "placeholder2",
-        jobKey: "5",
-        jobTitle: this.state.title,
-        jobLocation: this.state.location,
-        jobIndustry: this.state.industry,
-        jobAbout: this.state.about
-        //educationFilter: educationFilter,
-        //experienceFilter: experienceFilter,
-        //skillsFilter: skillsFilter
+        userEmail: currentProfile.userEmail,
+        jobKey: currentProfile.jobKey,
+        jobTitle: currentProfile.jobTitle,
+        jobLocation: currentProfile.jobLocation,
+        jobIndustry: currentProfile.jobIndustry,
+        jobAbout: currentProfile.jobAbout,
+        educationFilter: filters.education,
+        experienceFilter: filters.experience,
+        skillsFilter: filters.skills
       };
+
       axios.post('https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod', params);
     }catch (err) {
       console.log(`An error has occurred: ${err}`);
