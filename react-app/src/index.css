@@ -10,10 +10,70 @@ body {
 
 /* LANDING PAGE STYLES */
 
-.landingPage {
+.background {
   background-color: #F8F8FB;
+  background-image: url('./img/background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
   width: 100%;
   height: 100%;
+}
+
+.landingPage .middleContent {
+  width: 80%;
+  height: 60%;
+  text-align: center;
+  margin-top: 5%;
+}
+
+.landingPage .middleDivider {
+  /* IMAGE STYLE IF WE WANT IT BACK
+  background-image: url('./img/middlelogo.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 100%;*/
+
+  /* VERTICAL DIVIDER STYLE */
+  border-left: 2px solid white;
+  height: 70%;
+  position: absolute;
+  left: 50%;
+  margin-left: -3px;
+  top: 15%;
+}
+
+.landingPage .middleContent .row {
+  height: 100%;
+}
+
+.landingPage .middleContent .sideButton {
+  color: white;
+  margin-top: 60%;
+}
+
+.landingPage .btn {
+  margin-top: 10px;
+  width: 65%;
+  border: 2px solid #ffffff;
+  background: none;
+  color: white;
+  font-weight: lighter;
+}
+
+.landingPage .header {
+  background: none;
+  text-align: center;
+  color: white;
+  border-bottom: none;
+  padding-top: 50px;
+}
+
+.header h1 {
+  font-size: 5rem;
+}
+
+.header h2 {
+  font-size: 3rem;
 }
 
 .landingPage .card{
@@ -25,6 +85,7 @@ body {
   top: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
+  box-shadow: 0px 0px 17px 1px rgba(0,0,0,0.15);
 }
 
 .landingPage .card .h2{
@@ -40,6 +101,7 @@ body {
   position: fixed;
   bottom: 25px;
   right: 25px;
+  color: white;
 }
 
 .linkText {
@@ -48,6 +110,10 @@ body {
 }
 
 /* LOGIN PAGE STYLES */
+
+.background .h3 {
+  color: white;
+}
 
 .loginPage {
   background-color: #F8F8FB;
@@ -58,13 +124,14 @@ body {
 .loginPage .card{
   background-color: #ffffff;
   width: 400px;
-  min-height: 230px;
+  min-height: 240px;
   position: absolute;
   left: 50%; 
   top: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
   padding-top: 20px;
+  box-shadow: 0px 0px 17px 1px rgba(0,0,0,0.15);
 }
 
 .loginPage .wrapper{
@@ -79,8 +146,9 @@ body {
 }
 
 .loginPage .errorMsg {
-  height: 20px;
-  padding-top: 10px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  height: 10px;
 }
 
 .loginPage .errorMsg p{
@@ -115,7 +183,8 @@ body {
   transform: translate(-50%, -50%);
   text-align: center;
   padding-top: 20px;
-  margin-top: 90px
+  margin-top: 85px;
+  box-shadow: 0px 0px 17px 1px rgba(0,0,0,0.15);
 }
 
 .registerPage .wrapper{
@@ -154,10 +223,11 @@ body {
   font-weight: lighter;
 }
 
+/* MISC */
+
 .formLabelLeft {
   text-align: left;
 }
-
 
 .ui.basic.button, .ui.basic.buttons .button {
   box-shadow: none !important;

@@ -5,6 +5,10 @@ import { Auth } from "aws-amplify";
 
 import { Container, Form, Grid, Header, Button, Alert } from "tabler-react";
 
+const validEmailRegex = RegExp(
+  /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+);
+
 class Login extends Component {
   state = {
     username: "",
@@ -19,43 +23,74 @@ class Login extends Component {
   handleSubmit = async (event) => {
     event.preventDefault();
 
-    // AWS Cognito integration here
-    try {
-      const user = await Auth.signIn(this.state.username, this.state.password);
-      this.props.auth.setAuthStatus(true);
-      this.props.auth.setUser(user);
-      // this.props.history.push("/");
+    if (this.validateForm()) {
+      // AWS Cognito integration here
+      try {
+        const user = await Auth.signIn(
+          this.state.username,
+          this.state.password
+        );
+        this.props.auth.setAuthStatus(true);
+        this.props.auth.setUser(user);
+        // this.props.history.push("/");
 
-      let role = user.attributes["custom:role"];
-      // console.log(role);
+        let role = user.attributes["custom:role"];
+        // console.log(role);
 
-      if (role == "Employer") {
-        // console.log('route to employer profile');
-        this.props.history.push("/candidates");
-      } else if (role == "Jobseeker") {
-        // console.log('route to jobseeker profile');
-        this.props.history.push("/myprofile");
+        if (role == "employer") {
+          // console.log('route to employer profile');
+          this.props.history.push("/candidates");
+        } else if (role == "jobseeker") {
+          // console.log('route to jobseeker profile');
+          this.props.history.push("/myprofile");
+        }
+      } catch (error) {
+        if (error.code == "UserNotConfirmedException") {
+          this.setState({
+            emailErr: true,
+            passwordErr: true,
+            errorMsg: "Please confirm your account first!",
+          });
+        }
+
+        if (error.code == "NotAuthorizedException") {
+          this.setState({
+            emailErr: true,
+            passwordErr: true,
+            errorMsg: "Incorrect username or password.",
+          });
+        }
       }
-    } catch (error) {
-      console.log("Error");
-      let err = null;
-      !error.message ? (err = { message: error }) : (err = error);
-      this.setState({
-        error: true,
-        errorMsg:
-          "The username or password you entered is incorrect, please try again.",
-        errors: {
-          ...this.state.errors,
-          cognito: err,
-        },
-      });
     }
+  };
+
+  validateForm = () => {
+    let username = this.state.username;
+    let password = this.state.password;
+
+    let validInput = true;
+
+    if (!username) {
+      this.setState({ emailErr: true });
+      validInput = false;
+    } else if (!validEmailRegex.test(username)) {
+      this.setState({ emailErr: true });
+      validInput = false;
+    }
+
+    if (!password) {
+      this.setState({ passwordErr: true });
+      validInput = false;
+    }
+
+    return validInput;
   };
 
   onInputChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
-      error: false,
+      emailErr: false,
+      passwordErr: false,
       errorMsg: "",
     });
   };
@@ -66,6 +101,12 @@ class Login extends Component {
 
   // Set initial state
   componentDidMount() {
+    if (this.props.location.email) {
+      this.setState({
+        username: this.props.location.email,
+      });
+    }
+
     this.setState({
       error: false,
       errorMsg: "",
@@ -74,10 +115,13 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="loginPage">
+      <div className="background loginPage">
         <Container className="wrapper">
           <Header.H3>Login</Header.H3>
           <Container className="card">
+            <Container className="errorMsg">
+              <p> {this.state.errorMsg} </p>
+            </Container>
             <Grid className="landingGrid">
               <Grid.Row>
                 <Grid.Col md={8} offset={2}>
@@ -87,7 +131,7 @@ class Login extends Component {
                         name="username"
                         value={this.state.username}
                         onChange={this.onInputChange}
-                        invalid={this.state.error}
+                        invalid={this.state.emailErr}
                       />
                     </Form.Group>
 
@@ -97,10 +141,9 @@ class Login extends Component {
                         type="password"
                         value={this.state.password}
                         onChange={this.onInputChange}
-                        invalid={this.state.error}
+                        invalid={this.state.passwordErr}
                       />
                     </Form.Group>
-
                     <Button type="submit" square>
                       Login
                     </Button>
@@ -108,9 +151,6 @@ class Login extends Component {
                 </Grid.Col>
               </Grid.Row>
             </Grid>
-          </Container>
-          <Container className="errorMsg">
-            <p> {this.state.errorMsg} </p>
           </Container>
         </Container>
 

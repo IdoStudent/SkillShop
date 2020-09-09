@@ -38,9 +38,16 @@ class Signup extends Component {
           },
         });
         console.log(signUpResponse);
-        this.props.history.push("/login");
+        this.props.history.push({
+          pathname: '/login',
+          email: email,
+      });
       } catch (error) {
-        console.log("Error");
+        console.log(error);
+
+        if(error.code == "UsernameExistsException"){
+          this.setState({ emailErrMsg: "An account with this email already exists", emailErr: true });
+        }
       }
     }
   };
@@ -64,6 +71,9 @@ class Signup extends Component {
     if (!password) {
         this.setState({ passwordErrMsg: "Password is required", passwordErr: true });
         validInput = false
+    } else if (password.length < 8){
+      this.setState({ passwordErrMsg: "Password needs to be atleast 8 characters", passwordErr: true });
+      validInput = false
     }
 
     if (!passwordConfirm) {
@@ -111,9 +121,18 @@ class Signup extends Component {
     this.props.history.push("/login");
   };
 
+  componentDidMount(){
+
+    // If there is a user type parameter (came from landing page), assign this to our state
+    if(this.props.location.type) {
+      this.setState({role: this.props.location.type })
+    }
+
+  }
+
   render() {
     return (
-      <div className="registerPage">
+      <div className="background registerPage">
         <Container className="wrapper">
           <Header.H3>Register</Header.H3>
           <Container className="card">
@@ -128,6 +147,7 @@ class Signup extends Component {
                       name="accountType"
                       value="jobseeker"
                       onChange={this.handleRadio}
+                      checked={this.state.role == "jobseeker"}
                     />
                     <Form.Radio
                       isInline
@@ -135,6 +155,7 @@ class Signup extends Component {
                       name="accountType"
                       value="employer"
                       onChange={this.handleRadio}
+                      checked={this.state.role == "employer"}
                     />
                   </Form.Group>
                   <Container className="errorMsg radios">
