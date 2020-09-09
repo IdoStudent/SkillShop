@@ -18,8 +18,7 @@ class ProfilePage extends Component {
       <SiteWrapper>
         <Alert type="warning" isDismissible>
           <center>
-            All information on your profile is publicly available to potential
-            employers.
+            All information on your profile is publicly available to potential employers.
           </center>
         </Alert>
         <div className="my-3 my-md-5">

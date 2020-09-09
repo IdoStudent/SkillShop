@@ -5,8 +5,7 @@ import EmployerSetup from "./EmployerSetup.react";
 import Candidates from "./Candidates.react";
 
 import LandingPage  from "./LandingPage.react";
-import RegistrationPageEmployer from "./RegistrationPageEmployer.react";
-import RegistrationPageJobseeker from "./RegistrationPageJobseeker.react";
+import Signup from "./Signup.react";
 import Login from "./Login.react";
 import TestUser from "./TestUser.react";
 
@@ -16,9 +15,8 @@ export {
   ProfileSetup,
   EmployerSetup,
   LandingPage,
-  RegistrationPageJobseeker,
+  Signup,
   Login,
   Candidates,
   TestUser,
-  RegistrationPageEmployer
 };
