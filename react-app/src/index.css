@@ -60,6 +60,15 @@ body {
   font-weight: lighter;
 }
 
+.landingPage .btn:hover {
+  margin-top: 10px;
+  width: 65%;
+  border: 2px solid #ffffff;
+  background: white;
+  color: black;
+  font-weight: lighter;
+}
+
 .landingPage .header {
   background: none;
   text-align: center;
