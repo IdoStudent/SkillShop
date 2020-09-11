@@ -3,7 +3,8 @@ import { Auth } from "aws-amplify";
 
 // import { Header,Form,Button,Grid,Message } from "semantic-ui-react";
 
-import { Container, Form, Grid, Header, Button, Alert } from "tabler-react";
+import { Container, Form, Grid, Header } from "tabler-react";
+import { Button, Icon } from "semantic-ui-react";
 
 const validEmailRegex = RegExp(
   /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
@@ -18,6 +19,8 @@ class Login extends Component {
     errorMsg: "",
 
     error: false,
+
+    sendingData: false,
   };
 
   handleSubmit = async (event) => {
@@ -26,6 +29,7 @@ class Login extends Component {
     if (this.validateForm()) {
       // AWS Cognito integration here
       try {
+        this.setState({sendingData: true})
         const user = await Auth.signIn(
           this.state.username,
           this.state.password
@@ -45,6 +49,7 @@ class Login extends Component {
           this.props.history.push("/myprofile");
         }
       } catch (error) {
+        this.setState({sendingData: false})
         if (error.code == "UserNotConfirmedException") {
           this.setState({
             emailErr: true,
@@ -144,8 +149,11 @@ class Login extends Component {
                         invalid={this.state.passwordErr}
                       />
                     </Form.Group>
-                    <Button type="submit" square>
-                      Login
+                    <Button animated={!this.state.sendingData} loading={this.state.sendingData}>
+                      <Button.Content type="submit" visible>
+                        Login
+                      </Button.Content>
+                      {(this.state.sendingData == false) ? <Button.Content hidden><Icon name="arrow right" /></Button.Content> : null}
                     </Button>
                   </Form>
                 </Grid.Col>

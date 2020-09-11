@@ -165,13 +165,24 @@ body {
   font-size: 0.875rem;
 }
 
-.loginPage .btn {
+.loginPage .ui.button {
   margin-top: 10px;
   width: 65%;
   background-color: #26CB64;
   background-image: linear-gradient(to bottom right, #26CB64, #18d311);
   color: white;
   font-weight: lighter;
+  border-radius: 0px;
+}
+
+.loginPage .ui.button:hover {
+  background-color: #26CB64;
+  background-image: linear-gradient(to bottom right, #26CB64, #18d311);
+  color: white;
+}
+
+.loginPage .ui.button .icon{
+  color: white !important;
 }
 
 /* REGISTER PAGE STYLES */
@@ -223,13 +234,49 @@ body {
   font-size: 0.875rem;
 }
 
-.registerPage .btn {
+.registerPage .ui.button {
   margin-top: 10px;
   width: 65%;
   background-color: #26CB64;
   background-image: linear-gradient(to bottom right, #26CB64, #18d311);
   color: white;
   font-weight: lighter;
+  border-radius: 0px;
+}
+
+.registerPage .ui.button:hover {
+  background-color: #26CB64;
+  background-image: linear-gradient(to bottom right, #26CB64, #18d311);
+  color: white;
+}
+
+.registerPage .ui.button .icon{
+  color: white !important;
+}
+
+/* MY PROFILE STYLES */
+
+.ui.basic.button, .ui.basic.buttons .button {
+  box-shadow: none !important;
+}
+
+.selectgroup-pills .selectgroup-button {
+  border-radius: 15px !important;
+  width: 180px;
+}
+
+.acceptButton {
+  background-color: white !important;
+  border: 2px #26CB64 solid !important;
+  border-radius: 0px !important;
+  font-weight: lighter !important;
+  height: 35px;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+.acceptButton .icon{
+  color: #26CB64 !important;
 }
 
 /* MISC */
@@ -238,6 +285,4 @@ body {
   text-align: left;
 }
 
-.ui.basic.button, .ui.basic.buttons .button {
-  box-shadow: none !important;
-}
+

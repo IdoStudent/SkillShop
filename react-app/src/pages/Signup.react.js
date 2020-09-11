@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Auth } from "aws-amplify";
 
-import { Container, Form, Grid, Header, Button, Alert } from "tabler-react";
+import { Container, Form, Grid, Header } from "tabler-react";
+import { Button, Icon } from "semantic-ui-react";
 
 const validEmailRegex = 
   RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
@@ -18,6 +19,8 @@ class Signup extends Component {
     emailErrMsg: "",
     passwordErrMsg: "",
     passwordConfErrMsg: "",
+
+    sendingData: false
   };
 
   handleSubmit = async (event) => {
@@ -29,6 +32,7 @@ class Signup extends Component {
       this.state.username = this.state.email;
       const { username, email, password } = this.state;
       try {
+        this.setState({sendingData: true})
         const signUpResponse = await Auth.signUp({
           username,
           password,
@@ -43,7 +47,7 @@ class Signup extends Component {
           email: email,
       });
       } catch (error) {
-        console.log(error);
+        this.setState({sendingData: false})
 
         if(error.code == "UsernameExistsException"){
           this.setState({ emailErrMsg: "An account with this email already exists", emailErr: true });
@@ -207,8 +211,11 @@ class Signup extends Component {
                       <p> {this.state.passwordConfErrMsg} </p>
                     </Container>
 
-                    <Button type="submit" square>
-                      Register
+                    <Button animated={!this.state.sendingData} loading={this.state.sendingData}>
+                      <Button.Content type="submit" visible>
+                        Register
+                      </Button.Content>
+                      {(this.state.sendingData == false) ? <Button.Content hidden><Icon name="arrow right" /></Button.Content> : null}
                     </Button>
                   </Form>
                 </Grid.Col>

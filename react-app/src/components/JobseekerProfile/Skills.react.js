@@ -19,17 +19,14 @@ class Skills extends React.Component {
 
   componentDidMount() {
     fetch("https://demo5322112.mockable.io/testskills")
-      .then(res => res.json())
-      .then(
-        (result) => {
+      .then((res) => res.json())
+      .then((result) => {
+        // We can just do a straight copy of the array we received into our var array
+        dbSkills = result.skills;
 
-          // We can just do a straight copy of the array we received into our var array
-         dbSkills = result.skills
-
-          // After the skills are added into the array from the API, we set the state based on the given values
-         this.initialiseState();
-        },
-      )
+        // After the skills are added into the array from the API, we set the state based on the given values
+        this.initialiseState();
+      });
   }
 
   initialiseState() {
@@ -37,9 +34,9 @@ class Skills extends React.Component {
       this.setState({
         [dbSkills[i]]: true,
       });
-      
+
       // Copy the dbSkills array to our selectedSkills array to give it its initial value
-      selectedSkills = dbSkills
+      selectedSkills = dbSkills;
     }
   }
 
@@ -59,7 +56,6 @@ class Skills extends React.Component {
       // If the change event was that a skill is being deselected, remove this skill from our array
       selectedSkills = selectedSkills.filter((val) => val !== name);
     }
-
   };
 
   /*cancelChanges = () => {
@@ -80,11 +76,14 @@ class Skills extends React.Component {
     // ADD LOGIC FOR SUBMITTING TO DATABASE, CAN JUST TAKE THE ENTIRE SELECTEDSKILLS ARRAY AND POST IT
     try {
       const params = {
-        "userEmail": "placeholder",
-        "userSkills": selectedSkills
+        userEmail: "placeholder",
+        userSkills: selectedSkills,
       };
-      await axios.post('https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/skills', params);
-    }catch (err) {
+      await axios.post(
+        "https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/skills",
+        params
+      );
+    } catch (err) {
       console.log(`An error has occurred: ${err}`);
     }
   };
@@ -291,9 +290,24 @@ class Skills extends React.Component {
                     value="Javascript"
                     checked={this.state.javascript}
                   />
-                  <Form.SelectGroupItem label="PHP" name="php" value="PHP" checked={this.state.php} />
-                  <Form.SelectGroupItem label="C++" name="c++" value="C++" checked={this.state.cplusplus} />
-                  <Form.SelectGroupItem label="Java" name="java" value="Java" checked={this.state.java} />
+                  <Form.SelectGroupItem
+                    label="PHP"
+                    name="php"
+                    value="PHP"
+                    checked={this.state.php}
+                  />
+                  <Form.SelectGroupItem
+                    label="C++"
+                    name="c++"
+                    value="C++"
+                    checked={this.state.cplusplus}
+                  />
+                  <Form.SelectGroupItem
+                    label="Java"
+                    name="java"
+                    value="Java"
+                    checked={this.state.java}
+                  />
                   <Form.SelectGroupItem
                     label="Cloud Computing"
                     name="cloudcomputing"
@@ -313,13 +327,13 @@ class Skills extends React.Component {
             onClick={this.cancelChanges}
           />*/}
           <Button
-            content="Save changes"
             floated="right"
-            color="green"
-            basic
+            className="acceptButton"
+            icon="check"
             hidden={this.state.showSaveButton ? "" : "hidden"}
             onClick={this.submitChanges}
           />
+
         </Card.Body>
       </div>
     );
