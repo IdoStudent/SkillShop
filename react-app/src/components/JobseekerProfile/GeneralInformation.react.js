@@ -1,10 +1,10 @@
 import * as React from "react";
 import axios from "axios";
 import { Form, Card, Grid } from "tabler-react";
-import { Button, Modal } from "semantic-ui-react";
-import Auth from '@aws-amplify/auth';
+import { Button, Modal, Icon, Container } from "semantic-ui-react";
+import Auth from "@aws-amplify/auth";
 
-import '../../index.css';
+import "../../index.css";
 import { arrayOf } from "prop-types";
 
 //const config = require('../config.json');
@@ -52,164 +52,202 @@ class GeneralInformation extends React.Component {
       aboutErrorMsg: "",
     };
   }
-  // GET email for getSecondApi 
+  // GET email for getSecondApi
   getEmailApi() {
-   return Auth.currentAuthenticatedUser().then((user) => {
+    return Auth.currentAuthenticatedUser().then((user) => {
       const { attributes = {} } = user;
-      console.log(attributes['email']);
-      let email =  attributes['email']
-      return email
-    })}
-  // GET email for form
- getFirstApi() {
-   return Auth.currentAuthenticatedUser().then((user) => {
-      this.setState({email: user.attributes.email, formemail: user.attributes.email})
+      console.log(attributes["email"]);
+      let email = attributes["email"];
+      return email;
     });
- }
- // GET user data 
+  }
+  // GET email for form
+  getFirstApi() {
+    return Auth.currentAuthenticatedUser().then((user) => {
+      this.setState({
+        email: user.attributes.email,
+        formemail: user.attributes.email,
+      });
+    });
+  }
+  // GET user data
   async getSecondApi(email) {
-    fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +email)
-      .then(res => res.json())
-      .then(
-        (result) => {
+    fetch(
+      `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
+        email
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        // If length is undefined, that means for some reason it's not returning data at all, so dont try and access fields that dont exist
+        if (!result.length == undefined) {
+          this.setState({
+            firstname: result.Item.userFirstName,
+            middlename: result.Item.userMiddleName,
+            surname: result.Item.userLastName,
+            city: result.Item.userCity,
+            postcode: result.Item.userPostcode,
+            state: result.Item.userState,
+            about: result.Item.userAbout,
 
-          // If length is undefined, that means for some reason it's not returning data at all, so dont try and access fields that dont exist
-          if(!result.length == undefined){
-            this.setState({
-              firstname: result.Item.userFirstName,
-              middlename: result.Item.userMiddleName,
-              surname: result.Item.userLastName,
-              city: result.Item.userCity,
-              postcode: result.Item.userPostcode,
-              state: result.Item.userState,
-              about: result.Item.userAbout,
-  
-              formfirstname: result.Item.userFirstName,
-              formmiddlename: result.Item.userMiddleName,
-              formsurname: result.Item.userLastName,
-              formcity: result.Item.userCity,
-              formpostcode: result.postcode,
-              formstate: result.Item.userState,
-              formabout: result.Item.userAbout,
-            });
-          }
-          
-          console.log("THIS IS RESULT1 " + this.state.email)} ,
-      )
+            formfirstname: result.Item.userFirstName,
+            formmiddlename: result.Item.userMiddleName,
+            formsurname: result.Item.userLastName,
+            formcity: result.Item.userCity,
+            formpostcode: result.postcode,
+            formstate: result.Item.userState,
+            formabout: result.Item.userAbout,
+          });
+        }
+
+        console.log("THIS IS RESULT1 " + this.state.email);
+      });
   }
   // pass before mount
-  BeforDidMount() { 
-   this.getEmailApi().then(email => this.getSecondApi(email)); }
+  BeforeDidMount() {
+    this.getEmailApi().then((email) => this.getSecondApi(email));
+  }
 
   componentDidMount() {
-    this.BeforDidMount();
-    this.getFirstApi();  
+    this.BeforeDidMount();
+    this.getFirstApi();
   }
 
   handleChange = (input) => (event) => {
     this.setState({ [input]: event.target.value });
   };
 
-  handleSubmit = async (event , email) => {
+  handleSubmit = async (event, email) => {
     event.preventDefault();
 
-    if(this.validateForm()){
-    this.setState((prevState) => ({
-      // If submitting new values, update the state to represent the new data
-      firstname: prevState.formfirstname,
-      middlename: prevState.formmiddlename,
-      surname: prevState.formsurname,
-      city: prevState.formcity,
-      postcode: prevState.formpostcode,
-      email: this.state.formemail,
-      userState: prevState.formstate,
-      about: prevState.formabout,
-      open: false,
-      
-    }))
+    if (this.validateForm()) {
+      this.setState((prevState) => ({
+        // If submitting new values, update the state to represent the new data
+        firstname: prevState.formfirstname,
+        middlename: prevState.formmiddlename,
+        surname: prevState.formsurname,
+        city: prevState.formcity,
+        postcode: prevState.formpostcode,
+        email: this.state.formemail,
+        userState: prevState.formstate,
+        about: prevState.formabout,
+        open: false,
+      }));
 
-    try {
-      const params = {
-        "userEmail": this.state.formemail,
-        "userFirstName": this.state.formfirstname,
-        "userMiddleName": this.state.formmiddlename,
-        "userLastName": this.state.formsurname,
-        "userCity": this.state.formcity,
-        "userPostCode": this.state.formpostcode,
-        "userEmail": this.state.formemail,
-        "userState": this.state.formstate,
-        "userAbout": this.state.formabout,
-        "userType": "jobseeker"
-      };
-      
-      await axios.post('https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata', params);
-      console.log(`EMAIL:  ` + this.state.formemail);
-    }catch (err) {
-      console.log(`An error has occurred: ${err}`);
-  }
-}
- };
+      try {
+        const params = {
+          userEmail: this.state.formemail,
+          userFirstName: this.state.formfirstname,
+          userMiddleName: this.state.formmiddlename,
+          userLastName: this.state.formsurname,
+          userCity: this.state.formcity,
+          userPostCode: this.state.formpostcode,
+          userEmail: this.state.formemail,
+          userState: this.state.formstate,
+          userAbout: this.state.formabout,
+          userType: "jobseeker",
+        };
 
- validateForm = () => {
-  let fName = this.state.formfirstname
-  let surname = this.state.formsurname
-  let postcode = this.state.formpostcode
-  let state = this.state.formstate
-  let about = this.state.formabout
+        await axios.post(
+          "https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata",
+          params
+        );
+        console.log(`EMAIL:  ` + this.state.formemail);
+      } catch (err) {
+        console.log(`An error has occurred: ${err}`);
+      }
+    }
+  };
 
-  this.setState({
-    fNameInvalid: false,
-    surnameInvalid: false,
-    postcodeInvalid: false,
-    stateInvalid: false,
-    aboutInvalid: false,
-  });
+  validateForm = () => {
+    let fName = this.state.formfirstname;
+    let surname = this.state.formsurname;
+    let postcode = this.state.formpostcode;
+    let state = this.state.formstate;
+    let about = this.state.formabout;
 
-  let validInput = true
+    this.setState({
+      fNameInvalid: false,
+      surnameInvalid: false,
+      postcodeInvalid: false,
+      stateInvalid: false,
+      aboutInvalid: false,
+    });
 
-  if(!fName){
-    this.setState({ fNameErrorMsg: "First name cannot be empty", fNameInvalid: true });
-    validInput = false
-  } else if (fName.length < 2) {
-    this.setState({ fNameErrorMsg: "First name needs to be 2 or more characters", fNameInvalid: true });
-    validInput = false
-  } 
+    let validInput = true;
 
-  if(!surname){
-    this.setState({ surnameErrorMsg: "Surname cannot be empty", surnameInvalid: true });
-    validInput = false
-  } else if (surname.length < 2) {
-    this.setState({ surnameErrorMsg: "Surname needs to be 2 or more characters", surnameInvalid: true });
-    validInput = false
-  }
+    if (!fName) {
+      this.setState({
+        fNameErrorMsg: "First name cannot be empty",
+        fNameInvalid: true,
+      });
+      validInput = false;
+    } else if (fName.length < 2) {
+      this.setState({
+        fNameErrorMsg: "First name needs to be 2 or more characters",
+        fNameInvalid: true,
+      });
+      validInput = false;
+    }
 
-  if(!postcode){
-    this.setState({ postcodeErrorMsg: "Postcode cannot be empty", postcodeInvalid: true });
-    validInput = false
-  } else if (postcode.length != 4) {
-    this.setState({ postcodeErrorMsg: "Postcode need to be 4 numbers!", postcodeInvalid: true });
-    validInput = false
-  }
+    if (!surname) {
+      this.setState({
+        surnameErrorMsg: "Surname cannot be empty",
+        surnameInvalid: true,
+      });
+      validInput = false;
+    } else if (surname.length < 2) {
+      this.setState({
+        surnameErrorMsg: "Surname needs to be 2 or more characters",
+        surnameInvalid: true,
+      });
+      validInput = false;
+    }
 
-  if(!state){
-    this.setState({ stateErrorMsg: "State cannot be empty", stateInvalid: true });
-    validInput = false
-  } else if (state.length < 3) {
-    this.setState({ stateErrorMsg: "Please enter a valid state name", stateInvalid: true });
-    validInput = false
-  }
+    if (!postcode) {
+      this.setState({
+        postcodeErrorMsg: "Postcode cannot be empty",
+        postcodeInvalid: true,
+      });
+      validInput = false;
+    } else if (postcode.length != 4) {
+      this.setState({
+        postcodeErrorMsg: "Postcode need to be 4 numbers!",
+        postcodeInvalid: true,
+      });
+      validInput = false;
+    }
 
-  if(!about){
-    this.setState({ aboutErrorMsg: "Description cannot be empty", aboutInvalid: true });
-    validInput = false
-  } else if (about.length < 100) {
-    this.setState({ aboutErrorMsg: "Tell us more about you! (100+ characters)", aboutInvalid: true });
-    validInput = false
-  }
+    if (!state) {
+      this.setState({
+        stateErrorMsg: "State cannot be empty",
+        stateInvalid: true,
+      });
+      validInput = false;
+    } else if (state.length < 3) {
+      this.setState({
+        stateErrorMsg: "Please enter a valid state name",
+        stateInvalid: true,
+      });
+      validInput = false;
+    }
 
-  // Return the status of valid input. If any of the above error conditions are met, this will return false
-  return validInput
-};
+    if (!about) {
+      this.setState({
+        aboutErrorMsg: "Description cannot be empty",
+        aboutInvalid: true,
+      });
+      validInput = false;
+    } else if (about.length < 100) {
+      this.setState({
+        aboutErrorMsg: "Tell us more about you! (100+ characters)",
+        aboutInvalid: true,
+      });
+      validInput = false;
+    }
+
+    // Return the status of valid input. If any of the above error conditions are met, this will return false
+    return validInput;
+  };
 
   cancelForm = () => {
     // If cancelling, reset any fields that have been changed to the original values so that when the modal is re-opened, the old values are shown
@@ -222,6 +260,12 @@ class GeneralInformation extends React.Component {
       formstate: prevState.state,
       formabout: prevState.about,
       open: false,
+
+      fNameInvalid: false,
+      surnameInvalid: false,
+      postcodeInvalid: false,
+      stateInvalid: false,
+      aboutInvalid: false,
     }));
   };
 
@@ -332,7 +376,7 @@ class GeneralInformation extends React.Component {
           closeOnDimmerClick={false}
           open={open}
         >
-          <Modal.Header>Edit Info</Modal.Header>
+          <Modal.Header>Editing General Information</Modal.Header>
           <Modal.Content>
             <Form>
               <Grid.Row>
@@ -419,28 +463,40 @@ class GeneralInformation extends React.Component {
                   </Form.Group>
                 </Grid.Col>
               </Grid.Row>
+            </Form>
+          </Modal.Content>
 
-              {/* ROW 4 - SUBMIT */}
+          {/* ROW 4 - SUBMIT */}
+          <Modal.Actions>
+            <Container className="modalSubmit">
               <Grid.Row>
                 <Grid.Col md={12}>
                   <Button
-                    floated="left"
-                    basic
-                    type="button"
-                    color="red"
+                    animated
+                    className="acceptButton"
+                    circular
+                    onClick={this.handleSubmit}
+                  >
+                    <Button.Content visible>Accept</Button.Content>
+                    <Button.Content hidden>
+                      <Icon name="check" />
+                    </Button.Content>
+                  </Button>
+                  <Button
+                    animated
+                    className="cancelButton"
+                    circular
                     onClick={this.cancelForm}
                   >
-                    {" "}
-                    Cancel{" "}
-                  </Button>
-                  <Button floated="right" basic type="button" color="green" onClick={this.handleSubmit}>
-                    {" "}
-                    Accept Changes{" "}
+                    <Button.Content visible>Cancel</Button.Content>
+                    <Button.Content hidden>
+                      <Icon name="x" />
+                    </Button.Content>
                   </Button>
                 </Grid.Col>
               </Grid.Row>
-            </Form>
-          </Modal.Content>
+            </Container>
+          </Modal.Actions>
         </Modal>
       </div>
     );

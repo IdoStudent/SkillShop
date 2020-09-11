@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { Card } from "tabler-react";
 
-import { Button, Modal, Segment } from "semantic-ui-react";
+import { Button, Modal, Segment, Container, Icon } from "semantic-ui-react";
 import { Form, Grid } from "tabler-react";
 
 import JobseekerExp from "./JobseekerExp.react";
@@ -82,22 +82,25 @@ class JobseekerExpContainer extends React.Component {
       this.setState({
         dataset: this.state.dataset.concat(<JobseekerExp jobinfo={jobinfo} />),
         open: false,
-      })
+      });
     }
 
     // TO-DO: ADD LOGIC FOR SENDING TO DATABASE
     try {
       const params = {
-        "userEmail": "placeholder2",
-        "userJobTitle": this.state.formtitle,
-        "userJobCompany": this.state.formcompany,
-        "userJobStartDate": this.state.formstartdate,
-        "userJobEndDate": this.state.formenddate,
-        "userJobLocation": this.state.formlocation,
-        "userJobDescription": this.state.formdesc
+        userEmail: "placeholder2",
+        userJobTitle: this.state.formtitle,
+        userJobCompany: this.state.formcompany,
+        userJobStartDate: this.state.formstartdate,
+        userJobEndDate: this.state.formenddate,
+        userJobLocation: this.state.formlocation,
+        userJobDescription: this.state.formdesc,
       };
-      axios.post('https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/jobexperience/', params);
-    }catch (err) {
+      axios.post(
+        "https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/jobexperience/",
+        params
+      );
+    } catch (err) {
       console.log(`An error has occurred: ${err}`);
     }
   };
@@ -476,34 +479,39 @@ class JobseekerExpContainer extends React.Component {
                   </Form.Group>
                 </Grid.Col>
               </Grid.Row>
-
-              {/* ROW 4 - SUBMIT */}
+            </Form>
+          </Modal.Content>
+          {/* ROW 4 - SUBMIT */}
+          <Modal.Actions>
+            <Container className="modalSubmit">
               <Grid.Row>
                 <Grid.Col md={12}>
                   <Button
-                    floated="left"
-                    basic
-                    type="button"
-                    color="red"
-                    onClick={this.cancelForm}
-                  >
-                    {" "}
-                    Cancel{" "}
-                  </Button>
-                  <Button
-                    floated="right"
-                    basic
-                    type="button"
-                    color="green"
+                    animated
+                    className="acceptButton"
+                    circular
                     onClick={this.handleSubmit}
                   >
-                    {" "}
-                    Accept Changes{" "}
+                    <Button.Content visible>Accept</Button.Content>
+                    <Button.Content hidden>
+                      <Icon name="check" />
+                    </Button.Content>
+                  </Button>
+                  <Button
+                    animated
+                    className="cancelButton"
+                    circular
+                    onClick={this.cancelForm}
+                  >
+                    <Button.Content visible>Cancel</Button.Content>
+                    <Button.Content hidden>
+                      <Icon name="x" />
+                    </Button.Content>
                   </Button>
                 </Grid.Col>
               </Grid.Row>
-            </Form>
-          </Modal.Content>
+            </Container>
+          </Modal.Actions>
         </Modal>
       </div>
     );

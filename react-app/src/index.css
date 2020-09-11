@@ -254,35 +254,128 @@ body {
   color: white !important;
 }
 
-/* MY PROFILE STYLES */
+/* BUTTON STYLES */
 
-.ui.basic.button, .ui.basic.buttons .button {
+.icon.button {
   box-shadow: none !important;
 }
 
+.icon.button:hover .icon {
+  color: #26CB64 !important;
+}
+
 .selectgroup-pills .selectgroup-button {
-  border-radius: 15px !important;
-  width: 180px;
+  width: 160px;
+  font-size: 0.87rem;
 }
 
 .acceptButton {
-  background-color: white !important;
-  border: 2px #26CB64 solid !important;
-  border-radius: 0px !important;
+  background-color: #fafafa !important;
+  color: #26CB64 !important;
   font-weight: lighter !important;
-  height: 35px;
+  height: 30px;
   padding-top: 0px !important;
   padding-bottom: 0px !important;
+}
+
+.acceptButton.white {
+  background-color: white !important;
+}
+
+.acceptButton:hover {
+  background-color: #26CB64 !important;
 }
 
 .acceptButton .icon{
   color: #26CB64 !important;
 }
 
+.acceptButton:hover .icon{
+  color: white !important;
+}
+
+.cancelButton {
+  background-color: #fafafa !important;
+  color: #cb2626 !important;
+  font-weight: lighter !important;
+  height: 30px;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+.acceptButton.delete {
+  color: #cb2626 !important;
+}
+
+.acceptButton.delete:hover {
+  background-color: #cb2626 !important;
+}
+
+.cancelButton.delete {
+  color: rgba(0,0,0,.87) !important;
+}
+
+.cancelButton.delete:hover {
+  background-color: rgba(0,0,0,.87)!important;
+}
+
+.cancelButton:hover {
+  background-color: #cb2626 !important;
+}
+
+.cancelButton .icon{
+  color: white !important;
+}
+
+
+/* MODAL STYLES */
+
+.modalSubmit {
+  text-align: center;
+}
+
+.actions {
+  background: #fafafa !important;
+  border-radius: 0px !important;
+  height: 50px !important;
+  padding: 0.65rem 1rem !important;
+}
+
+.modalSubmit .acceptButton{
+  margin-right: 100px !important;
+}
+
+.modal .header {
+  background: #2b2a2a !important;
+  border-radius: 0px !important;
+  color: white !important;
+  height: 50px !important;
+  font-size: 1.2rem !important;
+  text-align: center;
+}
+
+.modal {
+  background: none !important;
+  border-radius: 0px !important;
+}
+
+.modal .content{
+  border-radius: 0px !important;
+}
+
 /* MISC */
 
 .formLabelLeft {
   text-align: left;
+}
+
+#skills .form-label {
+  margin-left: -15px;
+  margin-bottom: 10px;
+}
+
+#skills .col {
+  margin-left: 130px !important;
 }
 
 

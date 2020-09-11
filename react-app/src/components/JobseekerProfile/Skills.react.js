@@ -1,7 +1,7 @@
 import * as React from "react";
 import axios from "axios";
 import { Form, Card, Grid } from "tabler-react";
-import { Button } from "semantic-ui-react";
+import { Button, Icon } from "semantic-ui-react";
 
 var selectedSkills = [];
 
@@ -90,7 +90,7 @@ class Skills extends React.Component {
 
   render() {
     return (
-      <div className="card" name="skills">
+      <div className="card" name="skills" id="skills">
         <Card.Body>
           <Card.Title>Top skills</Card.Title>
           <Grid.Row>
@@ -318,22 +318,20 @@ class Skills extends React.Component {
               </Form.Group>
             </Grid.Col>
           </Grid.Row>
-          {/*<Button
-            content="Cancel changes"
-            floated="left"
-            color="red"
-            basic
-            hidden={this.state.showCancelButton ? "" : "hidden"}
-            onClick={this.cancelChanges}
-          />*/}
-          <Button
-            floated="right"
-            className="acceptButton"
-            icon="check"
-            hidden={this.state.showSaveButton ? "" : "hidden"}
-            onClick={this.submitChanges}
-          />
 
+          <Button
+            animated
+            className="acceptButton white"
+            circular
+            floated="right"
+            onClick={this.submitChanges}
+            hidden={this.state.showSaveButton ? "" : "hidden"}
+          >
+            <Button.Content visible>Accept</Button.Content>
+            <Button.Content hidden>
+              <Icon name="check" />
+            </Button.Content>
+          </Button>
         </Card.Body>
       </div>
     );
