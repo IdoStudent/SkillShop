@@ -188,7 +188,7 @@ class Candidates extends React.Component {
     // Get current profile information
     let currentProfile = this.state.data[this.state.selectValue];
 
-    console.log(filters)
+    console.log(filters);
 
     try {
       // Map the data so it sends the current profile information with the new filters
@@ -223,7 +223,8 @@ class Candidates extends React.Component {
                 <Header.H1 className="pageHeading">Find Candidates</Header.H1>
 
                 {/* Job profile selection */}
-                <Container className="card" name="generalInfo">
+                <div id="jobprofile"> 
+                <Container className="card thin" name="jobProfile">
                   <Card.Body>
                     <Grid.Row>
                       <Grid.Col md={4}>
@@ -241,31 +242,32 @@ class Candidates extends React.Component {
                         <Button
                           floated="right"
                           basic
+                          icon="plus"
+                          type="button"
+                          onClick={this.openModalNew}
+                        />
+                        <Button
+                          floated="right"
+                          basic
                           icon="filter"
                           type="button"
                           onClick={this.openModalFilter}
                         />
                         <Button
                           floated="right"
-                          basic
                           icon="pencil"
                           type="button"
+                          basic
                           onClick={this.openModalInfo}
                         />
                       </Grid.Col>
                     </Grid.Row>
-                    <Button
-                      floated="right"
-                      basic
-                      icon="plus"
-                      type="button"
-                      onClick={this.openModalNew}
-                    />
                   </Card.Body>
                 </Container>
-
+                </div>
+                
                 {/* Candidate Info */}
-                <Container className="card" name="generalInfo">
+                <Container className="card" name="candidateInfo">
                   <Card.Body>
                     {/* Insert candidate info component */}
                     <JobCandidates />
@@ -293,11 +295,10 @@ class Candidates extends React.Component {
 
           {this.state.openNew ? (
             <JobNewModal
-            closeModal={this.closeModalNew}
-            acceptChanges={this.createNewProfile}
+              closeModal={this.closeModalNew}
+              acceptChanges={this.createNewProfile}
             />
           ) : null}
-
         </div>
       </SiteWrapper>
     );

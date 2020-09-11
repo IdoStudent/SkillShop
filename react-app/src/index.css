@@ -387,6 +387,25 @@ body {
   margin-left: 45px;
 }
 
+/* CANDIDATES SCREEN */
+
+.card.thin {
+  height: 90px;
+}
+
+.card.thin .card-body {
+  padding-top: 0.8rem;
+  padding-left: 30px;
+}
+
+#jobprofile .button {
+  margin-top: 20px;
+}
+
+#jobprofile .form-label {
+  margin-left: -10px;
+}
+
 /* MISC */
 
 .formLabelLeft {
