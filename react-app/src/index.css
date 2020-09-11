@@ -264,9 +264,17 @@ body {
   color: #26CB64 !important;
 }
 
+.selectgroup-input:checked + .selectgroup-button {
+  border-radius: 5px !important;
+}
+
+.selectgroup-input:not(:checked) + .selectgroup-button {
+  border-radius: 5px !important;
+}
+
 .selectgroup-pills .selectgroup-button {
   width: 160px;
-  font-size: 0.87rem;
+  font-size: 0.89rem;
 }
 
 .acceptButton {
@@ -357,10 +365,26 @@ body {
 .modal {
   background: none !important;
   border-radius: 0px !important;
+  position: relative !important;
 }
 
 .modal .content{
   border-radius: 0px !important;
+}
+
+.xButton {
+  background: none !important;
+  float: right;
+  margin-top: -18px !important;
+  margin-right: -22px !important;
+}
+
+.icon.button.xButton:hover .icon {
+  color: white !important;
+}
+
+.xButtonHeader {
+  margin-left: 45px;
 }
 
 /* MISC */
@@ -377,5 +401,16 @@ body {
 #skills .col {
   margin-left: 130px !important;
 }
+
+.pageHeading {
+  text-align: center; 
+  padding: 20px;
+}
+
+.link {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 
 

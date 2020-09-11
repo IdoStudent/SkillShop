@@ -128,7 +128,7 @@ class GeneralInformation extends React.Component {
         city: prevState.formcity,
         postcode: prevState.formpostcode,
         email: this.state.formemail,
-        userState: prevState.formstate,
+        state: prevState.formstate,
         about: prevState.formabout,
         open: false,
       }));

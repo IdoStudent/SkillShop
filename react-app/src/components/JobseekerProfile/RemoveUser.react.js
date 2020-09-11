@@ -97,7 +97,6 @@ class RemoveUser extends React.Component {
         {/* MODAL CONTENT */}
         <Modal
           style={{ position: "relative" }}
-          closeOnDimmerClick={false}
           open={open}
         >
           <Modal.Header>Delete Profile</Modal.Header>

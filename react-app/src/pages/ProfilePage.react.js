@@ -3,6 +3,7 @@
 import React, { Component } from "react";
 
 import { Container, Grid, Header, Alert } from "tabler-react";
+import { Button, Modal, Icon } from "semantic-ui-react";
 
 import SiteWrapper from "../SiteWrapper.react";
 
@@ -13,20 +14,36 @@ import JobseekerEduContainer from "../components/JobseekerProfile/JobseekerEduCo
 import RemoveUser from "../components/JobseekerProfile/RemoveUser.react";
 
 class ProfilePage extends Component {
+  state = {
+    open: false,
+  };
+
+  openModal = () => {
+    this.setState({ open: true });
+  };
+
+  closeModal = () => {
+    this.setState({ open: false });
+  };
+
   render() {
     return (
       <SiteWrapper>
-        <Alert type="warning" isDismissible>
+        <Alert type="warning">
           <center>
             All information on your profile is publicly available to potential
-            employers.
+            employers.{" "}
+            <span onClick={this.openModal} className="link">
+              {" "}
+              Learn more{" "}
+            </span>
           </center>
         </Alert>
         <div className="my-3 my-md-5">
           <Container>
             <Grid.Row>
               <Grid.Col lg={12}>
-                <Header.H1>Your Profile</Header.H1>
+                <Header.H1 className="pageHeading">Your Profile</Header.H1>
 
                 {/* Jobseeker General Information Set */}
                 <GeneralInformation />
@@ -45,6 +62,24 @@ class ProfilePage extends Component {
               </Grid.Col>
             </Grid.Row>
           </Container>
+
+          {/* MODAL CONTENT */}
+          <Modal open={this.state.open}>
+            <Modal.Header>
+              <span className="xButtonHeader"> Your public information </span>
+              <Button className="xButton" onClick={this.closeModal} icon="x"/>{" "}
+            </Modal.Header>
+            <Modal.Content>
+              <p>
+                <b>Everything you put on your profile will be publically available for any potential employers to see</b>{" "}
+              </p>
+              <p>
+                In order to help facilitate matches, we need to show potential employers your information! This means that for any job we deem you to be a good match for, that business will be able to see your full name, location, description
+                and any experience and education information that you have added. Your privacy is important to us and we only use this information to help match you with potential employers. It is a breach of our terms of service for any employers to 
+                share any information about you with anyone else.
+              </p>
+            </Modal.Content>
+          </Modal>
         </div>
       </SiteWrapper>
     );
