@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Form, Card, Grid } from "tabler-react";
 import { Button, Modal } from "semantic-ui-react";
-
+import Auth from '@aws-amplify/auth';
 import '../../index.css';
-
+import axios from "axios";
 class RemoveUser extends React.Component {
     constructor(props) {
       super(props);
@@ -31,10 +31,42 @@ class RemoveUser extends React.Component {
       };
     }
 
-    handleSubmit = (event) => {
-      event.preventDefault();
-      const data = "test@test.com"
-      fetch("https://q32xq9hoif.execute-api.ap-southeast-2.amazonaws.com/prod/deleteUser", {
+    getEmailApi() {
+      return Auth.currentAuthenticatedUser().then((user) => {
+         const { attributes = {} } = user;
+         let email =  attributes['email']
+         return email
+       })}
+     // GET email for form
+    getFirstApi() {
+      return Auth.currentAuthenticatedUser().then((user) => {
+         this.setState({email: user.attributes.email, formemail: user.attributes.email})
+       });
+    }
+    // GET user data 
+     async getSecondApi(email) {
+       fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +email)
+         .then(res => res.json())
+         .then(
+           (result) => {
+             this.setState({
+         
+             });
+             } ,
+         )
+     }
+     // pass before mount
+     BeforDidMount() { 
+      this.getEmailApi().then(email => this.handleSubmit(email)); }
+   
+     componentDidMount() {
+       this.BeforDidMount();
+       this.getFirstApi();  
+     }
+
+    handleSubmit = (event, email) => {
+      console.log("LINE 68 REMOVE EMAIL CHECK: " + this.state.email);
+      fetch(`https://q32xq9hoif.execute-api.ap-southeast-2.amazonaws.com/prod/deleteUser?userEmail=` +email, {
         method: 'DELETE',
         headers: {
         "X-Requested-With": '*',

@@ -54,10 +54,6 @@ class JobseekerExp extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.convertDate();
-  }
-
   handleChange = (input) => (event) => {
     let value = event.target.value;
 
@@ -140,11 +136,46 @@ class JobseekerExp extends React.Component {
     }
   };
 
+  getEmailApi() {
+    return Auth.currentAuthenticatedUser().then((user) => {
+       const { attributes = {} } = user;
+       let email =  attributes['email']
+       return email
+     })}
+   // GET email for form
+  getFirstApi() {
+    return Auth.currentAuthenticatedUser().then((user) => {
+       this.setState({email: user.attributes.email, formemail: user.attributes.email})
+     });
+  }
+  // GET user data 
+   async getSecondApi(email) {
+     fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +email)
+       .then(res => res.json())
+       .then(
+         (result) => {
+           this.setState({
+       
+           });
+           } ,
+       )
+   }
+   // pass before mount
+   BeforDidMount() { 
+    this.getEmailApi().then(email => this.sendData(email)); }
+ 
+   componentDidMount() {
+     this.BeforDidMount();
+     this.getFirstApi();  
+     this.convertDate();
+   }
+ 
   handleSubmit = (event) => {
     event.preventDefault();
 
     // Only submit the form if all input is valid
     if (this.validateForm()) {
+      console.log("LINE 178 JOBEX EMAIL CHECK: " + this.state.email);
       this.setState(
         (prevState) => ({
           title: prevState.formtitle,
@@ -155,6 +186,7 @@ class JobseekerExp extends React.Component {
           desc: prevState.formdesc,
           open: false,
           current: prevState.isChecked,
+          email: this.state.email
         }),
         () => {
           // Convert the date once state has updated (for front-end display purposes)
@@ -404,7 +436,7 @@ class JobseekerExp extends React.Component {
     //API functionality
     try {
       const params = {
-        userEmail: "placeholder",
+        userEmail: this.state.email,
         userJobTitle: this.state.title,
         userJobCompany: this.state.company,
         userJobStartDate: this.state.startdate,

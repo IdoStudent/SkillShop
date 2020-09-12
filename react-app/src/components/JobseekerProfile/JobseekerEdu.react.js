@@ -1,5 +1,5 @@
 // @flow
-
+import Auth from '@aws-amplify/auth';
 import * as React from "react";
 import axios from "axios";
 import { Container, Divider, Header, Button, Modal } from "semantic-ui-react";
@@ -51,10 +51,6 @@ class JobseekerEdu extends React.Component {
       descInvalid: false,
       descErrorMsg: "",
     };
-  }
-
-  componentDidMount() {
-    this.convertDate();
   }
 
   handleChange = (input) => (event) => {
@@ -389,7 +385,42 @@ class JobseekerEdu extends React.Component {
     return validInput;
   };
 
-  sendData = () => {
+  getEmailApi() {
+    return Auth.currentAuthenticatedUser().then((user) => {
+       const { attributes = {} } = user;
+       let email =  attributes['email']
+       return email
+     })}
+   // GET email for form
+  getFirstApi() {
+    return Auth.currentAuthenticatedUser().then((user) => {
+       this.setState({email: user.attributes.email, formemail: user.attributes.email})
+     });
+  }
+  // GET user data 
+   async getSecondApi(email) {
+     fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +email)
+       .then(res => res.json())
+       .then(
+         (result) => {
+           this.setState({
+       
+           });
+           } ,
+       )
+   }
+   // pass before mount
+   BeforDidMount() { 
+    this.getEmailApi().then(email => this.sendData(email)); }
+ 
+   componentDidMount() {
+     this.BeforDidMount();
+     this.getFirstApi();  
+     this.convertDate();
+   }
+ 
+
+  sendData = (email) => {
     const data = [
       this.state.title, 
       this.state.institution,
@@ -397,14 +428,14 @@ class JobseekerEdu extends React.Component {
       this.state.startdate,
       this.state.enddate,
       this.state.desc,
-      this.state.current
+      this.state.current,
+      this.state.email,
     ]
 
     //API functionality
     try {
-      const params = {
-        
-        "userEmail": "placeholder2",
+      const params = {    
+        "userEmail": this.state.email,
         "userEducationTitle": this.state.title,
         "userEducationInstitution": this.state.institution,
         "userEducationStartDate": this.state.startdate,
@@ -412,6 +443,7 @@ class JobseekerEdu extends React.Component {
         "userEducationLocation": this.state.location,
         "userEducationDescription": this.state.desc
       };
+      console.log("LINE 466 JSEDU EMAIL CHECK: " + this.state.email);
       axios.post('https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/education/', params);
     }catch (err) {
       console.log(`An error has occurred: ${err}`);
