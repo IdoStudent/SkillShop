@@ -13,6 +13,8 @@ import JobFiltersModal from "../components/JobFiltersModal.react";
 import JobNewModal from "../components/JobNewModal.react";
 import JobCandidates from "../components/JobCandidates.react";
 
+const uuidv4 = require("uuid/v4")
+
 class Candidates extends React.Component {
   constructor(props) {
     super(props);
@@ -157,10 +159,13 @@ class Candidates extends React.Component {
     // I think if we append the data to the state directly it leaves too many possibilities for a mistmatch between what is on the front-end and what's on the database
     // It's doable both ways though so doesn't really matter
 
+    // Generate a unique id 
+    let jobKey = uuidv4()
+
     try {
       const params = {
         userEmail: "placeholder2",
-        jobKey: "5",
+        jobKey: jobKey,
         jobTitle: newInfo[0],
         jobLocation: newInfo[1],
         jobIndustry: newInfo[2],

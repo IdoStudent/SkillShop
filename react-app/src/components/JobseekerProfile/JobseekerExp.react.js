@@ -80,18 +80,18 @@ class JobseekerExp extends React.Component {
 
   convertDate = () => {
     var months = [
-      "JAN",
-      "FEB",
-      "MAR",
-      "APR",
-      "MAY",
-      "JUN",
-      "JUL",
-      "AUG",
-      "SEP",
-      "OCT",
-      "NOV",
-      "DEC",
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ];
 
     // START DATE
@@ -122,7 +122,7 @@ class JobseekerExp extends React.Component {
     if (displayDateEnd === "00" || this.state.current === true) {
       this.setState(() => ({
         displaystart: displayDateStart + " " + displayYearStart,
-        displayend: "CURRENT",
+        displayend: "Current",
       }));
     } else {
       // IF THERE IS A SLASH (FROM FORM INPUT), REMOVE IT

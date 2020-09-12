@@ -318,39 +318,39 @@ class GeneralInformation extends React.Component {
               {/* ROW 1 */}
               <Grid.Col md={4}>
                 <Form.Group label="First Name">
-                  <Form.Input name="firstname" readOnly value={firstname} />
+                  <Form.Input name="firstname" disabled value={firstname} />
                 </Form.Group>
               </Grid.Col>
               <Grid.Col md={4}>
                 <Form.Group label="Middle Name">
-                  <Form.Input name="middlename" readOnly value={middlename} />
+                  <Form.Input name="middlename" disabled value={middlename} />
                 </Form.Group>
               </Grid.Col>
               <Grid.Col md={4}>
                 <Form.Group label="Surname">
-                  <Form.Input name="surname" readOnly value={surname} />
+                  <Form.Input name="surname" disabled value={surname} />
                 </Form.Group>
               </Grid.Col>
 
               {/* ROW 2 */}
               <Grid.Col md={3}>
                 <Form.Group label="City">
-                  <Form.Input name="city" readOnly value={city} />
+                  <Form.Input name="city" disabled value={city} />
                 </Form.Group>
               </Grid.Col>
               <Grid.Col md={2}>
                 <Form.Group label="Post Code">
-                  <Form.Input name="postcode" readOnly value={postcode} />
+                  <Form.Input name="postcode" disabled value={postcode} />
                 </Form.Group>
               </Grid.Col>
               <Grid.Col md={3}>
                 <Form.Group label="State">
-                  <Form.Input name="state" readOnly value={state} />
+                  <Form.Input name="state" disabled value={state} />
                 </Form.Group>
               </Grid.Col>
               <Grid.Col md={4}>
                 <Form.Group label="Email">
-                  <Form.Input name="email" readOnly value={email} />
+                  <Form.Input name="email" disabled value={email} />
                 </Form.Group>
               </Grid.Col>
 
