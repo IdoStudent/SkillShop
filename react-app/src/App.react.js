@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import { Auth } from 'aws-amplify';
 
 import {
@@ -8,9 +8,7 @@ import {
   LandingPage,
   Login,
   Candidates,
-  TestUser,
-  RegistrationPageEmployer,
-  RegistrationPageJobseeker
+  Signup,
 } from "./pages";
 
 import "tabler-react/dist/Tabler.css";
@@ -47,6 +45,8 @@ class App extends React.Component {
       console.log(error);
     }
     this.setState({ isAuthenticating: false });
+
+    console.log(this.state.isAuthenticated)
   }
   render(){
     const authProps = {
@@ -65,16 +65,15 @@ class App extends React.Component {
             {/* NO USER PAGES */}
             <Route exact path="/" render={(props) => <LandingPage {...props} auth={authProps} />} />
             <Route exact path="/login" render={(props) => <Login {...props} auth={authProps} />} />
-            <Route exact path="/registrationpageemployer" render={(props) => <RegistrationPageEmployer {...props} auth={authProps} />} />
-            <Route exact path="/registrationpagejobseeker" render={(props) => <RegistrationPageJobseeker {...props} auth={authProps} />} />
+            <Route exact path="/signup" render={(props) => <Signup {...props} auth={authProps} />} />
+
+            {/* PRIVATE ROUTES (USER NEEDS TO BE AUTHENTICATED) */}
 
             {/* JOBSEEKER PAGES */}
-            <Route exact path="/myprofile" render={(props) => <ProfilePage {...props} auth={authProps} />} />
+            <PrivateRoute authed={this.state.isAuthenticated} path='/myprofile' component={ProfilePage} />
 
             {/* EMPLOYER PAGES */}
-            <Route exact path="/candidates" render={(props) => <Candidates {...props} auth={authProps} />}  />
-
-            <Route exact path="/testuser" render={(props) => <TestUser {...props} auth={authProps} />} />
+            <PrivateRoute authed={this.state.isAuthenticated} path='/candidates' component={Candidates} />
 
             {/* ERROR PAGE (NO VALID ROUTE) */}
             <Route component={Error404} />
@@ -83,6 +82,18 @@ class App extends React.Component {
       </React.StrictMode>
     );
   }
+}
+
+// Redirect function - redirects to login if user is not authenticated
+function PrivateRoute ({component: Component, authed, ...rest}) {
+  return (
+    <Route
+      {...rest}
+      render={(props) => authed === true
+        ? <Component {...props} />
+        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
+    />
+  )
 }
 
 export default App;

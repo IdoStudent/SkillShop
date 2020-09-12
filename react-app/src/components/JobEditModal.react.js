@@ -2,30 +2,26 @@
 
 import * as React from "react";
 
-import { Container, Button } from "semantic-ui-react";
+import { Container, Button, Modal, Icon } from "semantic-ui-react";
 import { Form, Grid } from "tabler-react";
 
 class JobEditModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        title: props.data.jobTitle,
-        location: props.data.jobLocation,
-        about: props.data.jobAbout,
-        industry: props.data.jobIndustry,
+      title: props.data.jobTitle,
+      location: props.data.jobLocation,
+      about: props.data.jobAbout,
+      industry: props.data.jobIndustry,
 
-        newInfo: [],
+      newInfo: [],
 
-        titleInvalid: false,
-        titleErrorMsg: "",
+      titleInvalid: false,
+      titleErrorMsg: "",
 
-        aboutInvalid: false,
-        aboutErrorMsg: "",
-        
-
-      // Modal State
-      open: false,
-    };
+      aboutInvalid: false,
+      aboutErrorMsg: "",
+  };
   }
 
   closeModal = () => {
@@ -73,20 +69,23 @@ class JobEditModal extends React.Component {
     return validInput
   };
 
+  componentDidMount () {
+    console.log(this.state.title)
+  }
 
   handleChange = (input) => (event) => {
     this.setState({ [input]: event.target.value });
   };
 
-  componentDidMount() {
-    console.log("Editing info for " + this.props.data.jobTitle)
-  }
-
-
   render() {
     return (
-      <Container>
-        <Form>
+      <Modal
+      closeOnDimmerClick={false}
+      open={true}
+    >
+      <Modal.Header>Editing information for {this.props.data.jobTitle}</Modal.Header>
+      <Modal.Content>
+      <Form>
         <Grid.Row>
           <Grid.Col sm={6} md={6}>
             <Form.Group label="Job Title" isRequired>
@@ -140,28 +139,41 @@ class JobEditModal extends React.Component {
             </Form.Group>
           </Grid.Col>
         </Grid.Row>
-
-        {/* ROW 4 - SUBMIT */}
-        <Grid.Row>
-          <Grid.Col md={12}>
-            <Button
-              floated="left"
-              basic
-              type="button"
-              color="red"
-              onClick={this.closeModal}
-            >
-              {" "}
-              Cancel{" "}
-            </Button>
-            <Button floated="right" basic type="button" color="green" onClick={this.acceptChanges}>
-              {" "}
-              Accept Changes{" "}
-            </Button>
-          </Grid.Col>
-        </Grid.Row>
         </Form>
-      </Container>
+      </Modal.Content>
+
+                 {/* SUBMIT */}
+                 <Modal.Actions>
+            <Container className="modalSubmit">
+              <Grid.Row>
+                <Grid.Col md={12}>
+                  <Button
+                    animated
+                    className="acceptButton"
+                    circular
+                    onClick={this.acceptChanges}
+                  >
+                    <Button.Content visible>Accept</Button.Content>
+                    <Button.Content hidden>
+                      <Icon name="check" />
+                    </Button.Content>
+                  </Button>
+                  <Button
+                    animated
+                    className="cancelButton"
+                    circular
+                    onClick={this.closeModal}
+                  >
+                    <Button.Content visible>Cancel</Button.Content>
+                    <Button.Content hidden>
+                      <Icon name="x" />
+                    </Button.Content>
+                  </Button>
+                </Grid.Col>
+              </Grid.Row>
+            </Container>
+          </Modal.Actions>
+    </Modal>
     );
   }
 }

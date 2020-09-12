@@ -2,7 +2,14 @@
 import Auth from '@aws-amplify/auth';
 import * as React from "react";
 import axios from "axios";
-import { Container, Divider, Header, Button, Modal } from "semantic-ui-react";
+import {
+  Container,
+  Divider,
+  Header,
+  Button,
+  Modal,
+  Icon,
+} from "semantic-ui-react";
 import { Form, Grid } from "tabler-react";
 
 class JobseekerEdu extends React.Component {
@@ -34,7 +41,7 @@ class JobseekerEdu extends React.Component {
 
       // Current Role Checkbox
       isChecked: props.eduinfo.current,
-      
+
       // Form Validation stuff
       titleInvalid: false,
       titleErrorMsg: "",
@@ -58,28 +65,26 @@ class JobseekerEdu extends React.Component {
   };
 
   handleCheckbox = () => {
-    this.setState(
-      {
-        isChecked: !this.state.isChecked,
-        endMonthInvalid: false,
-      });
+    this.setState({
+      isChecked: !this.state.isChecked,
+      endMonthInvalid: false,
+    });
   };
-
 
   convertDate = () => {
     var months = [
-      "JAN",
-      "FEB",
-      "MAR",
-      "APR",
-      "MAY",
-      "JUN",
-      "JUL",
-      "AUG",
-      "SEP",
-      "OCT",
-      "NOV",
-      "DEC",
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ];
 
     // START DATE
@@ -107,10 +112,10 @@ class JobseekerEdu extends React.Component {
     var displayYearEnd = this.state.enddate.substring(2, 7);
 
     // IF displayDateEnd (THE MONTH) = 00 (or of for some reason it was stored incorrectly, check if current === true) IT MEANS THE ROLE IS CURRENT, SO DISPLAY THOSE WORDS INSTEAD
-    if(displayDateEnd === "00" || this.state.current === true){
+    if (displayDateEnd === "00" || this.state.current === true) {
       this.setState(() => ({
         displaystart: displayDateStart + " " + displayYearStart,
-        displayend: "CURRENT",
+        displayend: "Current",
       }));
     } else {
       // IF THERE IS A SLASH (FROM FORM INPUT), REMOVE IT
@@ -139,41 +144,50 @@ class JobseekerEdu extends React.Component {
     event.preventDefault();
 
     if (this.validateForm()) {
-    this.setState(prevState => ({
-      title: prevState.formtitle,
-      institution: prevState.forminstitution,
-      location: prevState.formlocation,
-      startdate: prevState.formstartdate,
-      enddate: prevState.formenddate,
-      desc: prevState.formdesc,
-      open: false,
-      current: prevState.isChecked,
-    }), () => {                              
-      // Convert the date once state has updated (for front-end display purposes)
-      this.convertDate()
-    });
+      this.setState(
+        (prevState) => ({
+          title: prevState.formtitle,
+          institution: prevState.forminstitution,
+          location: prevState.formlocation,
+          startdate: prevState.formstartdate,
+          enddate: prevState.formenddate,
+          desc: prevState.formdesc,
+          open: false,
+          current: prevState.isChecked,
+        }),
+        () => {
+          // Convert the date once state has updated (for front-end display purposes)
+          this.convertDate();
+        }
+      );
 
-    // If role is current role, we don't need an end date so set this to default value for database storarge
-    if(this.state.isChecked){
-      this.setState({
-        // For database
-        enddate: "00/0000",
+      // If role is current role, we don't need an end date so set this to default value for database storarge
+      if (this.state.isChecked) {
+        this.setState(
+          {
+            // For database
+            enddate: "00/0000",
 
-        // For immediate display on front-end
-        formenddate: "00/0000"
-      }, () => {          
-        // Send the data to the database once the date value has been resolved                    
-        this.sendData()
-      });
-    } else {
-      this.setState(prevState => ({
-        enddate: prevState.formenddate
-      }), () => {                              
-        // Send the data to the database once the date value has been resolved
-        this.sendData()
-      });
+            // For immediate display on front-end
+            formenddate: "00/0000",
+          },
+          () => {
+            // Send the data to the database once the date value has been resolved
+            this.sendData();
+          }
+        );
+      } else {
+        this.setState(
+          (prevState) => ({
+            enddate: prevState.formenddate,
+          }),
+          () => {
+            // Send the data to the database once the date value has been resolved
+            this.sendData();
+          }
+        );
+      }
     }
-  }
   };
 
   validateForm = () => {
@@ -422,30 +436,31 @@ class JobseekerEdu extends React.Component {
 
   sendData = (email) => {
     const data = [
-      this.state.title, 
+      this.state.title,
       this.state.institution,
       this.state.location,
       this.state.startdate,
       this.state.enddate,
       this.state.desc,
       this.state.current,
-      this.state.email,
-    ]
+    ];
 
     //API functionality
     try {
-      const params = {    
-        "userEmail": this.state.email,
-        "userEducationTitle": this.state.title,
-        "userEducationInstitution": this.state.institution,
-        "userEducationStartDate": this.state.startdate,
-        "userEducationEndDate": this.state.enddate,
-        "userEducationLocation": this.state.location,
-        "userEducationDescription": this.state.desc
+      const params = {
+        userEmail: "placeholder2",
+        userEducationTitle: this.state.title,
+        userEducationInstitution: this.state.institution,
+        userEducationStartDate: this.state.startdate,
+        userEducationEndDate: this.state.enddate,
+        userEducationLocation: this.state.location,
+        userEducationDescription: this.state.desc,
       };
-      console.log("LINE 466 JSEDU EMAIL CHECK: " + this.state.email);
-      axios.post('https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/education/', params);
-    }catch (err) {
+      axios.post(
+        "https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/education/",
+        params
+      );
+    } catch (err) {
       console.log(`An error has occurred: ${err}`);
     }
   };
@@ -623,7 +638,11 @@ class JobseekerEdu extends React.Component {
               {/* ROW 3 */}
               <Grid.Row>
                 <Grid.Col md={12}>
-                  <Form.Group className="mb=0" label="Job Description" isRequired>
+                  <Form.Group
+                    className="mb=0"
+                    label="Job Description"
+                    isRequired
+                  >
                     <Form.Textarea
                       name="jobdesc"
                       rows={3}
@@ -635,28 +654,39 @@ class JobseekerEdu extends React.Component {
                   </Form.Group>
                 </Grid.Col>
               </Grid.Row>
-
-              {/* ROW 4 - SUBMIT */}
+            </Form>
+          </Modal.Content>
+          {/* ROW 4 - SUBMIT */}
+          <Modal.Actions>
+            <Container className="modalSubmit">
               <Grid.Row>
                 <Grid.Col md={12}>
                   <Button
-                    floated="left"
-                    basic
-                    type="button"
-                    color="red"
+                    animated
+                    className="acceptButton"
+                    circular
+                    onClick={this.handleSubmit}
+                  >
+                    <Button.Content visible>Accept</Button.Content>
+                    <Button.Content hidden>
+                      <Icon name="check" />
+                    </Button.Content>
+                  </Button>
+                  <Button
+                    animated
+                    className="cancelButton"
+                    circular
                     onClick={this.cancelForm}
                   >
-                    {" "}
-                    Cancel{" "}
-                  </Button>
-                  <Button floated="right" basic type="button" color="green" onClick={this.handleSubmit}>
-                    {" "}
-                    Accept Changes{" "}
+                    <Button.Content visible>Cancel</Button.Content>
+                    <Button.Content hidden>
+                      <Icon name="x" />
+                    </Button.Content>
                   </Button>
                 </Grid.Col>
               </Grid.Row>
-            </Form>
-          </Modal.Content>
+            </Container>
+          </Modal.Actions>
         </Modal>
       </Container>
     );

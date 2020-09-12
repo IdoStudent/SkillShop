@@ -45,7 +45,7 @@ class RemoveUser extends React.Component {
     }
     // GET user data 
      async getSecondApi(email) {
-       fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +email)
+       fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/delete?userEmail=` +email)
          .then(res => res.json())
          .then(
            (result) => {

@@ -2,8 +2,8 @@ import * as React from "react";
 import axios from "axios";
 import { Card } from "tabler-react";
 
-import { Button, Modal, Segment } from "semantic-ui-react";
-import { Form, Grid } from "tabler-react";
+import { Button, Modal, Segment, Icon } from "semantic-ui-react";
+import { Form, Grid, Container } from "tabler-react";
 
 import JobseekerEdu from "./JobseekerEdu.react";
 
@@ -81,23 +81,26 @@ class JobseekerEduContainer extends React.Component {
       this.setState({
         dataset: this.state.dataset.concat(<JobseekerEdu eduinfo={eduinfo} />),
         open: false,
-      })
+      });
     }
 
     // TO-DO: ADD LOGIC FOR SENDING TO DATABASE
 
     try {
       const params = {
-        "userEmail": "placeholder2",
-        "userEducationTitle": this.state.formtitle,
-        "userEducationInstitution": this.state.forminstitution,
-        "userEducationStartDate": this.state.formstartdate,
-        "userEducationEndDate": this.state.formenddate,
-        "userEducationLocation": this.state.formlocation,
-        "userEducationDescription": this.state.formdesc
+        userEmail: "placeholder2",
+        userEducationTitle: this.state.formtitle,
+        userEducationInstitution: this.state.forminstitution,
+        userEducationStartDate: this.state.formstartdate,
+        userEducationEndDate: this.state.formenddate,
+        userEducationLocation: this.state.formlocation,
+        userEducationDescription: this.state.formdesc,
       };
-      axios.post('https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/education/', params);
-    }catch (err) {
+      axios.post(
+        "https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/education/",
+        params
+      );
+    } catch (err) {
       console.log(`An error has occurred: ${err}`);
     }
   };
@@ -472,34 +475,39 @@ class JobseekerEduContainer extends React.Component {
                   </Form.Group>
                 </Grid.Col>
               </Grid.Row>
-
-              {/* ROW 4 - SUBMIT */}
+            </Form>
+          </Modal.Content>
+          {/* ROW 4 - SUBMIT */}
+          <Modal.Actions>
+            <Container className="modalSubmit">
               <Grid.Row>
                 <Grid.Col md={12}>
                   <Button
-                    floated="left"
-                    basic
-                    type="button"
-                    color="red"
-                    onClick={this.cancelForm}
-                  >
-                    {" "}
-                    Cancel{" "}
-                  </Button>
-                  <Button
-                    floated="right"
-                    basic
-                    type="button"
-                    color="green"
+                    animated
+                    className="acceptButton"
+                    circular
                     onClick={this.handleSubmit}
                   >
-                    {" "}
-                    Accept Changes{" "}
+                    <Button.Content visible>Accept</Button.Content>
+                    <Button.Content hidden>
+                      <Icon name="check" />
+                    </Button.Content>
+                  </Button>
+                  <Button
+                    animated
+                    className="cancelButton"
+                    circular
+                    onClick={this.cancelForm}
+                  >
+                    <Button.Content visible>Cancel</Button.Content>
+                    <Button.Content hidden>
+                      <Icon name="x" />
+                    </Button.Content>
                   </Button>
                 </Grid.Col>
               </Grid.Row>
-            </Form>
-          </Modal.Content>
+            </Container>
+          </Modal.Actions>
         </Modal>
       </div>
     );

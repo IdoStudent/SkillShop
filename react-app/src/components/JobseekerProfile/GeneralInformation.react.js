@@ -1,10 +1,10 @@
 import * as React from "react";
 import axios from "axios";
 import { Form, Card, Grid } from "tabler-react";
-import { Button, Modal } from "semantic-ui-react";
-import Auth from '@aws-amplify/auth';
+import { Button, Modal, Icon, Container } from "semantic-ui-react";
+import Auth from "@aws-amplify/auth";
 
-import '../../index.css';
+import "../../index.css";
 import { arrayOf } from "prop-types";
 
 //const config = require('../config.json');
@@ -34,27 +34,49 @@ class GeneralInformation extends React.Component {
 
       // Modal State
       open: false,
+
+      // Form Validation stuff
+      fNameInvalid: false,
+      fNameErrorMsg: "",
+
+      surnameInvalid: false,
+      surnameErrorMsg: "",
+
+      postcodeInvalid: false,
+      postcodeErrorMsg: "",
+
+      stateInvalid: false,
+      stateErrorMsg: "",
+
+      aboutInvalid: false,
+      aboutErrorMsg: "",
     };
   }
-  // GET email for getSecondApi 
+  // GET email for getSecondApi
   getEmailApi() {
-   return Auth.currentAuthenticatedUser().then((user) => {
+    return Auth.currentAuthenticatedUser().then((user) => {
       const { attributes = {} } = user;
       let email =  attributes['email']
       return email
     })}
   // GET email for form
- getFirstApi() {
-   return Auth.currentAuthenticatedUser().then((user) => {
-      this.setState({email: user.attributes.email, formemail: user.attributes.email})
+  getFirstApi() {
+    return Auth.currentAuthenticatedUser().then((user) => {
+      this.setState({
+        email: user.attributes.email,
+        formemail: user.attributes.email,
+      });
     });
- }
- // GET user data 
+  }
+  // GET user data
   async getSecondApi(email) {
-    fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +email)
-      .then(res => res.json())
-      .then(
-        (result) => {
+    fetch(
+      `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
+        email )
+      .then((res) => res.json())
+      .then((result) => {
+        // If length is undefined, that means for some reason it's not returning data at all, so dont try and access fields that dont exist
+        
           this.setState({
             firstname: result.Item.userFirstName,
             middlename: result.Item.userMiddleName,
@@ -72,57 +94,155 @@ class GeneralInformation extends React.Component {
             formstate: result.Item.userState,
             formabout: result.Item.userAbout,        
           });
-          console.log("LINE 75 GEN INFO EMAIL CHECK: " + this.state.email)} ,
+          console.log("LINE 75 GEN INFO EMAIL CHECK: " + this.state.email) },
       )
   }
   // pass before mount
-  BeforDidMount() { 
-   this.getEmailApi().then(email => this.getSecondApi(email)); }
+  BeforeDidMount() {
+    this.getEmailApi().then((email) => this.getSecondApi(email));
+  }
 
   componentDidMount() {
-    this.BeforDidMount();
-    this.getFirstApi();  
+    this.BeforeDidMount();
+    this.getFirstApi();
   }
 
   handleChange = (input) => (event) => {
     this.setState({ [input]: event.target.value });
   };
 
-  handleSubmit = async (event , email) => {
+  handleSubmit = async (event, email) => {
     event.preventDefault();
-    this.setState((prevState) => ({
-      // If submitting new values, update the state to represent the new data
-      firstname: prevState.formfirstname,
-      middlename: prevState.formmiddlename,
-      surname: prevState.formsurname,
-      city: prevState.formcity,
-      postcode: prevState.formpostcode,
-      email: this.state.formemail,
-      userState: prevState.formstate,
-      about: prevState.formabout,
-      open: false,
-      
-    }))
 
-    try {
-      const params = {
-        "userFirstName": this.state.formfirstname,
-        "userMiddleName": this.state.formmiddlename,
-        "userLastName": this.state.formsurname,
-        "userCity": this.state.formcity,
-        "userPostCode": this.state.formpostcode,
-        "userEmail": this.state.formemail,
-        "userState": this.state.formstate,
-        "userAbout": this.state.formabout,
-        "userType": "jobseeker"
-      };
-      
-      await axios.post('https://qrg3idkox4.execute-api.ap-southeast-2.amazonaws.com/prod/{userEmail}/', params);
-      console.log(`EMAIL:  ` + this.state.formemail);
-    }catch (err) {
-      console.log(`An error has occurred: ${err}`);
-  }
- };
+    if (this.validateForm()) {
+      this.setState((prevState) => ({
+        // If submitting new values, update the state to represent the new data
+        firstname: prevState.formfirstname,
+        middlename: prevState.formmiddlename,
+        surname: prevState.formsurname,
+        city: prevState.formcity,
+        postcode: prevState.formpostcode,
+        email: this.state.formemail,
+        state: prevState.formstate,
+        about: prevState.formabout,
+        open: false,
+      }));
+
+      try {
+        const params = {
+          userEmail: this.state.formemail,
+          userFirstName: this.state.formfirstname,
+          userMiddleName: this.state.formmiddlename,
+          userLastName: this.state.formsurname,
+          userCity: this.state.formcity,
+          userPostCode: this.state.formpostcode,
+          userEmail: this.state.formemail,
+          userState: this.state.formstate,
+          userAbout: this.state.formabout,
+          userType: "jobseeker",
+        };
+
+        await axios.post(
+          "https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata",
+          params
+        );
+        console.log(`EMAIL:  ` + this.state.formemail);
+      } catch (err) {
+        console.log(`An error has occurred: ${err}`);
+      }
+    }
+  };
+
+  validateForm = () => {
+    let fName = this.state.formfirstname;
+    let surname = this.state.formsurname;
+    let postcode = this.state.formpostcode;
+    let state = this.state.formstate;
+    let about = this.state.formabout;
+
+    this.setState({
+      fNameInvalid: false,
+      surnameInvalid: false,
+      postcodeInvalid: false,
+      stateInvalid: false,
+      aboutInvalid: false,
+    });
+
+    let validInput = true;
+
+    if (!fName) {
+      this.setState({
+        fNameErrorMsg: "First name cannot be empty",
+        fNameInvalid: true,
+      });
+      validInput = false;
+    } else if (fName.length < 2) {
+      this.setState({
+        fNameErrorMsg: "First name needs to be 2 or more characters",
+        fNameInvalid: true,
+      });
+      validInput = false;
+    }
+
+    if (!surname) {
+      this.setState({
+        surnameErrorMsg: "Surname cannot be empty",
+        surnameInvalid: true,
+      });
+      validInput = false;
+    } else if (surname.length < 2) {
+      this.setState({
+        surnameErrorMsg: "Surname needs to be 2 or more characters",
+        surnameInvalid: true,
+      });
+      validInput = false;
+    }
+
+    if (!postcode) {
+      this.setState({
+        postcodeErrorMsg: "Postcode cannot be empty",
+        postcodeInvalid: true,
+      });
+      validInput = false;
+    } else if (postcode.length != 4) {
+      this.setState({
+        postcodeErrorMsg: "Postcode need to be 4 numbers!",
+        postcodeInvalid: true,
+      });
+      validInput = false;
+    }
+
+    if (!state) {
+      this.setState({
+        stateErrorMsg: "State cannot be empty",
+        stateInvalid: true,
+      });
+      validInput = false;
+    } else if (state.length < 3) {
+      this.setState({
+        stateErrorMsg: "Please enter a valid state name",
+        stateInvalid: true,
+      });
+      validInput = false;
+    }
+
+    if (!about) {
+      this.setState({
+        aboutErrorMsg: "Description cannot be empty",
+        aboutInvalid: true,
+      });
+      validInput = false;
+    } else if (about.length < 100) {
+      this.setState({
+        aboutErrorMsg: "Tell us more about you! (100+ characters)",
+        aboutInvalid: true,
+      });
+      validInput = false;
+    }
+
+    // Return the status of valid input. If any of the above error conditions are met, this will return false
+    return validInput;
+  };
 
   cancelForm = () => {
     // If cancelling, reset any fields that have been changed to the original values so that when the modal is re-opened, the old values are shown
@@ -135,6 +255,12 @@ class GeneralInformation extends React.Component {
       formstate: prevState.state,
       formabout: prevState.about,
       open: false,
+
+      fNameInvalid: false,
+      surnameInvalid: false,
+      postcodeInvalid: false,
+      stateInvalid: false,
+      aboutInvalid: false,
     }));
   };
 
@@ -187,39 +313,39 @@ class GeneralInformation extends React.Component {
               {/* ROW 1 */}
               <Grid.Col md={4}>
                 <Form.Group label="First Name">
-                  <Form.Input name="firstname" readOnly value={firstname} />
+                  <Form.Input name="firstname" disabled value={firstname} />
                 </Form.Group>
               </Grid.Col>
               <Grid.Col md={4}>
                 <Form.Group label="Middle Name">
-                  <Form.Input name="middlename" readOnly value={middlename} />
+                  <Form.Input name="middlename" disabled value={middlename} />
                 </Form.Group>
               </Grid.Col>
               <Grid.Col md={4}>
                 <Form.Group label="Surname">
-                  <Form.Input name="surname" readOnly value={surname} />
+                  <Form.Input name="surname" disabled value={surname} />
                 </Form.Group>
               </Grid.Col>
 
               {/* ROW 2 */}
               <Grid.Col md={3}>
                 <Form.Group label="City">
-                  <Form.Input name="city" readOnly value={city} />
+                  <Form.Input name="city" disabled value={city} />
                 </Form.Group>
               </Grid.Col>
               <Grid.Col md={2}>
                 <Form.Group label="Post Code">
-                  <Form.Input name="postcode" readOnly value={postcode} />
+                  <Form.Input name="postcode" disabled value={postcode} />
                 </Form.Group>
               </Grid.Col>
               <Grid.Col md={3}>
                 <Form.Group label="State">
-                  <Form.Input name="state" readOnly value={state} />
+                  <Form.Input name="state" disabled value={state} />
                 </Form.Group>
               </Grid.Col>
               <Grid.Col md={4}>
                 <Form.Group label="Email">
-                  <Form.Input name="email" readOnly value={email} />
+                  <Form.Input name="email" disabled value={email} />
                 </Form.Group>
               </Grid.Col>
 
@@ -245,16 +371,18 @@ class GeneralInformation extends React.Component {
           closeOnDimmerClick={false}
           open={open}
         >
-          <Modal.Header>Edit Info</Modal.Header>
+          <Modal.Header>Editing General Information</Modal.Header>
           <Modal.Content>
-            <Form onSubmit={this.handleSubmit}>
+            <Form>
               <Grid.Row>
                 <Grid.Col md={4}>
-                  <Form.Group label="First Name">
+                  <Form.Group label="First Name" isRequired>
                     <Form.Input
                       name="firstname"
                       value={formfirstname}
                       onChange={this.handleChange("formfirstname")}
+                      invalid={this.state.fNameInvalid}
+                      feedback={this.state.fNameErrorMsg}
                     />
                   </Form.Group>
                 </Grid.Col>
@@ -268,11 +396,13 @@ class GeneralInformation extends React.Component {
                   </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={4}>
-                  <Form.Group label="Surname">
+                  <Form.Group label="Surname" isRequired>
                     <Form.Input
                       name="surname"
                       value={formsurname}
                       onChange={this.handleChange("formsurname")}
+                      invalid={this.state.surnameInvalid}
+                      feedback={this.state.surnameErrorMsg}
                     />
                   </Form.Group>
                 </Grid.Col>
@@ -290,20 +420,24 @@ class GeneralInformation extends React.Component {
                   </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={2}>
-                  <Form.Group label="Post Code">
+                  <Form.Group label="Post Code" isRequired>
                     <Form.Input
                       name="postcode"
                       value={formpostcode}
                       onChange={this.handleChange("formpostcode")}
+                      invalid={this.state.postcodeInvalid}
+                      feedback={this.state.postcodeErrorMsg}
                     />
                   </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={3}>
-                  <Form.Group label="State">
+                  <Form.Group label="State" isRequired>
                     <Form.Input
                       name="state"
                       value={formstate}
                       onChange={this.handleChange("formstate")}
+                      invalid={this.state.stateInvalid}
+                      feedback={this.state.stateErrorMsg}
                     />
                   </Form.Group>
                 </Grid.Col>
@@ -312,38 +446,52 @@ class GeneralInformation extends React.Component {
               {/* ROW 3 */}
               <Grid.Row>
                 <Grid.Col md={12}>
-                  <Form.Group className="mb=0" label="About Me">
+                  <Form.Group className="mb=0" label="About Me" isRequired>
                     <Form.Textarea
                       name="aboutme"
                       rows={3}
                       value={formabout}
                       onChange={this.handleChange("formabout")}
+                      invalid={this.state.aboutInvalid}
+                      feedback={this.state.aboutErrorMsg}
                     />
                   </Form.Group>
                 </Grid.Col>
               </Grid.Row>
+            </Form>
+          </Modal.Content>
 
-              {/* ROW 4 - SUBMIT */}
+          {/* ROW 4 - SUBMIT */}
+          <Modal.Actions>
+            <Container className="modalSubmit">
               <Grid.Row>
                 <Grid.Col md={12}>
                   <Button
-                    floated="left"
-                    basic
-                    type="button"
-                    color="red"
+                    animated
+                    className="acceptButton"
+                    circular
+                    onClick={this.handleSubmit}
+                  >
+                    <Button.Content visible>Accept</Button.Content>
+                    <Button.Content hidden>
+                      <Icon name="check" />
+                    </Button.Content>
+                  </Button>
+                  <Button
+                    animated
+                    className="cancelButton"
+                    circular
                     onClick={this.cancelForm}
                   >
-                    {" "}
-                    Cancel{" "}
-                  </Button>
-                  <Button floated="right" basic type="submit" color="green">
-                    {" "}
-                    Accept Changes{" "}
+                    <Button.Content visible>Cancel</Button.Content>
+                    <Button.Content hidden>
+                      <Icon name="x" />
+                    </Button.Content>
                   </Button>
                 </Grid.Col>
               </Grid.Row>
-            </Form>
-          </Modal.Content>
+            </Container>
+          </Modal.Actions>
         </Modal>
       </div>
     );

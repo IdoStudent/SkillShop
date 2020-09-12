@@ -4,10 +4,433 @@ body {
   font-family: sans-serif;
 }
 
-.page{
+.page {
   background-color: #F8F8FB;
 }
 
-.ui.basic.button, .ui.basic.buttons .button {
+/* LANDING PAGE STYLES */
+
+.background {
+  background-color: #F8F8FB;
+  background-image: url('./img/background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.landingPage .middleContent {
+  width: 80%;
+  height: 60%;
+  text-align: center;
+  margin-top: 5%;
+}
+
+.landingPage .middleDivider {
+  /* IMAGE STYLE IF WE WANT IT BACK
+  background-image: url('./img/middlelogo.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 100%;*/
+
+  /* VERTICAL DIVIDER STYLE */
+  border-left: 2px solid white;
+  height: 70%;
+  position: absolute;
+  left: 50%;
+  margin-left: -3px;
+  top: 15%;
+}
+
+.landingPage .middleContent .row {
+  height: 100%;
+}
+
+.landingPage .middleContent .sideButton {
+  color: white;
+  margin-top: 60%;
+}
+
+.landingPage .btn {
+  margin-top: 10px;
+  width: 65%;
+  border: 2px solid #ffffff;
+  background: none;
+  color: white;
+  font-weight: lighter;
+}
+
+.landingPage .btn:hover {
+  margin-top: 10px;
+  width: 65%;
+  border: 2px solid #ffffff;
+  background: white;
+  color: black;
+  font-weight: lighter;
+}
+
+.landingPage .header {
+  background: none;
+  text-align: center;
+  color: white;
+  border-bottom: none;
+  padding-top: 50px;
+}
+
+.header h1 {
+  font-size: 5rem;
+}
+
+.header h2 {
+  font-size: 3rem;
+}
+
+.landingPage .card{
+  background-color: #ffffff;
+  width: 400px;
+  min-height: 200px;
+  position: absolute;
+  left: 50%; 
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  box-shadow: 0px 0px 17px 1px rgba(0,0,0,0.15);
+}
+
+.landingPage .card .h2{
+  padding: 5%;
+}
+
+.landingPage .card .row{
+  margin-top: 2%;
+  text-align: center;
+}
+
+.bottomRight {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  color: white;
+}
+
+.linkText {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* LOGIN PAGE STYLES */
+
+.background .h3 {
+  color: white;
+}
+
+.loginPage {
+  background-color: #F8F8FB;
+  width: 100%;
+  height: 100%;
+}
+
+.loginPage .card{
+  background-color: #ffffff;
+  width: 400px;
+  min-height: 240px;
+  position: absolute;
+  left: 50%; 
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  padding-top: 20px;
+  box-shadow: 0px 0px 17px 1px rgba(0,0,0,0.15);
+}
+
+.loginPage .wrapper{
+  width: 30%;
+  min-height: 600px;
+  padding-top: 100px;
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.loginPage .errorMsg {
+  margin-top: -10px;
+  margin-bottom: 10px;
+  height: 10px;
+}
+
+.loginPage .errorMsg p{
+  color: #cd201f;
+  font-size: 0.875rem;
+}
+
+.loginPage .ui.button {
+  margin-top: 10px;
+  width: 65%;
+  background-color: #26CB64;
+  background-image: linear-gradient(to bottom right, #26CB64, #18d311);
+  color: white;
+  font-weight: lighter;
+  border-radius: 0px;
+}
+
+.loginPage .ui.button:hover {
+  background-color: #26CB64;
+  background-image: linear-gradient(to bottom right, #26CB64, #18d311);
+  color: white;
+}
+
+.loginPage .ui.button .icon{
+  color: white !important;
+}
+
+/* REGISTER PAGE STYLES */
+
+.registerPage {
+  background-color: #F8F8FB;
+  width: 100%;
+  height: 100%;
+}
+
+.registerPage .card{
+  background-color: #ffffff;
+  width: 400px;
+  min-height: 410px;
+  position: absolute;
+  left: 50%; 
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  padding-top: 20px;
+  margin-top: 85px;
+  box-shadow: 0px 0px 17px 1px rgba(0,0,0,0.15);
+}
+
+.registerPage .wrapper{
+  width: 30%;
+  min-height: 600px;
+  padding-top: 100px;
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.registerPage .errorMsg {
+  margin-top: -10px;
+  margin-bottom: 10px;
+  height: 10px;
+}
+
+.registerPage .errorMsg.radios {
+  margin-top: -20px;
+  margin-bottom: 15px
+}
+
+.registerPage .errorMsg p{
+  color: #cd201f;
+  font-size: 0.875rem;
+}
+
+.registerPage .ui.button {
+  margin-top: 10px;
+  width: 65%;
+  background-color: #26CB64;
+  background-image: linear-gradient(to bottom right, #26CB64, #18d311);
+  color: white;
+  font-weight: lighter;
+  border-radius: 0px;
+}
+
+.registerPage .ui.button:hover {
+  background-color: #26CB64;
+  background-image: linear-gradient(to bottom right, #26CB64, #18d311);
+  color: white;
+}
+
+.registerPage .ui.button .icon{
+  color: white !important;
+}
+
+/* BUTTON STYLES */
+
+.icon.button {
   box-shadow: none !important;
 }
+
+.icon.button:hover .icon {
+  color: #26CB64 !important;
+}
+
+.selectgroup-input:checked + .selectgroup-button {
+  border-radius: 5px !important;
+}
+
+.selectgroup-input:not(:checked) + .selectgroup-button {
+  border-radius: 5px !important;
+}
+
+.selectgroup-pills .selectgroup-button {
+  width: 160px;
+  font-size: 0.89rem;
+}
+
+.acceptButton {
+  background-color: #fafafa !important;
+  color: #26CB64 !important;
+  font-weight: lighter !important;
+  height: 30px;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+.acceptButton.white {
+  background-color: white !important;
+}
+
+.acceptButton:hover {
+  background-color: #26CB64 !important;
+}
+
+.acceptButton .icon{
+  color: #26CB64 !important;
+}
+
+.acceptButton:hover .icon{
+  color: white !important;
+}
+
+.cancelButton {
+  background-color: #fafafa !important;
+  color: #cb2626 !important;
+  font-weight: lighter !important;
+  height: 30px;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+.acceptButton.delete {
+  color: #cb2626 !important;
+}
+
+.acceptButton.delete:hover {
+  background-color: #cb2626 !important;
+}
+
+.cancelButton.delete {
+  color: rgba(0,0,0,.87) !important;
+}
+
+.cancelButton.delete:hover {
+  background-color: rgba(0,0,0,.87)!important;
+}
+
+.cancelButton:hover {
+  background-color: #cb2626 !important;
+}
+
+.cancelButton .icon{
+  color: white !important;
+}
+
+
+/* MODAL STYLES */
+
+.modalSubmit {
+  text-align: center;
+}
+
+.actions {
+  background: #fafafa !important;
+  border-radius: 0px !important;
+  height: 50px !important;
+  padding: 0.65rem 1rem !important;
+}
+
+.modalSubmit .acceptButton{
+  margin-right: 100px !important;
+}
+
+.modal .header {
+  background: #2b2a2a !important;
+  border-radius: 0px !important;
+  color: white !important;
+  height: 50px !important;
+  font-size: 1.2rem !important;
+  text-align: center;
+}
+
+.modal {
+  background: none !important;
+  border-radius: 0px !important;
+  position: relative !important;
+  overflow: visible !important;
+}
+
+.modal .content{
+  border-radius: 0px !important;
+}
+
+.xButton {
+  background: none !important;
+  float: right;
+  margin-top: -18px !important;
+  margin-right: -22px !important;
+}
+
+.icon.button.xButton:hover .icon {
+  color: white !important;
+}
+
+.xButtonHeader {
+  margin-left: 45px;
+}
+
+/* CANDIDATES SCREEN */
+
+.card.thin {
+  height: 90px;
+}
+
+.card.thin .card-body {
+  padding-top: 0.8rem;
+  padding-left: 30px;
+}
+
+#jobprofile .button {
+  margin-top: 20px;
+}
+
+#jobprofile .form-label {
+  margin-left: -10px;
+}
+
+/* MISC */
+
+.formLabelLeft {
+  text-align: left;
+}
+
+#skills .form-label {
+  margin-left: -15px;
+  margin-bottom: 10px;
+}
+
+#skills .col {
+  margin-left: 130px !important;
+}
+
+.pageHeading {
+  text-align: center; 
+  padding: 20px;
+}
+
+.link {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+
+

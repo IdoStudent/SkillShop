@@ -3,7 +3,14 @@
 import * as React from "react";
 import axios from "axios";
 import { Auth } from "aws-amplify";
-import { Container, Divider, Header, Button, Modal } from "semantic-ui-react";
+import {
+  Container,
+  Divider,
+  Header,
+  Button,
+  Modal,
+  Icon,
+} from "semantic-ui-react";
 import { Form, Grid } from "tabler-react";
 
 class JobseekerExp extends React.Component {
@@ -69,18 +76,18 @@ class JobseekerExp extends React.Component {
 
   convertDate = () => {
     var months = [
-      "JAN",
-      "FEB",
-      "MAR",
-      "APR",
-      "MAY",
-      "JUN",
-      "JUL",
-      "AUG",
-      "SEP",
-      "OCT",
-      "NOV",
-      "DEC",
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ];
 
     // START DATE
@@ -111,7 +118,7 @@ class JobseekerExp extends React.Component {
     if (displayDateEnd === "00" || this.state.current === true) {
       this.setState(() => ({
         displaystart: displayDateStart + " " + displayYearStart,
-        displayend: "CURRENT",
+        displayend: "Current",
       }));
     } else {
       // IF THERE IS A SLASH (FROM FORM INPUT), REMOVE IT
@@ -221,7 +228,6 @@ class JobseekerExp extends React.Component {
         );
       }
     }
-
   };
 
   validateForm = () => {
@@ -642,34 +648,39 @@ class JobseekerExp extends React.Component {
                   </Form.Group>
                 </Grid.Col>
               </Grid.Row>
-
-              {/* ROW 4 - SUBMIT */}
+            </Form>
+          </Modal.Content>
+          {/* ROW 4 - SUBMIT */}
+          <Modal.Actions>
+            <Container className="modalSubmit">
               <Grid.Row>
                 <Grid.Col md={12}>
                   <Button
-                    floated="left"
-                    basic
-                    type="button"
-                    color="red"
-                    onClick={this.cancelForm}
-                  >
-                    {" "}
-                    Cancel{" "}
-                  </Button>
-                  <Button
-                    floated="right"
-                    basic
-                    type="button"
-                    color="green"
+                    animated
+                    className="acceptButton"
+                    circular
                     onClick={this.handleSubmit}
                   >
-                    {" "}
-                    Accept Changes{" "}
+                    <Button.Content visible>Accept</Button.Content>
+                    <Button.Content hidden>
+                      <Icon name="check" />
+                    </Button.Content>
+                  </Button>
+                  <Button
+                    animated
+                    className="cancelButton"
+                    circular
+                    onClick={this.cancelForm}
+                  >
+                    <Button.Content visible>Cancel</Button.Content>
+                    <Button.Content hidden>
+                      <Icon name="x" />
+                    </Button.Content>
                   </Button>
                 </Grid.Col>
               </Grid.Row>
-            </Form>
-          </Modal.Content>
+            </Container>
+          </Modal.Actions>
         </Modal>
       </Container>
     );

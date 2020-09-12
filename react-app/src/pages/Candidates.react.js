@@ -11,7 +11,9 @@ import SiteWrapper from "../SiteWrapper.react";
 import JobEditModal from "../components/JobEditModal.react";
 import JobFiltersModal from "../components/JobFiltersModal.react";
 import JobNewModal from "../components/JobNewModal.react";
-import JobCandidates from "../components/JobCandidates.react"
+import JobCandidates from "../components/JobCandidates.react";
+
+const uuidv4 = require("uuid/v4")
 
 class Candidates extends React.Component {
   constructor(props) {
@@ -42,7 +44,7 @@ class Candidates extends React.Component {
     fetch("http://demo5322112.mockable.io/TESTTEST")
       .then((res) => res.json())
       .then((result) => {
-        console.log(result)
+        console.log(result);
         // Create a temporary array to hold our individual items (job profiles)
         let items = [];
         for (var i = 0; i < result.length; i++) {
@@ -129,7 +131,7 @@ class Candidates extends React.Component {
     );
 
     // Get current profile information so we can save the filters
-    let currentProfile = this.state.data[this.state.selectValue]
+    let currentProfile = this.state.data[this.state.selectValue];
 
     try {
       const params = {
@@ -141,12 +143,15 @@ class Candidates extends React.Component {
         jobAbout: newInfo[3],
         educationFilter: currentProfile.educationFilter,
         experienceFilter: currentProfile.experienceFilter,
-        skillsFilter: currentProfile.skillsFilter
+        skillsFilter: currentProfile.skillsFilter,
       };
-      axios.post('https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod', params);
-    }catch (err) {
+      axios.post(
+        "https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod",
+        params
+      );
+    } catch (err) {
       console.log(`An error has occurred: ${err}`);
-  }
+    }
   };
 
   createNewProfile = (newInfo) => {
@@ -154,24 +159,30 @@ class Candidates extends React.Component {
     // I think if we append the data to the state directly it leaves too many possibilities for a mistmatch between what is on the front-end and what's on the database
     // It's doable both ways though so doesn't really matter
 
+    // Generate a unique id 
+    let jobKey = uuidv4()
+
     try {
       const params = {
         userEmail: "placeholder2",
-        jobKey: "5",
+        jobKey: jobKey,
         jobTitle: newInfo[0],
         jobLocation: newInfo[1],
         jobIndustry: newInfo[2],
-        jobAbout: newInfo[3]
-        //don't need to add filters here because this is a new Job 
+        jobAbout: newInfo[3],
+        //don't need to add filters here because this is a new Job
       };
-      axios.post('https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod', params);
-    }catch (err) {
+      axios.post(
+        "https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod",
+        params
+      );
+    } catch (err) {
       console.log(`An error has occurred: ${err}`);
-  }
+    }
 
-    console.log(newInfo)
+    console.log(newInfo);
 
-    this.setState({openNew: false})
+    this.setState({ openNew: false });
   };
 
   setFilters = (filters) => {
@@ -180,12 +191,12 @@ class Candidates extends React.Component {
     // filters.skills is an array of skills (strings). anything in the array has been selected
 
     // Get current profile information
-    let currentProfile = this.state.data[this.state.selectValue]
+    let currentProfile = this.state.data[this.state.selectValue];
+
+    console.log(filters);
 
     try {
-
       // Map the data so it sends the current profile information with the new filters
-
       const params = {
         userEmail: currentProfile.userEmail,
         jobKey: currentProfile.jobKey,
@@ -195,14 +206,16 @@ class Candidates extends React.Component {
         jobAbout: currentProfile.jobAbout,
         educationFilter: filters.education,
         experienceFilter: filters.experience,
-        skillsFilter: filters.skills
+        skillsFilter: filters.skills,
       };
 
-      axios.post('https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod', params);
-    }catch (err) {
+      axios.post(
+        "https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod",
+        params
+      );
+    } catch (err) {
       console.log(`An error has occurred: ${err}`);
-  }
-
+    }
   };
 
   render() {
@@ -212,10 +225,11 @@ class Candidates extends React.Component {
           <Container>
             <Grid.Row>
               <Grid.Col lg={12}>
-                <Header.H1>Find Candidates</Header.H1>
+                <Header.H1 className="pageHeading">Find Candidates</Header.H1>
 
                 {/* Job profile selection */}
-                <Container className="card" name="generalInfo">
+                <div id="jobprofile"> 
+                <Container className="card thin" name="jobProfile">
                   <Card.Body>
                     <Grid.Row>
                       <Grid.Col md={4}>
@@ -233,32 +247,34 @@ class Candidates extends React.Component {
                         <Button
                           floated="right"
                           basic
+                          icon="plus"
+                          type="button"
+                          onClick={this.openModalNew}
+                        />
+                        <Button
+                          floated="right"
+                          basic
                           icon="filter"
                           type="button"
                           onClick={this.openModalFilter}
                         />
                         <Button
                           floated="right"
-                          basic
                           icon="pencil"
                           type="button"
+                          basic
                           onClick={this.openModalInfo}
                         />
                       </Grid.Col>
                     </Grid.Row>
-                    <Button
-                      floated="right"
-                      basic
-                      icon="plus"
-                      type="button"
-                      onClick={this.openModalNew}
-                    />
                   </Card.Body>
                 </Container>
-
+                </div>
+                
                 {/* Candidate Info */}
-                <Container className="card" name="generalInfo">
-                  <Card.Body>{/* Insert candidate info component */}
+                <Container className="card" name="candidateInfo">
+                  <Card.Body>
+                    {/* Insert candidate info component */}
                     <JobCandidates />
                   </Card.Body>
                 </Container>
@@ -266,53 +282,28 @@ class Candidates extends React.Component {
             </Grid.Row>
           </Container>
 
-          {/* Edit Job Info */}
-          <Modal
-            style={{ position: "relative" }}
-            closeOnDimmerClick={false}
-            open={this.state.openInfo}
-          >
-            <Modal.Header>Edit Job Profile Info</Modal.Header>
-            <Modal.Content>
-              <JobEditModal
-                closeModal={this.closeModalInfo}
-                acceptChanges={this.acceptChangesInfo}
-                data={this.state.data[this.state.selectValue]}
-              />
-            </Modal.Content>
-          </Modal>
+          {this.state.openInfo ? (
+            <JobEditModal
+              closeModal={this.closeModalInfo}
+              acceptChanges={this.acceptChangesInfo}
+              data={this.state.data[this.state.selectValue]}
+            />
+          ) : null}
 
-          {/* Edit Filters */}
-          <Modal
-            style={{ position: "relative", overflow: "visible" }}
-            closeOnDimmerClick={false}
-            open={this.state.openFilter}
-          >
-            <Modal.Header>Change Filters</Modal.Header>
-            <Modal.Content>
-              <JobFiltersModal
-                closeModal={this.closeModalFilter}
-                data={this.state.data[this.state.selectValue]}
-                acceptChanges={this.setFilters}
-              />
-            </Modal.Content>
-          </Modal>
+          {this.state.openFilter ? (
+            <JobFiltersModal
+              closeModal={this.closeModalFilter}
+              data={this.state.data[this.state.selectValue]}
+              acceptChanges={this.setFilters}
+            />
+          ) : null}
 
-          {/* Create New Profile*/}
-          <Modal
-            style={{ position: "relative" }}
-            closeOnDimmerClick={false}
-            open={this.state.openNew}
-          >
-            <Modal.Header>Create a new Job Profile</Modal.Header>
-
-            <Modal.Content>
-              <JobNewModal
-                closeModal={this.closeModalNew}
-                acceptChanges={this.createNewProfile}
-              />
-            </Modal.Content>
-          </Modal>
+          {this.state.openNew ? (
+            <JobNewModal
+              closeModal={this.closeModalNew}
+              acceptChanges={this.createNewProfile}
+            />
+          ) : null}
         </div>
       </SiteWrapper>
     );
