@@ -432,5 +432,63 @@ body {
   text-decoration: underline;
 }
 
+/* CHAT */
+
+.chat {
+  width:100%;
+  height:100%;
+}
+
+.ido {
+  width:50%;
+  height:100px;
+}
+
+.my-body {
+  margin:30px;
+}
+
+.my-container {
+  border:1px solid green;
+  height:600px;
+}
+
+.my-row {
+  border:3px solid black;
+}
+
+.my-col {
+  border:3px dotted blue;
+}
+
+.chat-box {
+  height:550px;
+}
+
+.text-box {
+  height:50px;
+}
+
+.input-text {
+  width:100%;
+  height:100%;
+}
+
+.my-button {
+  height:100%;
+  width:100%;
+}
+
+
+
+/* .message-list {
+  box-sizing: border-box;
+  padding: 0 0 0 6px;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  background: white;
+} */
 
 
