@@ -7,6 +7,7 @@ import { Container, Form, Grid, Header } from "tabler-react";
 import { Button, Icon } from "semantic-ui-react";
 
 const validEmailRegex = RegExp(
+  //eslint-disable-next-line
   /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
 );
 
@@ -41,16 +42,16 @@ class Login extends Component {
         let role = user.attributes["custom:role"];
         // console.log(role);
 
-        if (role == "employer") {
+        if (role === "employer") {
           // console.log('route to employer profile');
           this.props.history.push("/candidates");
-        } else if (role == "jobseeker") {
+        } else if (role === "jobseeker") {
           // console.log('route to jobseeker profile');
           this.props.history.push("/myprofile");
         }
       } catch (error) {
         this.setState({sendingData: false})
-        if (error.code == "UserNotConfirmedException") {
+        if (error.code === "UserNotConfirmedException") {
           this.setState({
             emailErr: true,
             passwordErr: true,
@@ -58,7 +59,7 @@ class Login extends Component {
           });
         }
 
-        if (error.code == "NotAuthorizedException") {
+        if (error.code === "NotAuthorizedException") {
           this.setState({
             emailErr: true,
             passwordErr: true,
@@ -153,7 +154,7 @@ class Login extends Component {
                       <Button.Content type="submit" visible>
                         Login
                       </Button.Content>
-                      {(this.state.sendingData == false) ? <Button.Content hidden><Icon name="arrow right" /></Button.Content> : null}
+                      {(this.state.sendingData === false) ? <Button.Content hidden><Icon name="arrow right" /></Button.Content> : null}
                     </Button>
                   </Form>
                 </Grid.Col>

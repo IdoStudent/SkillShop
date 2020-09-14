@@ -192,7 +192,7 @@ class JobseekerEdu extends React.Component {
 
   validateForm = () => {
     let title = this.state.formtitle;
-    let institution = this.state.forminstitution;
+    //let institution = this.state.forminstitution;
     let startdate = this.state.formstartdate;
     let enddate = this.state.formenddate;
     let desc = this.state.formdesc;
@@ -258,7 +258,7 @@ class JobseekerEdu extends React.Component {
 
     /* START DATE BLOCK START */
 
-    if (startDateYear == currentYear) {
+    if (startDateYear === currentYear) {
       if (startDateMonth > currentMonth) {
         this.setState({
           startMonthErrorMsg: "Month cannot be in the future!",
@@ -282,7 +282,7 @@ class JobseekerEdu extends React.Component {
       validInput = false;
     }
     // IF THE MONTH STARTS WITH 1, CHECK THAT THE SECOND VALUE IS NOT > 2, OTHERWISE THAT IS INVALID
-    if (startdate[0] == 1) {
+    if (startdate[0] === 1) {
       if (startdate[1] > 2) {
         this.setState({
           startMonthErrorMsg: "Please enter a valid month",
@@ -310,7 +310,7 @@ class JobseekerEdu extends React.Component {
 
     /* END DATE BLOCK START */
     if (!this.state.isChecked) {
-      if (endDateYear == currentYear) {
+      if (endDateYear === currentYear) {
         if (endDateMonth > currentMonth) {
           this.setState({
             endMonthErrorMsg: "Month cannot be in the future!",
@@ -334,7 +334,7 @@ class JobseekerEdu extends React.Component {
         validInput = false;
       }
       // IF THE MONTH STARTS WITH 1, CHECK THAT THE SECOND VALUE IS NOT > 2, OTHERWISE THAT IS INVALID
-      if (enddate[0] == 1) {
+      if (enddate[0] === 1) {
         if (enddate[1] > 2) {
           this.setState({
             endMonthErrorMsg: "Please enter a valid month",
@@ -359,7 +359,7 @@ class JobseekerEdu extends React.Component {
         validInput = false;
       }
       // IF THE YEARS ARE THE SAME, MAKE SURE THE START MONTH IS BEFORE THE END MONTH
-      if (startDateYear == endDateYear) {
+      if (startDateYear === endDateYear) {
         if (startDateMonth >= endDateMonth) {
           this.setState({
             endMonthErrorMsg: "End date must be after start date",
@@ -435,15 +435,6 @@ class JobseekerEdu extends React.Component {
  
 
   sendData = (email) => {
-    const data = [
-      this.state.title,
-      this.state.institution,
-      this.state.location,
-      this.state.startdate,
-      this.state.enddate,
-      this.state.desc,
-      this.state.current,
-    ];
 
     //API functionality
     try {

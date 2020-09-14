@@ -5,6 +5,7 @@ import { Container, Form, Grid, Header } from "tabler-react";
 import { Button, Icon } from "semantic-ui-react";
 
 const validEmailRegex = 
+//eslint-disable-next-line
   RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
 class Signup extends Component {
@@ -49,7 +50,7 @@ class Signup extends Component {
       } catch (error) {
         this.setState({sendingData: false})
 
-        if(error.code == "UsernameExistsException"){
+        if(error.code === "UsernameExistsException"){
           this.setState({ emailErrMsg: "An account with this email already exists", emailErr: true });
         }
       }
@@ -83,7 +84,7 @@ class Signup extends Component {
     if (!passwordConfirm) {
         this.setState({ passwordConfErrMsg: "Please confirm your password", passwordConfErr: true });
         validInput = false
-    } else if (password != passwordConfirm) {
+    } else if (password !== passwordConfirm) {
         this.setState({ passwordConfErrMsg: "Passwords do not match", passwordErr: true, passwordConfErr: true });
         validInput = false
     }
@@ -151,7 +152,7 @@ class Signup extends Component {
                       name="accountType"
                       value="jobseeker"
                       onChange={this.handleRadio}
-                      checked={this.state.role == "jobseeker"}
+                      checked={this.state.role === "jobseeker"}
                     />
                     <Form.Radio
                       isInline
@@ -159,7 +160,7 @@ class Signup extends Component {
                       name="accountType"
                       value="employer"
                       onChange={this.handleRadio}
-                      checked={this.state.role == "employer"}
+                      checked={this.state.role === "employer"}
                     />
                   </Form.Group>
                   <Container className="errorMsg radios">
@@ -215,7 +216,7 @@ class Signup extends Component {
                       <Button.Content type="submit" visible>
                         Register
                       </Button.Content>
-                      {(this.state.sendingData == false) ? <Button.Content hidden><Icon name="arrow right" /></Button.Content> : null}
+                      {(this.state.sendingData === false) ? <Button.Content hidden><Icon name="arrow right" /></Button.Content> : null}
                     </Button>
                   </Form>
                 </Grid.Col>

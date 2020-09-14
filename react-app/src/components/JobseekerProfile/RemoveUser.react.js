@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Form, Card, Grid } from "tabler-react";
-import { Button, Modal } from "semantic-ui-react";
+import { Card, Grid, Container } from "tabler-react";
+import { Button, Modal, Icon } from "semantic-ui-react";
 import Auth from '@aws-amplify/auth';
 import '../../index.css';
-import axios from "axios";
+
 class RemoveUser extends React.Component {
     constructor(props) {
       super(props);
@@ -105,7 +105,7 @@ class RemoveUser extends React.Component {
               <Grid>
                 <Grid.Row>
                   <Grid.Col md={7}>
-                    <Card.Title>Delete User</Card.Title>
+                    <Card.Title>Delete my profile</Card.Title>
                   </Grid.Col>
                   <Grid.Col md={5}>
                     {/* MODAL BUTTON */}
@@ -120,9 +120,7 @@ class RemoveUser extends React.Component {
                   </Grid.Col>
                 </Grid.Row>
     
-                <Grid.Row>
-                 
-                </Grid.Row>
+                <Grid.Row></Grid.Row>
               </Grid>
             </Card.Body>
     
@@ -132,39 +130,45 @@ class RemoveUser extends React.Component {
               closeOnDimmerClick={false}
               open={open}
             >
-              <Modal.Header>Delete User</Modal.Header>
+              <Modal.Header>Delete Profile</Modal.Header>
               <Modal.Content>
-                <Form onSubmit={this.handleSubmit}>
+                <p><b>Are you sure you want to delete your profile?</b> </p>
+                <p>This will completely remove your user account from the system. This means that all your information, matches, and chat history will be <b>permanently</b> deleted. If you wish to access SkillShop again you will
+                need to create a new account and start from scratch. </p>
+                <p>Deleting your account is irreversible!</p>
+              </Modal.Content>
     
-                  {/* ROW 3 */}
-                  <Grid.Row>
-                    <Grid.Col md={12}>
-                      <Form.Group className="mb=0" label="Are you sure you want to completely remove your profile ?">    
-                      </Form.Group>
-                    </Grid.Col>
-                  </Grid.Row>
-    
-                  {/* ROW 4 - SUBMIT */}
+              {/* ROW 4 - SUBMIT */}
+              <Modal.Actions>
+                <Container className="modalSubmit">
                   <Grid.Row>
                     <Grid.Col md={12}>
                       <Button
-                        floated="left"
-                        basic
-                        type="button"
-                        color="red"
+                        animated
+                        className="acceptButton delete"
+                        circular
+                        onClick={this.handleSubmit}
+                      >
+                        <Button.Content visible>Delete</Button.Content>
+                        <Button.Content hidden>
+                          <Icon name="trash" />
+                        </Button.Content>
+                      </Button>
+                      <Button
+                        animated
+                        className="cancelButton delete"
+                        circular
                         onClick={this.cancelForm}
                       >
-                        {" "}
-                        Cancel{" "}
-                      </Button>
-                      <Button floated="right" basic type="submit" color="red">
-                        {" "}
-                        Delete User{" "}
+                        <Button.Content visible>Cancel</Button.Content>
+                        <Button.Content hidden>
+                          <Icon name="x" />
+                        </Button.Content>
                       </Button>
                     </Grid.Col>
                   </Grid.Row>
-                </Form>
-              </Modal.Content>
+                </Container>
+              </Modal.Actions>
             </Modal>
           </div>
         );
