@@ -5,8 +5,6 @@ import * as React from "react";
 import {Container, Grid, Card, Form, Header} from "tabler-react";
 import {Button} from "semantic-ui-react";
 
-import SiteWrapper from "../SiteWrapper.react";
-
 var num = 0;
 
 

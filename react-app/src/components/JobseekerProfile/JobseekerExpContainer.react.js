@@ -197,7 +197,7 @@ class JobseekerExpContainer extends React.Component {
 
     /* START DATE BLOCK START */
 
-    if (startDateYear == currentYear) {
+    if (startDateYear === currentYear) {
       if (startDateMonth > currentMonth) {
         this.setState({
           startMonthErrorMsg: "Month cannot be in the future!",
@@ -221,7 +221,7 @@ class JobseekerExpContainer extends React.Component {
       validInput = false;
     }
     // IF THE MONTH STARTS WITH 1, CHECK THAT THE SECOND VALUE IS NOT > 2, OTHERWISE THAT IS INVALID
-    if (startdate[0] == 1) {
+    if (startdate[0] === 1) {
       if (startdate[1] > 2) {
         this.setState({
           startMonthErrorMsg: "Please enter a valid month",
@@ -249,7 +249,7 @@ class JobseekerExpContainer extends React.Component {
 
     /* END DATE BLOCK START */
     if (!this.state.isChecked) {
-      if (endDateYear == currentYear) {
+      if (endDateYear === currentYear) {
         if (endDateMonth > currentMonth) {
           this.setState({
             endMonthErrorMsg: "Month cannot be in the future!",
@@ -273,7 +273,7 @@ class JobseekerExpContainer extends React.Component {
         validInput = false;
       }
       // IF THE MONTH STARTS WITH 1, CHECK THAT THE SECOND VALUE IS NOT > 2, OTHERWISE THAT IS INVALID
-      if (enddate[0] == 1) {
+      if (enddate[0] === 1) {
         if (enddate[1] > 2) {
           this.setState({
             endMonthErrorMsg: "Please enter a valid month",
@@ -298,7 +298,7 @@ class JobseekerExpContainer extends React.Component {
         validInput = false;
       }
       // IF THE YEARS ARE THE SAME, MAKE SURE THE START MONTH IS BEFORE THE END MONTH
-      if (startDateYear == endDateYear) {
+      if (startDateYear === endDateYear) {
         if (startDateMonth >= endDateMonth) {
           this.setState({
             endMonthErrorMsg: "End date must be after start date",
@@ -450,7 +450,7 @@ class JobseekerExpContainer extends React.Component {
                       label="I am currently in this role"
                       name="current"
                       checked="true"
-                      checked={this.state.isChecked}
+                      checked={isChecked}
                       onChange={this.handleCheckbox}
                     />
                   </Form.Group>

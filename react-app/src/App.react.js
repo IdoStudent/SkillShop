@@ -9,6 +9,7 @@ import {
   Login,
   Candidates,
   Signup,
+  Chat
 } from "./pages";
 
 import "tabler-react/dist/Tabler.css";
@@ -66,6 +67,9 @@ class App extends React.Component {
             <Route exact path="/" render={(props) => <LandingPage {...props} auth={authProps} />} />
             <Route exact path="/login" render={(props) => <Login {...props} auth={authProps} />} />
             <Route exact path="/signup" render={(props) => <Signup {...props} auth={authProps} />} />
+
+            {/* IN PROGRESS */}
+            <Route exact path="/chat" render={(props) => <Chat {...props} auth={authProps} />} />
 
             {/* PRIVATE ROUTES (USER NEEDS TO BE AUTHENTICATED) */}
 

@@ -7,7 +7,7 @@ import Candidates from "./Candidates.react";
 import LandingPage  from "./LandingPage.react";
 import Signup from "./Signup.react";
 import Login from "./Login.react";
-import TestUser from "./TestUser.react";
+import Chat from "./Chat.react";
 
 export {
   Error404,
@@ -18,5 +18,5 @@ export {
   Signup,
   Login,
   Candidates,
-  TestUser,
+  Chat
 };

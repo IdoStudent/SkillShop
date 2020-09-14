@@ -4,7 +4,7 @@ import React from "react";
 import axios from "axios";
 import { Container, Grid, Card, Form, Header } from "tabler-react";
 
-import { Button, Modal } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 
 import SiteWrapper from "../SiteWrapper.react";
 

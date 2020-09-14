@@ -114,7 +114,6 @@ class JobFiltersModal extends React.Component {
   }
 
   render() {
-    const { value } = this.state;
     return (
       <Modal closeOnDimmerClick={false} open={true}>
         <Modal.Header>Changing Filters for {this.props.data.jobTitle}</Modal.Header>

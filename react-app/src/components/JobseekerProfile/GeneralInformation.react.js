@@ -5,7 +5,6 @@ import { Button, Modal, Icon, Container } from "semantic-ui-react";
 import Auth from "@aws-amplify/auth";
 
 import "../../index.css";
-import { arrayOf } from "prop-types";
 
 //const config = require('../config.json');
 
@@ -135,7 +134,6 @@ class GeneralInformation extends React.Component {
           userLastName: this.state.formsurname,
           userCity: this.state.formcity,
           userPostCode: this.state.formpostcode,
-          userEmail: this.state.formemail,
           userState: this.state.formstate,
           userAbout: this.state.formabout,
           userType: "jobseeker",
@@ -203,7 +201,7 @@ class GeneralInformation extends React.Component {
         postcodeInvalid: true,
       });
       validInput = false;
-    } else if (postcode.length != 4) {
+    } else if (postcode.length !== 4) {
       this.setState({
         postcodeErrorMsg: "Postcode need to be 4 numbers!",
         postcodeInvalid: true,

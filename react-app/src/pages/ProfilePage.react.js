@@ -3,7 +3,7 @@
 import React, { Component } from "react";
 
 import { Container, Grid, Header, Alert } from "tabler-react";
-import { Button, Modal, Icon } from "semantic-ui-react";
+import { Button, Modal } from "semantic-ui-react";
 
 import SiteWrapper from "../SiteWrapper.react";
 
