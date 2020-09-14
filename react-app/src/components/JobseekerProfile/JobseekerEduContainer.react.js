@@ -4,7 +4,7 @@ import { Card } from "tabler-react";
 
 import { Button, Modal, Segment, Icon } from "semantic-ui-react";
 import { Form, Grid, Container } from "tabler-react";
-
+import Auth from "@aws-amplify/auth";
 import JobseekerEdu from "./JobseekerEdu.react";
 
 class JobseekerEduContainer extends React.Component {
@@ -44,9 +44,25 @@ class JobseekerEduContainer extends React.Component {
       descErrorMsg: "",
     };
   }
+  // GET email for getSecondApi
+  getEmailApi() {
+    return Auth.currentAuthenticatedUser().then((user) => {
+      const { attributes = {} } = user;
+      let email =  attributes['email']
+      return email
+    })}
+  // GET email for form
+  getFirstApi() {
+    return Auth.currentAuthenticatedUser().then((user) => {
+      this.setState({
+        email: user.attributes.email,
+        formemail: user.attributes.email,
+      });
+    });
+  }
 
-  componentDidMount() {
-    fetch("https://run.mocky.io/v3/567c9b5e-ce10-45e3-91d0-b86bc52e183f")
+  getSecondApi(email) {
+    fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/education?userEmail=`+email)
       .then((res) => res.json())
       .then((result) => {
         for (var i = 0; i < result.length; i++) {
@@ -59,17 +75,27 @@ class JobseekerEduContainer extends React.Component {
       });
   }
 
+  // pass before mount
+  BeforeDidMount() {
+    this.getEmailApi().then((email) => this.getSecondApi(email));
+  }
+
+  componentDidMount() {
+    this.BeforeDidMount();
+    this.getFirstApi();
+  }
+
   handleSubmit = (event) => {
     event.preventDefault();
 
     if (this.validateForm()) {
       const eduinfo = {
-        title: this.state.formtitle,
-        institution: this.state.forminstitution,
-        location: this.state.formlocation,
-        startdate: this.state.formstartdate,
-        enddate: this.state.formenddate,
-        desc: this.state.formdesc,
+        userEducationTitle: this.state.formtitle,
+        userEducationInstitution: this.state.forminstitution,
+        userEducationLocation: this.state.formlocation,
+        userEducationStartDate: this.state.formstartdate,
+        userEducationEndDate: this.state.formenddate,
+        userEducationDescription: this.state.formdesc,
         current: this.state.isChecked,
       };
 
@@ -88,7 +114,7 @@ class JobseekerEduContainer extends React.Component {
 
     try {
       const params = {
-        userEmail: "placeholder2",
+        userEmail: this.state.email,
         userEducationTitle: this.state.formtitle,
         userEducationInstitution: this.state.forminstitution,
         userEducationStartDate: this.state.formstartdate,

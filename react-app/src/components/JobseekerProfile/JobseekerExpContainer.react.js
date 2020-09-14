@@ -1,11 +1,9 @@
 import * as React from "react";
 import axios from "axios";
-
 import { Card } from "tabler-react";
-
+import Auth from "@aws-amplify/auth";
 import { Button, Modal, Segment, Container, Icon } from "semantic-ui-react";
 import { Form, Grid } from "tabler-react";
-
 import JobseekerExp from "./JobseekerExp.react";
 
 class JobseekerExpContainer extends React.Component {
@@ -45,9 +43,24 @@ class JobseekerExpContainer extends React.Component {
       descErrorMsg: "",
     };
   }
+  getEmailApi() {
+    return Auth.currentAuthenticatedUser().then((user) => {
+      const { attributes = {} } = user;
+      let email =  attributes['email']
+      return email
+    })}
+  // GET email for form
+  getFirstApi() {
+    return Auth.currentAuthenticatedUser().then((user) => {
+      this.setState({
+        email: user.attributes.email,
+        formemail: user.attributes.email,
+      });
+    });
+  }
 
-  componentDidMount() {
-    fetch("https://run.mocky.io/v3/ae18d559-f975-494a-94ce-5334637f05d2")
+  getSecondApi(email) {
+    fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/jobexperience?userEmail=`+email)
       .then((res) => res.json())
       .then((result) => {
         for (var i = 0; i < result.length; i++) {
@@ -55,22 +68,33 @@ class JobseekerExpContainer extends React.Component {
             dataset: this.state.dataset.concat(
               <JobseekerExp key={i} jobinfo={result[i]} />
             ),
+            
           });
         }
       });
   }
 
+    // pass before mount
+    BeforeDidMount() {
+      this.getEmailApi().then((email) => this.getSecondApi(email));
+    }
+  
+    componentDidMount() {
+      this.BeforeDidMount();
+      this.getFirstApi();
+    }
+  
   handleSubmit = async (event) => {
     event.preventDefault();
 
     if (this.validateForm()) {
       const jobinfo = {
-        title: this.state.formtitle,
-        company: this.state.formcompany,
-        location: this.state.formlocation,
-        startdate: this.state.formstartdate,
-        enddate: this.state.formenddate,
-        desc: this.state.formdesc,
+        userJobTitle: this.state.formtitle,
+        userJobCompany: this.state.formcompany,
+        userJobLocation: this.state.formlocation,
+        userJobStartDate: this.state.formstartdate,
+        userJobEndDate: this.state.formenddate,
+        userJobDescription: this.state.formdesc,
         current: this.state.isChecked,
       };
 
@@ -88,7 +112,7 @@ class JobseekerExpContainer extends React.Component {
     // TO-DO: ADD LOGIC FOR SENDING TO DATABASE
     try {
       const params = {
-        userEmail: "placeholder2",
+        userEmail: this.state.email,
         userJobTitle: this.state.formtitle,
         userJobCompany: this.state.formcompany,
         userJobStartDate: this.state.formstartdate,

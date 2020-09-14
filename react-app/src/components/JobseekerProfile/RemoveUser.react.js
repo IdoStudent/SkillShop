@@ -66,19 +66,8 @@ class RemoveUser extends React.Component {
 
     handleSubmit = (event, email) => {
       console.log("LINE 68 REMOVE EMAIL CHECK: " + this.state.email);
-      fetch(`https://q32xq9hoif.execute-api.ap-southeast-2.amazonaws.com/prod/deleteUser?userEmail=` +email, {
-        method: 'DELETE',
-        headers: {
-        "X-Requested-With": '*',
-        "Access-Control-Allow-Headers": 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Requested-With',
-        "Access-Control-Allow-Origin": '*',
-        "Access-Control-Allow-Methods": 'GET, OPTIONS',
-        "Access-Control-Allow-Credentials": true,// Required for cookies, authorization headers with HTTPS ,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-        },      
+      fetch(`https://q32xq9hoif.execute-api.ap-southeast-2.amazonaws.com/prod/delete?userEmail=` +this.state.email)      
        // body: JSON.stringify({records: id, record, album, artist, date, imageUrl}) - user email
-        });
       this.setState((prevState) => ({
         open: false,
       }));

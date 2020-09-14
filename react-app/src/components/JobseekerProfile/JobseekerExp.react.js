@@ -18,21 +18,21 @@ class JobseekerExp extends React.Component {
     super(props);
     this.state = {
       // States from API, default data values. Hardcoded for testing
-      title: props.jobinfo.title,
-      company: props.jobinfo.company,
-      startdate: props.jobinfo.startdate,
-      enddate: props.jobinfo.enddate,
-      location: props.jobinfo.location,
-      desc: props.jobinfo.desc,
+      title: props.jobinfo.userJobTitle,
+      company: props.jobinfo.userJobCompany,
+      startdate: props.jobinfo.userJobStartDate,
+      enddate: props.jobinfo.userJobEndDate,
+      location: props.jobinfo.userJobLocation,
+      desc: props.jobinfo.userJobDescription,
       current: props.jobinfo.current,
 
       // States for editable form. Initial values set to the API data. Hardcoded for testing
-      formtitle: props.jobinfo.title,
-      formcompany: props.jobinfo.company,
-      formstartdate: props.jobinfo.startdate,
-      formenddate: props.jobinfo.enddate,
-      formlocation: props.jobinfo.location,
-      formdesc: props.jobinfo.desc,
+      formtitle: props.jobinfo.userJobTitle,
+      formcompany: props.jobinfo.userJobCompany,
+      formstartdate: props.jobinfo.userJobStartDate,
+      formenddate: props.jobinfo.userJobEndDate,
+      formlocation: props.jobinfo.userJobLocation,
+      formdesc: props.jobinfo.userJobDescription,
 
       displaystart: "",
       displayend: "",
@@ -143,46 +143,11 @@ class JobseekerExp extends React.Component {
     }
   };
 
-  getEmailApi() {
-    return Auth.currentAuthenticatedUser().then((user) => {
-       const { attributes = {} } = user;
-       let email =  attributes['email']
-       return email
-     })}
-   // GET email for form
-  getFirstApi() {
-    return Auth.currentAuthenticatedUser().then((user) => {
-       this.setState({email: user.attributes.email, formemail: user.attributes.email})
-     });
-  }
-  // GET user data 
-   async getSecondApi(email) {
-     fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +email)
-       .then(res => res.json())
-       .then(
-         (result) => {
-           this.setState({
-       
-           });
-           } ,
-       )
-   }
-   // pass before mount
-   BeforDidMount() { 
-    this.getEmailApi().then(email => this.sendData(email)); }
- 
-   componentDidMount() {
-     this.BeforDidMount();
-     this.getFirstApi();  
-     this.convertDate();
-   }
- 
   handleSubmit = (event) => {
     event.preventDefault();
 
     // Only submit the form if all input is valid
     if (this.validateForm()) {
-      console.log("LINE 178 JOBEX EMAIL CHECK: " + this.state.email);
       this.setState(
         (prevState) => ({
           title: prevState.formtitle,
@@ -433,13 +398,57 @@ class JobseekerExp extends React.Component {
       });
       validInput = false;
     }
-
+    
     // Return the status of valid input. If any of the above error conditions are met, this will return false
     return validInput;
   };
 
-  sendData = () => {
-    //API functionality
+  getEmailApi() {
+    return Auth.currentAuthenticatedUser().then((user) => {
+       const { attributes = {} } = user;
+       let email =  attributes['email']
+       return email
+     })}
+   // GET email for form
+  getFirstApi() {
+    return Auth.currentAuthenticatedUser().then((user) => {
+       this.setState({email: user.attributes.email, formemail: user.attributes.email})
+     });
+  }
+  // GET user data 
+   async getSecondApi(email) {
+     fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +email)
+       .then(res => res.json())
+       .then(
+         (result) => {
+           this.setState({
+       
+           });
+           } ,
+       )
+   }
+   // pass before mount
+   BeforDidMount() { 
+    this.getEmailApi().then(email => this.sendData(email)); }
+ 
+   componentDidMount() {
+     this.BeforDidMount();
+     this.getFirstApi();  
+     this.convertDate();
+   }
+ 
+   
+  sendData = (email) => {
+    const data = [
+      this.state.title,
+      this.state.institution,
+      this.state.location,
+      this.state.startdate,
+      this.state.enddate,
+      this.state.desc,
+      this.state.current,
+    ];
+
     try {
       const params = {
         userEmail: this.state.email,
@@ -450,6 +459,7 @@ class JobseekerExp extends React.Component {
         userJobLocation: this.state.location,
         userJobDescription: this.state.desc,
       };
+      console.log(this.state.company + "<----- LOG JOB LINE 462 ")
       axios.post(
         "https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/jobexperience/",
         params

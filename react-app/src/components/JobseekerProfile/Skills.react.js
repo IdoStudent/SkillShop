@@ -2,7 +2,7 @@ import * as React from "react";
 import axios from "axios";
 import { Form, Card, Grid } from "tabler-react";
 import { Button, Icon } from "semantic-ui-react";
-
+import Auth from "@aws-amplify/auth";
 var selectedSkills = [];
 
 var dbSkills = [];
@@ -16,17 +16,43 @@ class Skills extends React.Component {
       //showCancelButton: false,
     };
   }
+ // GET email for getSecondApi
+ getEmailApi() {
+  return Auth.currentAuthenticatedUser().then((user) => {
+    const { attributes = {} } = user;
+    let email =  attributes['email']
+    return email
+  })}
 
-  componentDidMount() {
-    fetch("https://demo5322112.mockable.io/testskills")
+// GET email for form
+getFirstApi() {
+  return Auth.currentAuthenticatedUser().then((user) => {
+    this.setState({
+      email: user.attributes.email,
+      formemail: user.attributes.email,
+    });
+  });
+}
+
+  getSecondApi(email) {
+    fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/skills?userEmail=`+email)
       .then((res) => res.json())
       .then((result) => {
         // We can just do a straight copy of the array we received into our var array
-        dbSkills = result.skills;
+        dbSkills = result.Item.userSkills;
 
         // After the skills are added into the array from the API, we set the state based on the given values
         this.initialiseState();
       });
+  }
+  // pass before mount
+  BeforeDidMount() {
+    this.getEmailApi().then((email) => this.getSecondApi(email));
+  }
+
+  componentDidMount() {
+    this.BeforeDidMount();
+    this.getFirstApi();
   }
 
   initialiseState() {

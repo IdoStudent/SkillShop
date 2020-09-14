@@ -17,21 +17,22 @@ class JobseekerEdu extends React.Component {
     super(props);
     this.state = {
       // States from API, default data values. Hardcoded for testing
-      title: props.eduinfo.title,
-      institution: props.eduinfo.institution,
-      startdate: props.eduinfo.startdate,
-      enddate: props.eduinfo.enddate,
-      location: props.eduinfo.location,
-      desc: props.eduinfo.desc,
+      title: props.eduinfo.userEducationTitle,
+      institution: props.eduinfo.userEducationInstitution,
+      startdate: props.eduinfo.userEducationStartDate,
+      enddate: props.eduinfo.userEducationEndDate,
+      location: props.eduinfo.userEducationLocation,
+      desc: props.eduinfo.userEducationDescription,
       current: props.eduinfo.current,
 
       // States for editable form. Initial values set to the API data. Hardcoded for testing
-      formtitle: props.eduinfo.title,
-      forminstitution: props.eduinfo.institution,
-      formstartdate: props.eduinfo.startdate,
-      formenddate: props.eduinfo.enddate,
-      formlocation: props.eduinfo.location,
-      formdesc: props.eduinfo.desc,
+      formtitle: props.eduinfo.userEducationTitle,
+      forminstitution: props.eduinfo.userEducationInstitution,
+      formstartdate: props.eduinfo.userEducationStartDate,
+      formenddate: props.eduinfo.userEducationEndDate,
+      formlocation: props.eduinfo.userEducationLocation,
+      formdesc: props.eduinfo.userEducationDescription,
+      formcurrent: props.eduinfo.current,
 
       displaystart: "",
       displayend: "",
@@ -154,6 +155,7 @@ class JobseekerEdu extends React.Component {
           desc: prevState.formdesc,
           open: false,
           current: prevState.isChecked,
+          email: this.state.email
         }),
         () => {
           // Convert the date once state has updated (for front-end display purposes)
@@ -442,13 +444,13 @@ class JobseekerEdu extends React.Component {
       this.state.startdate,
       this.state.enddate,
       this.state.desc,
-      this.state.current,
+  
     ];
-
+  
     //API functionality
     try {
       const params = {
-        userEmail: "placeholder2",
+        userEmail: this.state.email,
         userEducationTitle: this.state.title,
         userEducationInstitution: this.state.institution,
         userEducationStartDate: this.state.startdate,
@@ -456,6 +458,7 @@ class JobseekerEdu extends React.Component {
         userEducationLocation: this.state.location,
         userEducationDescription: this.state.desc,
       };
+      console.log(this.state.title + "<----- LOG EDU ")
       axios.post(
         "https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/education/",
         params
