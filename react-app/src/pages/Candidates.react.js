@@ -161,10 +161,12 @@ class Candidates extends React.Component {
 
     // Generate a unique id 
     let jobKey = uuidv4()
+     // Get current profile information so we can save the filters
+    let currentProfile = this.state.data[this.state.selectValue];
 
     try {
       const params = {
-        userEmail: "placeholder2",
+        userEmail: currentProfile.userEmail,
         jobKey: jobKey,
         jobTitle: newInfo[0],
         jobLocation: newInfo[1],
