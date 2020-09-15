@@ -138,6 +138,7 @@ class GeneralInformation extends React.Component {
           userState: this.state.formstate,
           userAbout: this.state.formabout,
           userType: "jobseeker",
+          //userPhoneNumber: this.state.phonenumber
         };
 
         await axios.post(
