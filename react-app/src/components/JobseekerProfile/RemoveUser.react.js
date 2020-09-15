@@ -65,7 +65,6 @@ class RemoveUser extends React.Component {
      }
 
     handleSubmit = (event, email) => {
-      console.log("LINE 68 REMOVE EMAIL CHECK: " + this.state.email);
       fetch(`https://q32xq9hoif.execute-api.ap-southeast-2.amazonaws.com/prod/delete?userEmail=` +this.state.email)      
        // body: JSON.stringify({records: id, record, album, artist, date, imageUrl}) - user email
       this.setState((prevState) => ({

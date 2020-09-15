@@ -3,7 +3,7 @@
 import React from "react";
 import axios from "axios";
 import { Container, Grid, Card, Form, Header } from "tabler-react";
-
+import Auth from "@aws-amplify/auth";
 import { Button } from "semantic-ui-react";
 
 import SiteWrapper from "../SiteWrapper.react";
@@ -39,8 +39,58 @@ class Candidates extends React.Component {
       openFilter: false,
     };
   }
+  getEmailApi() {
+    return Auth.currentAuthenticatedUser().then((user) => {
+      const { attributes = {} } = user;
+      let email =  attributes['email']
+      return email
+    })}
+  // GET email for form
+  getFirstApi() {
+    return Auth.currentAuthenticatedUser().then((user) => {
+      this.setState({
+        email: user.attributes.email,
+        formemail: user.attributes.email,
+      });
+    });
+  }
+  // GET user data
+  async getSecondApi(email) {
+    fetch(
+      `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
+        email )
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.Item !== undefined)
+        // If length is undefined, that means for some reason it's not returning data at all, so dont try and access fields that dont exist
+          this.setState({
+            firstname: result.Item.userFirstName,
+            middlename: result.Item.userMiddleName,
+            surname: result.Item.userLastName,
+            city: result.Item.userCity,
+            postcode: result.Item.userPostcode,
+            state: result.Item.userState,
+            about: result.Item.userAbout,
 
-  componentDidMount() {
+            formfirstname: result.Item.userFirstName,
+            formmiddlename: result.Item.userMiddleName,
+            formsurname: result.Item.userLastName,
+            formcity: result.Item.userCity,
+            formpostcode: result.postcode,
+            formstate: result.Item.userState,
+            formabout: result.Item.userAbout,        
+          });
+          console.log() },
+      )
+  }
+  // pass before mount
+  BeforeDidMount() {
+    this.getEmailApi().then((email) => this.getSecondApi(email));
+    this.getEmailApi().then((email) => this.getThirdApi(email));
+  }
+
+ async getThirdApi(email){
+    console.log(email)
     fetch("http://demo5322112.mockable.io/TESTTEST")
       .then((res) => res.json())
       .then((result) => {
@@ -63,7 +113,9 @@ class Candidates extends React.Component {
         );
       });
   }
-
+  componentDidMount() {
+    this.BeforeDidMount();
+  }
   openModalInfo = () => {
     this.setState({ openInfo: true });
   };
@@ -132,7 +184,6 @@ class Candidates extends React.Component {
 
     // Get current profile information so we can save the filters
     let currentProfile = this.state.data[this.state.selectValue];
-
     try {
       const params = {
         userEmail: currentProfile.userEmail,
@@ -154,19 +205,17 @@ class Candidates extends React.Component {
     }
   };
 
-  createNewProfile = (newInfo) => {
+  createNewProfile = (newInfo, email) => {
     // This can be done in a few ways but I think the best way (in terms of reliability) would be to first send the data to the database, and then just force a reload of this component so it does a new API call and collects the newly created data
     // I think if we append the data to the state directly it leaves too many possibilities for a mistmatch between what is on the front-end and what's on the database
     // It's doable both ways though so doesn't really matter
 
     // Generate a unique id 
     let jobKey = uuidv4()
-     // Get current profile information so we can save the filters
-    let currentProfile = this.state.data[this.state.selectValue];
-
+        // Get current profile information
     try {
       const params = {
-        userEmail: currentProfile.userEmail,
+        userEmail: this.state.email,
         jobKey: jobKey,
         jobTitle: newInfo[0],
         jobLocation: newInfo[1],

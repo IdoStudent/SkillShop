@@ -459,7 +459,6 @@ class JobseekerEdu extends React.Component {
         userEducationLocation: this.state.location,
         userEducationDescription: this.state.desc,
       };
-      console.log(this.state.title + "<----- LOG EDU ")
       axios.post(
         "https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/education/",
         params

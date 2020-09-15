@@ -459,7 +459,6 @@ class JobseekerExp extends React.Component {
         userJobLocation: this.state.location,
         userJobDescription: this.state.desc,
       };
-      console.log(this.state.company + "<----- LOG JOB LINE 462 ")
       axios.post(
         "https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/jobexperience/",
         params
