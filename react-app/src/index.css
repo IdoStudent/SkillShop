@@ -462,23 +462,33 @@ body {
 }
 
 .chat-box {
-  height:500px;
-  padding:10px;
+  height:470px;
+  border:1px solid lightgray;
+  /* padding:10px; */
+}
+
+.list {
+  height:520px;
+  border:1px solid lightgray;
 }
 
 .text-box {
   height:50px;
+  background-color: white;
+  border:1px solid lightgray;
 }
 
 .input-text {
   width:100%;
-  height:100%;
-  border-radius: 15px 50px 30px 5px;
-  font-size: 24px;
+  /* height:100%; */
+  /* border-radius: 15px 50px 30px 5px; */
+  font-size: 14px;
+  margin-top:14px;
+  border:1px solid lightgray;
 }
 
 .my-button {
-  height:100%;
+  height:60%;
   width:100%;
   overflow:hidden;
   background-color: #3e8e41;
@@ -486,6 +496,7 @@ body {
   color: white;
   border-radius: 12px;
   transition-duration: 0.4s;
+  margin-top:10px;
 }
 
 .my-button:hover {
@@ -499,15 +510,18 @@ body {
 }
 
 .message-list {
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
+  background-color:white;
   height:100%;
   width:100%;
   overflow: scroll;
+  scrollbar-width: none;
   list-style-type: none;
-  background-color:white;
-  background-image: url('./img/backgroundOF.png');
   background-size:cover;
-  border-radius: 15px;
+
+  /* background-image: url('./img/backgroundOF.png'); */
+  
+  /* border-radius: 15px; */
 }
 
 .message-Jobseeker {
@@ -545,6 +559,12 @@ body {
   display:inline;
   padding:8px 16px;
   border-radius:8px;
+}
+
+.title {
+  border:1px solid lightgray;
+  height:40px;
+  background-color: white;
 }
 
 

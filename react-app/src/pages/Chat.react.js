@@ -49,34 +49,55 @@ class Chat extends Component {
         return(
             <SiteWrapper>
                 <div className="my-body">
-                    <div className="container"> 
-                        <div className="row chat-box">
-                            <ul className="message-list">
-                                {this.state.messages.map(message => {
-                                    return(
-                                        <li key={message.id} className={"message-" + message.senderID}>
-                                            <div>
-                                                {message.senderID}
-                                            </div>
-                                            <div>
-                                                {message.text}
-                                            </div>
-                                        </li>
-                                    )
-                                })}
-                            </ul>
+                    <div className="container">
+                        {/* Title Row */}
+                        <div className="row">
+                            <div className="col-3 title">
+                                Search
+                            </div>
+                            <div className="col-9 title">
+                                Employer
+                            </div>
                         </div>
-                        <div className="row text-box">
-                            <div className="col-9 col-sm-10 col-md-10 col-lg-11">
-                                <input className="input-text" type="text" placeholder="Enter your message here"></input>
+                        {/* Body */}
+                        <div className="row">
+                            {/* List */}
+                            <div className="col-3 list">
+                                List
                             </div>
-                            <div className="col-3 col-sm-2 col-md-2 col-lg-1">
-                                <button className="my-button">
-                                    SEND
-                                </button>
+                            {/* Chat */}
+                            <div className="col-9">
+                                {/* Messages */}
+                                <div className="row chat-box">
+                                    <ul className="message-list">
+                                        {this.state.messages.map(message => {
+                                            return(
+                                                <li key={message.id} className={"message-" + message.senderID}>
+                                                    <div>
+                                                        {message.senderID}
+                                                    </div>
+                                                    <div>
+                                                        {message.text}
+                                                    </div>
+                                                </li>
+                                            )
+                                        })}
+                                    </ul>      
+                                </div>
+                                {/* Text */}
+                                <div className="row text-box">
+                                    <div className="col-9 col-sm-10 col-md-10 col-lg-11">
+                                        <input className="input-text" type="text" placeholder="Enter your message here"></input>
+                                    </div>
+                                    <div className="col-3 col-sm-2 col-md-2 col-lg-1">
+                                        <button className="fa fa-send-o my-button">
+                                        </button>
+                                    </div>
+                                </div>   
+
                             </div>
-                            
-                        </div>               
+                        </div>
+                                    
                     </div>
                 </div>
                 
