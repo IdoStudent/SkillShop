@@ -38,7 +38,7 @@ getFirstApi() {
     fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/skills?userEmail=`+email)
       .then((res) => res.json())
       .then((result) => {
-        if (result == !undefined)
+
         // We can just do a straight copy of the array we received into our var array
         dbSkills = result.Item.userSkills;
 
@@ -99,11 +99,10 @@ getFirstApi() {
       showSaveButton: false,
       //showCancelButton: false,
     });
-
     // ADD LOGIC FOR SUBMITTING TO DATABASE, CAN JUST TAKE THE ENTIRE SELECTEDSKILLS ARRAY AND POST IT
     try {
       const params = {
-        userEmail: "placeholder",
+        userEmail:  this.state.email,
         userSkills: selectedSkills,
       };
       await axios.post(

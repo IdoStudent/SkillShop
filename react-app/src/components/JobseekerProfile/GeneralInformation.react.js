@@ -74,7 +74,7 @@ class GeneralInformation extends React.Component {
         email )
       .then((res) => res.json())
       .then((result) => {
-        if (result == undefined) // need fix 
+        if (result.Item !== undefined)
         // If length is undefined, that means for some reason it's not returning data at all, so dont try and access fields that dont exist
           this.setState({
             firstname: result.Item.userFirstName,
@@ -93,7 +93,7 @@ class GeneralInformation extends React.Component {
             formstate: result.Item.userState,
             formabout: result.Item.userAbout,        
           });
-          console.log("LINE 75 GEN INFO EMAIL CHECK: " + this.state.email) },
+          console.log() },
       )
   }
   // pass before mount
