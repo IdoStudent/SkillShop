@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { Container, Grid, Header, Button } from "tabler-react";
 import SiteWrapper from "../SiteWrapper.react";
 
 const DUMMY_DATA = [
     {
-        senderID: "Employer Name",
+        senderID: "Employer's Name",
         senderRole: "Employer",
         text: "Hello, how are you?"
     },
@@ -14,7 +13,7 @@ const DUMMY_DATA = [
         text: "I'm good, thank you!"
     },
     {
-        senderID: "Employer Name",
+        senderID: "Employer's Name",
         senderRole: "Employer",
         text: "I viewed your resume and I was deeply impressed."
     },
@@ -24,7 +23,7 @@ const DUMMY_DATA = [
         text: "That's great to read!"
     },
     {
-        senderID: "Employer Name",
+        senderID: "Employer's Name",
         senderRole: "Employer",
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
     },
@@ -34,7 +33,7 @@ const DUMMY_DATA = [
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
     },
     {
-        senderID: "Employer Name",
+        senderID: "Employer's Name",
         senderRole: "Employer",
         text: "You're hired!"
     },
@@ -156,7 +155,7 @@ class Chat extends Component {
                                         })}
                                     </ul>      
                                 </div>
-                                {/* Text */}
+                                {/* Input */}
                                 <div className="row text-box">
                                     <div className="col-9 col-sm-10 col-md-10 col-lg-11">
                                         <input className="input-text" type="text" placeholder="Type message here..."></input>
@@ -172,7 +171,6 @@ class Chat extends Component {
                                     
                     </div>
                 </div>
-                
             </SiteWrapper>
         )
     }

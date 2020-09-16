@@ -570,7 +570,7 @@ body {
 
 .message-jobseeker div:nth-child(2) {
   float:right;
-  background:#3e8e41;
+  background:#6fcf72;
   margin-left:450px;
   padding:8px 16px;
 }
@@ -583,7 +583,7 @@ body {
 
 .message-Employer div:nth-child(2) {
   float:left;
-  background:lightgray;
+  background:rgb(233, 231, 231);
   padding:8px 16px;
 }
 
