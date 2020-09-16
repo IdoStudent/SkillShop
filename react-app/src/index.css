@@ -606,8 +606,7 @@ body {
   background-color: white;
   width: 100%; 
   height: 70px;
-  padding-left: 150px;
-  padding-right: 100px;
+  padding-left: 120px;
 }
 
 .topNav .heading {
@@ -621,7 +620,7 @@ body {
   margin-right: 120px;
   height: 20px;
   margin-top: 27px;
-  color: #525961;
+  color: #525961 !important;
 }
 
 .accountInfo .accountDropdown {
@@ -643,6 +642,10 @@ body {
   display: inline-block;
   margin-top: 3px;
   vertical-align: top;
+}
+
+.accountInfo .notifications a {
+  color: #525961 !important;
 }
 
 .accountInfo .notifications .nav-unread {
@@ -687,7 +690,6 @@ body {
 }
 
 .item:hover .icon {
-
   color: white !important;
 }
 
@@ -720,7 +722,7 @@ body {
 }
 
 .logout .icon:hover {
-  color: #4CAF50 !important;
+  color: white !important;
   cursor: pointer;
 }
 
