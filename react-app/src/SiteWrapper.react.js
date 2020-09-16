@@ -1,161 +1,173 @@
 // @flow
 
 import * as React from "react";
-import { NavLink, withRouter } from "react-router-dom";
+import { NavLink, Redirect } from "react-router-dom";
 
-import {
-  Site,
-  RouterContextProvider,
-} from "tabler-react";
+import Auth from "@aws-amplify/auth";
 
+import { AccountDropdown, Icon as IconAlt, Notification } from "tabler-react";
 
-import type { NotificationProps } from "tabler-react";
+import { Menu, Sidebar, Icon as IconMain } from "semantic-ui-react";
 
-type Props = {|
-  +children: React.Node,
-|};
+// acc details
+// tkt27786@cuoly.com
+// 12345678
 
-type State = {|
-  notificationsObjects: Array<NotificationProps>,
-|};
+class SiteWrapper extends React.Component {
+  constructor(props) {
+    super(props);
 
-type subNavItem = {|
-  +value: string,
-  +to?: string,
-  +icon?: string,
-  +LinkComponent?: React.ElementType,
-  +useExact?: boolean,
-|};
+    this.state = {
+      msg: " ",
+      userFirstName: null,
 
-type navItem = {|
-  +value: string,
-  +to?: string,
-  +icon?: string,
-  +active?: boolean,
-  +LinkComponent?: React.ElementType,
-  +subItems?: Array<subNavItem>,
-  +useExact?: boolean,
-|};
+      redirect: false,
+    };
 
-const navBarItems: Array<navItem> = [
-  {
-    value: "Home (Jobseeker - Placeholder)",
-    to: "/myprofile",
-    icon: "home",
-    LinkComponent: withRouter(NavLink),
-    useExact: true,
-  },
-  {
-    value: "Candidates Screen (Employer - Placeholder)",
-    to: "/candidates",
-    icon: "home",
-    LinkComponent: withRouter(NavLink),
-    useExact: true,
-  },
+    this.signOut = this.signOut.bind(this);
+  }
 
-    /* Example of how to use a sub-nav dropdown (if we need it)
-    subItems: [
-      {
-        value: "Cards Design",
-        to: "/cards",
-        LinkComponent: withRouter(NavLink),
-      },
-      { value: "Charts", to: "/charts", LinkComponent: withRouter(NavLink) },
-      {
-        value: "Pricing Cards",
-        to: "/pricing-cards",
-        LinkComponent: withRouter(NavLink),
-      },
-    ],
-    */
-];
+  async getUserData(email) {
+    fetch(
+      `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
+        email
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        // If length is undefined, that means for some reason it's not returning data at all, so dont try and access fields that dont exist
+        if (result.Item !== undefined) {
+          this.setState({ userFirstName: result.Item.userFirstName });
+        }
+      });
+  }
 
-const accountDropdownProps = {
-  avatarURL: "./demo/faces/female/25.jpg",
-  name: "Jane Pearson",
-  description: "Administrator",
-  options: [
-    { icon: "user", value: "Profile", to: "/myprofile", LinkComponent: withRouter(NavLink) },
-    { icon: "mail", value: "Inbox", badge: "6" },
-    { isDivider: true },
-    { icon: "log-out", value: "Sign out" },
-  ],
-};
+  componentDidMount() {
+    var date = new Date();
+    var hour = date.getHours();
+    console.log(date.getHours());
 
-class SiteWrapper extends React.Component<Props, State> {
-  state = {
-    notificationsObjects: [
-      {
-        unread: true,
-        //avatarURL: "demo/faces/male/41.jpg",
-        message: (
-          <React.Fragment>
-            You have a new match! <strong>Marketing Consultant</strong> at <strong>Deloitte</strong>
-          </React.Fragment> 
-        ),
-        time: "10 minutes ago",
-      },
-      {
-        unread: true,
-        //avatarURL: "demo/faces/female/1.jpg",
-        message: (
-          <React.Fragment>
-            You have a new match! <strong>Creative Intern</strong> at <strong>Envato</strong>
-          </React.Fragment> 
-        ),
-        time: "1 hour ago",
-      },
-      {
-        unread: false,
-        //avatarURL: "demo/faces/female/18.jpg",
-        message: (
-          <React.Fragment>
-            You've received a new message.  <u>Click to view</u>
-          </React.Fragment>
-        ),
-        time: "2 hours ago",
-      },
-    ],
-  };
+    if (hour < 12) {
+      this.setState({ msg: "Good Morning, " });
+    } else if (hour >= 12 && hour <= 17) {
+      this.setState({ msg: "Good Afternoon, " });
+    } else if (hour >= 17 && hour <= 24) {
+      this.setState({ msg: "Good Evening, " });
+    }
 
-  render(): React.Node {
-    const notificationsObjects = this.state.notificationsObjects || [];
-    const unreadCount = this.state.notificationsObjects.reduce(
-      (a, v) => a || v.unread,
-      false
-    );
+    this.getUserData(Auth.user.attributes.email);
+  }
+
+  async signOut() {
+    try {
+      // UNCOMMENT BELOW LINE TO ACTUALLY SIGN OUT USERS (tested and works)
+      //await Auth.signOut();
+
+      this.setState({ redirect: true });
+    } catch (error) {
+      console.log("error signing out: ", error);
+    }
+  }
+
+  render() {
+    if (this.state.redirect) {
+      return <Redirect push to="/login" />;
+    }
     return (
-      <Site.Wrapper
-        headerProps={{
-          notificationsTray: {
-            notificationsObjects,
-            markAllAsRead: () =>
-              this.setState(
-                () => ({
-                  notificationsObjects: this.state.notificationsObjects.map(
-                    v => ({ ...v, unread: false })
-                  ),
-                }),
-                () =>
-                  setTimeout(
-                    () =>
-                      this.setState({
-                        notificationsObjects: this.state.notificationsObjects.map(
-                          v => ({ ...v, unread: true })
-                        ),
-                      }),
-                    5000
-                  )
-              ),
-            unread: unreadCount,
-          },
-          accountDropdown: accountDropdownProps,
-        }}
-        navProps={{ itemsObjects: navBarItems }}
-        routerContextComponentType={withRouter(RouterContextProvider)}
-      >
-        {this.props.children}
-      </Site.Wrapper>
+      <div className="wrapper">
+        {/* SIDEBAR */}
+        <Sidebar as={Menu} vertical visible width="thin" className="sidebar">
+          {/* MAIN LOGO */}
+          <div className="siteLogo" />
+
+          {/* MENU ITEMS */}
+          <div className="menuItems">
+            <NavLink exact activeClassName="active" to="/myprofile">
+              <Menu.Item>
+                <IconMain name="home" className="icon" />
+              </Menu.Item>
+            </NavLink>
+
+            <NavLink exact activeClassName="active" to="/candidates">
+              <Menu.Item>
+                <IconMain name="users" className="icon" />
+              </Menu.Item>
+            </NavLink>
+
+            <NavLink exact activeClassName="active" to="/chat">
+              <Menu.Item>
+                <IconMain name="comments" className="icon" />
+              </Menu.Item>
+            </NavLink>
+          </div>
+
+          <div className="logout">
+            <IconAlt name="log-out" className="icon" onClick={this.signOut} />
+          </div>
+        </Sidebar>
+        {/* TOP BAR */}
+        <div className="topNav">
+          <p className="heading">
+            Skill
+            <b>Shop</b>
+          </p>
+
+          <div className="accountInfo">
+            {this.state.msg}
+            <div className="accountDropdown">
+              <AccountDropdown
+                className="accountDropdown"
+                name={this.state.userFirstName}
+                options={[
+                  { icon: "user", value: "Profile", to: "/myprofile" },
+                  { icon: "settings", value: "Settings", to: "/settings" },
+                  "divider",
+                  "help",
+                  {
+                    icon: "log-out",
+                    value: "Logout",
+                    onClick: () => this.signOut(),
+                  },
+                ]}
+              />
+            </div>
+
+            <div className="verticalDivider" />
+
+            <div className="notifications">
+              <NavLink exact to="/chat">
+                <Notification.Tray unread={true}>
+                  <Notification
+                    message={
+                      <React.Fragment>
+                        You have a new match with <strong>Envato</strong>!
+                      </React.Fragment>
+                    }
+                    time="10 minutes ago"
+                  />
+                  <Notification
+                    message={
+                      <React.Fragment>
+                        You have <strong>2</strong> unread messages.
+                      </React.Fragment>
+                    }
+                    time="1 hour ago"
+                  />
+                  <Notification
+                    message={
+                      <React.Fragment>
+                        You have a new match with <strong>Deloitte</strong>!
+                      </React.Fragment>
+                    }
+                    time="24 hours ago"
+                  />
+                </Notification.Tray>
+              </NavLink>
+            </div>
+          </div>
+        </div>
+
+        <div className="sitecontent">{this.props.children}</div>
+      </div>
     );
   }
 }
