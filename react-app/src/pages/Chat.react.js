@@ -21,11 +21,11 @@ const DUMMY_DATA = [
     },
     {
         senderID: "Employer",
-        text: "blah blah blah blah blah blah"
+        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
     },
     {
         senderID: "Jobseeker",
-        text: "Yes, blah blah blah blah blah blah"
+        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
     },
     {
         senderID: "Employer",
@@ -39,34 +39,44 @@ const DUMMY_DATA = [
 
 const DUMMY_EMPLOYERS = [
     {
-        name: "Bob"
+        name: "Bob",
+        lastUpdate: "1d"
     },
     {
-        name: "Sheryl"
+        name: "Sheryl",
+        lastUpdate: "1d"
     },
     {
-        name: "Yaki"
+        name: "Yaki",
+        lastUpdate: "1d"
     },
     {
-        name: "Condoleezza"
+        name: "Condoleezza",
+        lastUpdate: "1d"
     },
     {
-        name: "Guru"
+        name: "Guru",
+        lastUpdate: "1d"
     },
     {
-        name: "Stella"
+        name: "Stella",
+        lastUpdate: "1d"
     },
     {
-        name: "Bobo"
+        name: "Bobo",
+        lastUpdate: "1d"
     },
     {
-        name: "Hugo"
+        name: "Hugo",
+        lastUpdate: "1d"
     },
     {
-        name: "Fanny"
+        name: "Fanny",
+        lastUpdate: "1d"
     },
     {
-        name: "Peter"
+        name: "Peter",
+        lastUpdate: "1d"
     },
 ]
 
@@ -92,7 +102,7 @@ class Chat extends Component {
                             </div>
                             {/* Title */}
                             <div className="col-9 title">
-                                Employer
+                                <div className="title-text">Employer</div>
                             </div>
                         </div>
                         {/* Body */}
@@ -104,6 +114,7 @@ class Chat extends Component {
                                         return(
                                             <li key={employer.id} className="emp-item">
                                                 <button className="my-button-list">
+                                                    <div className="last-update">{employer.lastUpdate}</div>
                                                     <div className="button-text">{employer.name}</div>
                                                 </button>
                                             </li>
@@ -125,6 +136,7 @@ class Chat extends Component {
                                                     <div>
                                                         {message.text}
                                                     </div>
+                                                    <div className="divider">empty</div>
                                                 </li>
                                             )
                                         })}

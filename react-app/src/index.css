@@ -449,40 +449,140 @@ body {
 
 /* CHAT */
 
-.chat {
-  width:100%;
-  height:100%;
-}
-
-.ido {
-  width:50%;
-  height:100px;
-}
-
 .my-body {
-  margin:30px;
+  margin-top:100px;
 }
 
-.my-container {
-  border:1px solid green;
-  height:600px;
+/* search */
+
+.search {
+  border:1px solid rgb(210, 217, 241);
+  height:40px;
+  background-color: white;
 }
 
-.my-row {
-  border:3px solid black;
+.input-text-search {
+  width:100%;
+  font-size: 14px;
+  margin-top:10px;
+  border:1px solid rgb(210, 217, 241);
 }
 
-.my-col {
-  border:3px dotted blue;
+/* title */
+
+.title {
+  border:1px solid rgb(210, 217, 241);
+  height:40px;
+  background-color: white;
 }
+
+.title-text {
+  text-align: center;
+  font-size: 20px;
+  margin-top:10px;
+  font-weight: 900;
+}
+
+/* list */
+
+.list {
+  height:520px;
+  border:1px solid rgb(210, 217, 241);
+  white-space: nowrap;
+  overflow: scroll;
+  scrollbar-width: none;
+}
+
+.emp-list {
+  list-style-type: none;
+  padding:0;
+  margin-left:-11px;
+  margin-right:-12px;
+}
+
+.emp-item {
+  
+}
+
+.button-text {
+  margin-left: 25px;
+  margin-bottom:10px;
+  font-weight: bolder;
+}
+
+.my-button-list {
+  width:100%;
+  height:60px;
+  margin:0;
+  padding:0;
+  text-align:left;
+  background-color: transparent;
+  border:1px solid rgb(210, 217, 241);
+}
+
+.last-update {
+  text-align: right;
+  margin-right:10px;
+  font-size:10px;
+  color:gray;
+}
+
+/* chat */
 
 .chat-box {
   height:470px;
   border:1px solid rgb(210, 217, 241);
-  /* padding:10px; */
+  background-color: white;
+  overflow: scroll;
+  scrollbar-width: none;
 }
 
+.message-list {
+  list-style-type: none;
+}
 
+.message-Jobseeker {
+  margin:15px 0;
+  text-align:right;
+  padding:5px;
+  margin-right: 30px;
+}
+
+.message-Employer {
+  width:40%;
+}
+
+.message-Jobseeker div:nth-child(1) {
+  font-size:11px;
+  opacity:0.9;
+  margin-bottom:6px;
+}
+
+.message-Jobseeker div:nth-child(2) {
+  float:right;
+  background:#3e8e41;
+  margin-left:450px;
+  padding:8px 16px;
+}
+
+.message-Employer div:nth-child(1) {
+  font-size:11px;
+  opacity:0.9;
+  margin-bottom:6px;
+}
+
+.message-Employer div:nth-child(2) {
+  float:left;
+  background:lightgray;
+  padding:8px 16px;
+}
+
+.divider {
+  width:100%;
+  color:white;
+}
+
+/* input */
 
 .text-box {
   height:50px;
@@ -492,19 +592,8 @@ body {
 
 .input-text {
   width:100%;
-  /* height:100%; */
-  /* border-radius: 15px 50px 30px 5px; */
   font-size: 14px;
   margin-top:14px;
-  border:1px solid rgb(210, 217, 241);
-}
-
-.input-text-search {
-  width:100%;
-  /* height:100%; */
-  /* border-radius: 15px 50px 30px 5px; */
-  font-size: 14px;
-  margin-top:10px;
   border:1px solid rgb(210, 217, 241);
 }
 
@@ -529,120 +618,6 @@ body {
   box-shadow: 0 5px #666;
   transform: translateY(4px);
 }
-
-.message-list {
-  /* box-sizing: border-box; */
-  background-color:white;
-  height:100%;
-  width:100%;
-  overflow: scroll;
-  scrollbar-width: none;
-  list-style-type: none;
-  background-size:cover;
-
-  /* background-image: url('./img/backgroundOF.png'); */
-  
-  /* border-radius: 15px; */
-}
-
-.message-Jobseeker {
-  margin:15px 0;
-  text-align:right;
-  padding:5px;
-  margin-right: 30px;
-}
-
-.message-Employer {
-  margin:15px 0;
-}
-
-.message-Jobseeker div:nth-child(1) {
-  font-size:11px;
-  opacity:0.9;
-  margin-bottom:6px;
-}
-
-.message-Jobseeker div:nth-child(2) {
-  background:#3e8e41;
-  display:inline;
-  padding:8px 16px;
-  /* border-radius:8px; */
-}
-
-.message-Employer div:nth-child(1) {
-  font-size:11px;
-  opacity:0.9;
-  margin-bottom:6px;
-}
-
-.message-Employer div:nth-child(2) {
-  background:lightgray;
-  display:inline;
-  padding:8px 16px;
-  /* border-radius:8px; */
-}
-
-.list {
-  height:520px;
-  border:1px solid rgb(210, 217, 241);
-  white-space: nowrap;
-  overflow: scroll;
-  scrollbar-width: none;
-}
-
-.emp-list {
-  list-style-type: none;
-  padding:0;
-  margin-left:-10px;
-  margin-right:-12px;
-}
-
-.emp-item {
-  
-}
-
-.button-text {
-  margin-left: 20px;
-  font-weight: bolder;
-}
-
-.my-button-list {
-  width:100%;
-  height:60px;
-  margin:0;
-  padding:0;
-  text-align:left;
-  background-color: transparent;
-  border:1px solid rgb(210, 217, 241);
-}
-
-.title {
-  border:1px solid rgb(210, 217, 241);
-  height:40px;
-  background-color: white;
-  text-align: center;
-  font-size: 20px;
-}
-
-.search {
-  border:1px solid rgb(210, 217, 241);
-  height:40px;
-  background-color: white;
-}
-
-
-
-
-/* .message-list {
-  box-sizing: border-box;
-  padding: 0 0 0 6px;
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  overflow: scroll;
-  background: white;
-} */
-
 
 /* SITE WRAPPER - STRUCTURE */
 
