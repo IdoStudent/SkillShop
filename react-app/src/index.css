@@ -551,7 +551,7 @@ body {
   list-style-type: none;
 }
 
-.message-Jobseeker {
+.message-jobseeker {
   margin:15px 0;
   text-align:right;
   padding:5px;
@@ -562,13 +562,13 @@ body {
   width:40%;
 }
 
-.message-Jobseeker div:nth-child(1) {
+.message-jobseeker div:nth-child(1) {
   font-size:11px;
   opacity:0.9;
   margin-bottom:6px;
 }
 
-.message-Jobseeker div:nth-child(2) {
+.message-jobseeker div:nth-child(2) {
   float:right;
   background:#3e8e41;
   margin-left:450px;

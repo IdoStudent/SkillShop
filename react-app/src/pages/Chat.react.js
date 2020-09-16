@@ -4,42 +4,50 @@ import SiteWrapper from "../SiteWrapper.react";
 
 const DUMMY_DATA = [
     {
-        senderID: "Employer",
+        senderID: "Employer Name",
+        senderRole: "Employer",
         text: "Hello, how are you?"
     },
     {
-        senderID: "Jobseeker",
+        senderID: "You",
+        senderRole: "jobseeker",
         text: "I'm good, thank you!"
     },
     {
-        senderID: "Employer",
+        senderID: "Employer Name",
+        senderRole: "Employer",
         text: "I viewed your resume and I was deeply impressed."
     },
     {
-        senderID: "Jobseeker",
+        senderID: "You",
+        senderRole: "jobseeker",
         text: "That's great to read!"
     },
     {
-        senderID: "Employer",
+        senderID: "Employer Name",
+        senderRole: "Employer",
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
     },
     {
-        senderID: "Jobseeker",
+        senderID: "You",
+        senderRole: "jobseeker",
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
     },
     {
-        senderID: "Employer",
+        senderID: "Employer Name",
+        senderRole: "Employer",
         text: "You're hired!"
     },
     {
-        senderID: "Jobseeker",
+        senderID: "You",
+        senderRole: "jobseeker",
         text: "You will not regret this, sir."
     }
 ]
 
 const DUMMY_EMPLOYERS = [
     {
-        name: "Bob",
+        name: "Fred",
         lastUpdate: "1d"
     },
     {
@@ -86,12 +94,13 @@ class Chat extends Component {
         this.state = {
             messages: DUMMY_DATA,
             employers: DUMMY_EMPLOYERS,
+            currentEmployer: "Fred",
         }
     }
 
     chooseEmployer = (employer) => {
-        //get employer
-        console.log('Employer ',{employer},' was chosen');
+        // console.log('Employer ',employer.name,' was chosen');
+        this.setState({ currentEmployer:employer.name });
     }
 
     render(){
@@ -107,7 +116,7 @@ class Chat extends Component {
                             </div>
                             {/* Title */}
                             <div className="col-9 title">
-                                <div className="title-text">Employer</div>
+                                <div className="title-text">{this.state.currentEmployer}</div>
                             </div>
                         </div>
                         {/* Body */}
@@ -118,7 +127,7 @@ class Chat extends Component {
                                     {this.state.employers.map(employer => {
                                         return(
                                             <li key={employer.id} className="emp-item">
-                                                <button className="my-button-list" onClick={(event) => this.chooseEmployer(event,employer.name)}>
+                                                <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
                                                     <div className="last-update">{employer.lastUpdate}</div>
                                                     <div className="button-text">{employer.name}</div>
                                                 </button>
@@ -134,7 +143,7 @@ class Chat extends Component {
                                     <ul className="message-list">
                                         {this.state.messages.map(message => {
                                             return(
-                                                <li key={message.id} className={"message-" + message.senderID}>
+                                                <li key={message.id} className={"message-" + message.senderRole}>
                                                     <div>
                                                         {message.senderID}
                                                     </div>
