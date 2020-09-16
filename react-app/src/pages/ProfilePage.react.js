@@ -29,7 +29,7 @@ class ProfilePage extends Component {
   render() {
     return (
       <SiteWrapper>
-        <Alert type="warning">
+        <Alert type="warning" className="fixed">
           <center>
             All information on your profile is publicly available to potential
             employers.{" "}
@@ -39,6 +39,7 @@ class ProfilePage extends Component {
             </span>
           </center>
         </Alert>
+        <div className="spacer"></div>
         <div className="my-3 my-md-5">
           <Container>
             <Grid.Row>
