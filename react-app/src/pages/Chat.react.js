@@ -37,11 +37,45 @@ const DUMMY_DATA = [
     }
 ]
 
+const DUMMY_EMPLOYERS = [
+    {
+        name: "Bob"
+    },
+    {
+        name: "Sheryl"
+    },
+    {
+        name: "Yaki"
+    },
+    {
+        name: "Condoleezza"
+    },
+    {
+        name: "Guru"
+    },
+    {
+        name: "Stella"
+    },
+    {
+        name: "Bobo"
+    },
+    {
+        name: "Hugo"
+    },
+    {
+        name: "Fanny"
+    },
+    {
+        name: "Peter"
+    },
+]
+
 class Chat extends Component {
     constructor(){
         super()
         this.state = {
             messages: DUMMY_DATA,
+            employers: DUMMY_EMPLOYERS,
         }
     }
 
@@ -50,11 +84,13 @@ class Chat extends Component {
             <SiteWrapper>
                 <div className="my-body">
                     <div className="container">
-                        {/* Title Row */}
+                        {/* Header */}
                         <div className="row">
-                            <div className="col-3 title">
-                                Search
+                            {/* Search */}
+                            <div className="col-3 search">
+                                <input className="input-text-search" type="text" placeholder="Search Employer"></input>
                             </div>
+                            {/* Title */}
                             <div className="col-9 title">
                                 Employer
                             </div>
@@ -63,7 +99,17 @@ class Chat extends Component {
                         <div className="row">
                             {/* List */}
                             <div className="col-3 list">
-                                List
+                                <ul className="emp-list">
+                                    {this.state.employers.map(employer => {
+                                        return(
+                                            <li key={employer.id} className="emp-item">
+                                                <button className="my-button-list">
+                                                    <div className="button-text">{employer.name}</div>
+                                                </button>
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
                             </div>
                             {/* Chat */}
                             <div className="col-9">

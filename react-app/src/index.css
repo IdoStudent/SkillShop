@@ -463,19 +463,16 @@ body {
 
 .chat-box {
   height:470px;
-  border:1px solid lightgray;
+  border:1px solid rgb(210, 217, 241);
   /* padding:10px; */
 }
 
-.list {
-  height:520px;
-  border:1px solid lightgray;
-}
+
 
 .text-box {
   height:50px;
   background-color: white;
-  border:1px solid lightgray;
+  border:1px solid rgb(210, 217, 241);
 }
 
 .input-text {
@@ -484,7 +481,16 @@ body {
   /* border-radius: 15px 50px 30px 5px; */
   font-size: 14px;
   margin-top:14px;
-  border:1px solid lightgray;
+  border:1px solid rgb(210, 217, 241);
+}
+
+.input-text-search {
+  width:100%;
+  /* height:100%; */
+  /* border-radius: 15px 50px 30px 5px; */
+  font-size: 14px;
+  margin-top:10px;
+  border:1px solid rgb(210, 217, 241);
 }
 
 .my-button {
@@ -542,10 +548,10 @@ body {
 }
 
 .message-Jobseeker div:nth-child(2) {
-  background:#5ea3d0;
+  background:#3e8e41;
   display:inline;
   padding:8px 16px;
-  border-radius:8px;
+  /* border-radius:8px; */
 }
 
 .message-Employer div:nth-child(1) {
@@ -555,17 +561,61 @@ body {
 }
 
 .message-Employer div:nth-child(2) {
-  background:orange;
+  background:lightgray;
   display:inline;
   padding:8px 16px;
-  border-radius:8px;
+  /* border-radius:8px; */
+}
+
+.list {
+  height:520px;
+  border:1px solid rgb(210, 217, 241);
+  white-space: nowrap;
+  overflow: scroll;
+  scrollbar-width: none;
+}
+
+.emp-list {
+  list-style-type: none;
+  padding:0;
+  margin-left:-10px;
+  margin-right:-12px;
+}
+
+.emp-item {
+  
+}
+
+.button-text {
+  margin-left: 20px;
+  font-weight: bolder;
+}
+
+.my-button-list {
+  width:100%;
+  height:60px;
+  margin:0;
+  padding:0;
+  text-align:left;
+  background-color: transparent;
+  border:1px solid rgb(210, 217, 241);
 }
 
 .title {
-  border:1px solid lightgray;
+  border:1px solid rgb(210, 217, 241);
+  height:40px;
+  background-color: white;
+  text-align: center;
+  font-size: 20px;
+}
+
+.search {
+  border:1px solid rgb(210, 217, 241);
   height:40px;
   background-color: white;
 }
+
+
 
 
 /* .message-list {
