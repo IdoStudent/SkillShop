@@ -451,6 +451,8 @@ body {
 
 .my-body {
   margin-top:100px;
+  overflow: hidden;
+  height:100%;
 }
 
 /* search */
@@ -487,7 +489,8 @@ body {
 
 .list {
   height:520px;
-  border:1px solid rgb(210, 217, 241);
+  border-bottom:1px solid rgb(210, 217, 241);
+  border-left:1px solid rgb(210, 217, 241);
   white-space: nowrap;
   overflow: scroll;
   scrollbar-width: none;
@@ -497,7 +500,7 @@ body {
   list-style-type: none;
   padding:0;
   margin-left:-11px;
-  margin-right:-12px;
+  margin-right:-10px;
 }
 
 .emp-item {
@@ -520,6 +523,11 @@ body {
   border:1px solid rgb(210, 217, 241);
 }
 
+.my-button-list:focus {
+  background-color: white;
+  border:none;
+}
+
 .last-update {
   text-align: right;
   margin-right:10px;
@@ -531,7 +539,9 @@ body {
 
 .chat-box {
   height:470px;
-  border:1px solid rgb(210, 217, 241);
+  border-top:1px solid rgb(210, 217, 241);
+  border-right:1px solid rgb(210, 217, 241);
+  border-bottom:1px solid rgb(210, 217, 241);
   background-color: white;
   overflow: scroll;
   scrollbar-width: none;

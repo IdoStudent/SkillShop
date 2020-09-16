@@ -67,15 +67,15 @@ const DUMMY_EMPLOYERS = [
         lastUpdate: "1d"
     },
     {
+        name: "Annie",
+        lastUpdate: "1d"
+    },
+    {
         name: "Hugo",
         lastUpdate: "1d"
     },
     {
-        name: "Fanny",
-        lastUpdate: "1d"
-    },
-    {
-        name: "Peter",
+        name: "Fatima",
         lastUpdate: "1d"
     },
 ]
@@ -89,6 +89,11 @@ class Chat extends Component {
         }
     }
 
+    chooseEmployer = (employer) => {
+        //get employer
+        console.log('Employer ',{employer},' was chosen');
+    }
+
     render(){
         return(
             <SiteWrapper>
@@ -98,7 +103,7 @@ class Chat extends Component {
                         <div className="row">
                             {/* Search */}
                             <div className="col-3 search">
-                                <input className="input-text-search" type="text" placeholder="Search Employer"></input>
+                                <input className="input-text-search" type="text" placeholder="Search"></input>
                             </div>
                             {/* Title */}
                             <div className="col-9 title">
@@ -113,7 +118,7 @@ class Chat extends Component {
                                     {this.state.employers.map(employer => {
                                         return(
                                             <li key={employer.id} className="emp-item">
-                                                <button className="my-button-list">
+                                                <button className="my-button-list" onClick={(event) => this.chooseEmployer(event,employer.name)}>
                                                     <div className="last-update">{employer.lastUpdate}</div>
                                                     <div className="button-text">{employer.name}</div>
                                                 </button>
@@ -145,7 +150,7 @@ class Chat extends Component {
                                 {/* Text */}
                                 <div className="row text-box">
                                     <div className="col-9 col-sm-10 col-md-10 col-lg-11">
-                                        <input className="input-text" type="text" placeholder="Enter your message here"></input>
+                                        <input className="input-text" type="text" placeholder="Type message here..."></input>
                                     </div>
                                     <div className="col-3 col-sm-2 col-md-2 col-lg-1">
                                         <button className="fa fa-send-o my-button">
