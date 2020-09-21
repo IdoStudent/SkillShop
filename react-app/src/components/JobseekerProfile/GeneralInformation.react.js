@@ -21,6 +21,7 @@ class GeneralInformation extends React.Component {
       state: "",
       email: "",
       about: "",
+      phone: "",
 
       // States for editable form
       formfirstname: "",
@@ -30,6 +31,7 @@ class GeneralInformation extends React.Component {
       formpostcode: "",
       formstate: "",
       formabout: "",
+      formphone: "",
 
       // Modal State
       open: false,
@@ -49,6 +51,9 @@ class GeneralInformation extends React.Component {
 
       aboutInvalid: false,
       aboutErrorMsg: "",
+
+      phoneInvalid: false,
+      phoneErrorMsg: "",
     };
   }
   // GET email for getSecondApi
@@ -84,14 +89,16 @@ class GeneralInformation extends React.Component {
             postcode: result.Item.userPostcode,
             state: result.Item.userState,
             about: result.Item.userAbout,
+            //phone: result.Item.userPhone,
 
             formfirstname: result.Item.userFirstName,
             formmiddlename: result.Item.userMiddleName,
             formsurname: result.Item.userLastName,
             formcity: result.Item.userCity,
-            formpostcode: result.postcode,
+            formpostcode: result.Item.userPostcode,
             formstate: result.Item.userState,
-            formabout: result.Item.userAbout,        
+            formabout: result.Item.userAbout,      
+            //formphone: result.Item.userPhone,
           });
           console.log() },
       )
@@ -110,10 +117,11 @@ class GeneralInformation extends React.Component {
     this.setState({ [input]: event.target.value });
   };
 
-  handleSubmit = async (event, email) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
 
     if (this.validateForm()) {
+
       this.setState((prevState) => ({
         // If submitting new values, update the state to represent the new data
         firstname: prevState.formfirstname,
@@ -124,6 +132,7 @@ class GeneralInformation extends React.Component {
         email: this.state.formemail,
         state: prevState.formstate,
         about: prevState.formabout,
+        phone: prevState.formphone,
         open: false,
       }));
 
@@ -138,7 +147,7 @@ class GeneralInformation extends React.Component {
           userState: this.state.formstate,
           userAbout: this.state.formabout,
           userType: "jobseeker",
-          //userPhoneNumber: this.state.phonenumber
+          //userPhone: this.state.formphone
         };
 
         await axios.post(
@@ -158,6 +167,7 @@ class GeneralInformation extends React.Component {
     let postcode = this.state.formpostcode;
     let state = this.state.formstate;
     let about = this.state.formabout;
+    let phone = this.state.formphone
 
     this.setState({
       fNameInvalid: false,
@@ -165,6 +175,7 @@ class GeneralInformation extends React.Component {
       postcodeInvalid: false,
       stateInvalid: false,
       aboutInvalid: false,
+      phoneInvalid: false
     });
 
     let validInput = true;
@@ -239,6 +250,20 @@ class GeneralInformation extends React.Component {
       validInput = false;
     }
 
+    if (!phone) {
+      this.setState({
+        phoneErrorMsg: "Phone Number cannot be empty",
+        phoneInvalid: true,
+      });
+      validInput = false;
+    } else if (phone.includes("_")) {
+      this.setState({
+        phoneErrorMsg: "Please enter a valid phone number (10 Digits)",
+        phoneInvalid: true,
+      });
+      validInput = false;
+    }
+
     // Return the status of valid input. If any of the above error conditions are met, this will return false
     return validInput;
   };
@@ -253,6 +278,7 @@ class GeneralInformation extends React.Component {
       formpostcode: prevState.postcode,
       formstate: prevState.state,
       formabout: prevState.about,
+      formphone: prevState.phone,
       open: false,
 
       fNameInvalid: false,
@@ -260,6 +286,7 @@ class GeneralInformation extends React.Component {
       postcodeInvalid: false,
       stateInvalid: false,
       aboutInvalid: false,
+      phoneInvalid: false,
     }));
   };
 
@@ -277,6 +304,7 @@ class GeneralInformation extends React.Component {
       state,
       email,
       about,
+      phone,
       formfirstname,
       formmiddlename,
       formsurname,
@@ -284,32 +312,27 @@ class GeneralInformation extends React.Component {
       formpostcode,
       formstate,
       formabout,
+      formphone,
       open,
     } = this.state;
 
-    return (
-      <div className="card" name="generalInfo">
+    return <div className="card" id="generalInfo">
         <Card.Body>
-          <Grid>
-            <Grid.Row>
-              <Grid.Col md={7}>
-                <Card.Title>General Information</Card.Title>
-              </Grid.Col>
-              <Grid.Col md={5}>
-                {/* MODAL BUTTON */}
-                <Button
-                  floated="right"
-                  basic
-                  icon="pencil"
-                  type="button"
-                  compact
-                  onClick={this.openModal}
-                />
-              </Grid.Col>
-            </Grid.Row>
+          <Grid.Row>
+            <Grid.Col md={7}>
+              <Card.Title>General Information</Card.Title>
+            </Grid.Col>
+            <Grid.Col md={5}>
+              {/* MODAL BUTTON */}
+              <Button floated="right" basic icon="pencil" type="button" compact onClick={this.openModal} />
+            </Grid.Col>
+          </Grid.Row>
 
-            <Grid.Row>
+          <Grid.Row>
+            {/* MAIN INFO COL */}
+            <Grid.Col md={8}>
               {/* ROW 1 */}
+              <Grid.Row>
               <Grid.Col md={4}>
                 <Form.Group label="First Name">
                   <Form.Input name="firstname" disabled value={firstname} />
@@ -325,8 +348,10 @@ class GeneralInformation extends React.Component {
                   <Form.Input name="surname" disabled value={surname} />
                 </Form.Group>
               </Grid.Col>
+              </Grid.Row>
 
               {/* ROW 2 */}
+              <Grid.Row>
               <Grid.Col md={3}>
                 <Form.Group label="City">
                   <Form.Input name="city" disabled value={city} />
@@ -342,67 +367,55 @@ class GeneralInformation extends React.Component {
                   <Form.Input name="state" disabled value={state} />
                 </Form.Group>
               </Grid.Col>
-              <Grid.Col md={4}>
+              </Grid.Row>
+
+              {/* ROW 3 */}
+              <Grid.Row>
+              <Grid.Col md={12}>
+                <Form.Group className="mb=0" label="About Me">
+                  <Form.Textarea name="aboutme" rows={5} disabled readOnly value={about} />
+                </Form.Group>
+              </Grid.Col>
+              </Grid.Row>
+            </Grid.Col>
+            
+            <div className="verticalDivider" />
+
+            {/* CONTACT DETAILS COL */}
+            <Grid.Col md={3}>
+              <Grid.Col md={12}>
+                <Form.Group label="Phone Number">
+                  <Form.Input name="phone" disabled value={phone}/>
+                </Form.Group>
+              </Grid.Col>
+              <Grid.Col md={12}>
                 <Form.Group label="Email">
                   <Form.Input name="email" disabled value={email} />
                 </Form.Group>
               </Grid.Col>
-
-              {/* ROW 3 */}
-              <Grid.Col md={12}>
-                <Form.Group className="mb=0" label="About Me">
-                  <Form.Textarea
-                    name="aboutme"
-                    rows={3}
-                    disabled
-                    readOnly
-                    value={about}
-                  />
-                </Form.Group>
-              </Grid.Col>
-            </Grid.Row>
-          </Grid>
+            </Grid.Col>
+          </Grid.Row>
         </Card.Body>
 
         {/* MODAL CONTENT */}
-        <Modal
-          style={{ position: "relative" }}
-          closeOnDimmerClick={false}
-          open={open}
-        >
+        <Modal style={{ position: "relative" }} closeOnDimmerClick={false} open={open}>
           <Modal.Header>Editing General Information</Modal.Header>
           <Modal.Content>
             <Form>
               <Grid.Row>
                 <Grid.Col md={4}>
                   <Form.Group label="First Name" isRequired>
-                    <Form.Input
-                      name="firstname"
-                      value={formfirstname}
-                      onChange={this.handleChange("formfirstname")}
-                      invalid={this.state.fNameInvalid}
-                      feedback={this.state.fNameErrorMsg}
-                    />
+                    <Form.Input name="firstname" value={formfirstname} onChange={this.handleChange("formfirstname")} invalid={this.state.fNameInvalid} feedback={this.state.fNameErrorMsg} />
                   </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={4}>
                   <Form.Group label="Middle Name">
-                    <Form.Input
-                      name="middlename"
-                      value={formmiddlename}
-                      onChange={this.handleChange("formmiddlename")}
-                    />
+                    <Form.Input name="middlename" value={formmiddlename} onChange={this.handleChange("formmiddlename")} />
                   </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={4}>
                   <Form.Group label="Surname" isRequired>
-                    <Form.Input
-                      name="surname"
-                      value={formsurname}
-                      onChange={this.handleChange("formsurname")}
-                      invalid={this.state.surnameInvalid}
-                      feedback={this.state.surnameErrorMsg}
-                    />
+                    <Form.Input name="surname" value={formsurname} onChange={this.handleChange("formsurname")} invalid={this.state.surnameInvalid} feedback={this.state.surnameErrorMsg} />
                   </Form.Group>
                 </Grid.Col>
               </Grid.Row>
@@ -411,33 +424,22 @@ class GeneralInformation extends React.Component {
               <Grid.Row>
                 <Grid.Col md={3}>
                   <Form.Group label="City">
-                    <Form.Input
-                      name="city"
-                      value={formcity}
-                      onChange={this.handleChange("formcity")}
-                    />
+                    <Form.Input name="city" value={formcity} onChange={this.handleChange("formcity")} />
                   </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={2}>
                   <Form.Group label="Post Code" isRequired>
-                    <Form.Input
-                      name="postcode"
-                      value={formpostcode}
-                      onChange={this.handleChange("formpostcode")}
-                      invalid={this.state.postcodeInvalid}
-                      feedback={this.state.postcodeErrorMsg}
-                    />
+                    <Form.Input name="postcode" value={formpostcode} onChange={this.handleChange("formpostcode")} invalid={this.state.postcodeInvalid} feedback={this.state.postcodeErrorMsg} />
                   </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={3}>
                   <Form.Group label="State" isRequired>
-                    <Form.Input
-                      name="state"
-                      value={formstate}
-                      onChange={this.handleChange("formstate")}
-                      invalid={this.state.stateInvalid}
-                      feedback={this.state.stateErrorMsg}
-                    />
+                    <Form.Input name="state" value={formstate} onChange={this.handleChange("formstate")} invalid={this.state.stateInvalid} feedback={this.state.stateErrorMsg} />
+                  </Form.Group>
+                </Grid.Col>
+                <Grid.Col md={4}>
+                  <Form.Group label="Phone Number" isRequired>
+                    <Form.MaskedInput name="number" value={formphone} onChange={this.handleChange("formphone")} invalid={this.state.phoneInvalid} feedback={this.state.phoneErrorMsg} mask={[/\d/, /\d/, /\d/, /\d/, " ", /\d/, /\d/, /\d/, " ", /\d/, /\d/, /\d/]} />
                   </Form.Group>
                 </Grid.Col>
               </Grid.Row>
@@ -446,14 +448,7 @@ class GeneralInformation extends React.Component {
               <Grid.Row>
                 <Grid.Col md={12}>
                   <Form.Group className="mb=0" label="About Me" isRequired>
-                    <Form.Textarea
-                      name="aboutme"
-                      rows={3}
-                      value={formabout}
-                      onChange={this.handleChange("formabout")}
-                      invalid={this.state.aboutInvalid}
-                      feedback={this.state.aboutErrorMsg}
-                    />
+                    <Form.Textarea name="aboutme" rows={3} value={formabout} onChange={this.handleChange("formabout")} invalid={this.state.aboutInvalid} feedback={this.state.aboutErrorMsg} />
                   </Form.Group>
                 </Grid.Col>
               </Grid.Row>
@@ -465,23 +460,13 @@ class GeneralInformation extends React.Component {
             <Container className="modalSubmit">
               <Grid.Row>
                 <Grid.Col md={12}>
-                  <Button
-                    animated
-                    className="acceptButton"
-                    circular
-                    onClick={this.handleSubmit}
-                  >
+                  <Button animated className="acceptButton" circular onClick={this.handleSubmit}>
                     <Button.Content visible>Accept</Button.Content>
                     <Button.Content hidden>
                       <Icon name="check" />
                     </Button.Content>
                   </Button>
-                  <Button
-                    animated
-                    className="cancelButton"
-                    circular
-                    onClick={this.cancelForm}
-                  >
+                  <Button animated className="cancelButton" circular onClick={this.cancelForm}>
                     <Button.Content visible>Cancel</Button.Content>
                     <Button.Content hidden>
                       <Icon name="x" />
@@ -492,8 +477,7 @@ class GeneralInformation extends React.Component {
             </Container>
           </Modal.Actions>
         </Modal>
-      </div>
-    );
+      </div>;
   }
 }
 
