@@ -429,7 +429,7 @@ class GeneralInformation extends React.Component {
                 </Grid.Col>
                 <Grid.Col md={2}>
                   <Form.Group label="Post Code" isRequired>
-                    <Form.Input name="postcode" value={formpostcode} onChange={this.handleChange("formpostcode")} invalid={this.state.postcodeInvalid} feedback={this.state.postcodeErrorMsg} />
+                    <Form.Input name="postcode" value={formpostcode} onChange={this.handleChange("formpostcode")} invalid={this.state.postcodeInvalid} feedback={this.state.postcodeErrorMsg} maxLength={4}/>
                   </Form.Group>
                 </Grid.Col>
                 <Grid.Col md={3}>
