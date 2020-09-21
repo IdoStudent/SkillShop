@@ -781,5 +781,27 @@ body {
   cursor: pointer;
 }
 
+/* ACCORDIAN */
+
+.accordion .title {
+  /* FORMAT */
+  border-right: none;
+  border-left: none;
+  border-top: none;
+
+
+  /* TEXT */
+  font-size: 1.15em !important;
+}
+
+.accordion .title:not(:first-child) {
+  margin-top: 10px;
+}
+
+.accordion .content {
+  margin-top: 10px;
+}
+
+
 
 

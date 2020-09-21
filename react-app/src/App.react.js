@@ -9,7 +9,8 @@ import {
   Login,
   Candidates,
   Signup,
-  Chat
+  Chat,
+  Help
 } from "./pages";
 
 import "tabler-react/dist/Tabler.css";
@@ -71,13 +72,17 @@ class App extends React.Component {
             {/* IN PROGRESS */}
             <Route exact path="/chat" render={(props) => <Chat {...props} auth={authProps} />} />
 
+
+
             {/* PRIVATE ROUTES (USER NEEDS TO BE AUTHENTICATED) */}
+              {/* JOBSEEKER PAGES */}
+              <PrivateRoute authed={this.state.isAuthenticated} path='/myprofile' component={ProfilePage} />
 
-            {/* JOBSEEKER PAGES */}
-            <PrivateRoute authed={this.state.isAuthenticated} path='/myprofile' component={ProfilePage} />
+              {/* EMPLOYER PAGES */}
+              <PrivateRoute authed={this.state.isAuthenticated} path='/candidates' component={Candidates} />
 
-            {/* EMPLOYER PAGES */}
-            <PrivateRoute authed={this.state.isAuthenticated} path='/candidates' component={Candidates} />
+            {/* MISC */}
+            <Route exact path="/help" render={(props) => <Help {...props} auth={authProps} />} />
 
             {/* ERROR PAGE (NO VALID ROUTE) */}
             <Route component={Error404} />

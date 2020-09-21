@@ -3,11 +3,13 @@ import ProfilePage from "./ProfilePage.react";
 import ProfileSetup from "./ProfileSetup.react";
 import EmployerSetup from "./EmployerSetup.react";
 import Candidates from "./Candidates.react";
+import Chat from "./Chat.react";
+import Help from "./help.react";
 
 import LandingPage  from "./LandingPage.react";
 import Signup from "./Signup.react";
 import Login from "./Login.react";
-import Chat from "./Chat.react";
+
 
 export {
   Error404,
@@ -18,5 +20,6 @@ export {
   Signup,
   Login,
   Candidates,
-  Chat
+  Chat,
+  Help
 };
