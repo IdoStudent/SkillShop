@@ -78,7 +78,7 @@ class Candidates extends React.Component {
             formcity: result.Item.userCity,
             formpostcode: result.postcode,
             formstate: result.Item.userState,
-            formabout: result.Item.userAbout,        
+            formabout: result.Item.userAbout,
           });
           console.log() },
       )
@@ -210,7 +210,7 @@ class Candidates extends React.Component {
     // I think if we append the data to the state directly it leaves too many possibilities for a mistmatch between what is on the front-end and what's on the database
     // It's doable both ways though so doesn't really matter
 
-    // Generate a unique id 
+    // Generate a unique id
     let jobKey = uuidv4()
         // Get current profile information
     try {
@@ -279,7 +279,7 @@ class Candidates extends React.Component {
                 <Header.H1 className="pageHeading">Find Candidates</Header.H1>
 
                 {/* Job profile selection */}
-                <div id="jobprofile"> 
+                <div id="jobprofile">
                 <Container className="card thin" name="jobProfile">
                   <Card.Body>
                     <Grid.Row>
@@ -321,7 +321,7 @@ class Candidates extends React.Component {
                   </Card.Body>
                 </Container>
                 </div>
-                
+
                 {/* Candidate Info */}
                 <Container className="card" name="candidateInfo">
                   <Card.Body>
