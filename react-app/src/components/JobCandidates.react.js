@@ -79,28 +79,19 @@ getBySkills(){
       skills: items,
     },
     () => {
-      this.filteredCandidates();
+      this.filterJobseekers();
     }
   );
 }
 
 
-filteredCandidates(){
-console.log(this.state.jobseekers[this.state.num]);
-console.log(skill);
-  for (var i = 0; i < 0; i++){
-   if(filters.every(r => skill[i].includes(r))){
-     console.log(skill[i]);
-   } else {
-     console.log(skill[i]);
-     jobseeker.pop(jobseeker[i]);
-     skill.pop(skill[i]);
-   }
-  }
+filterJobseekers(){
+
+  // if(this.state.filters.every(r => this.state.skills.Item.userSkills.includes(r))){
+  //   items.push(result.Item);
+  //
 }
-// if(this.state.filters.every(r => this.state.skillsresult.Item.userSkills.includes(r))){
-//   items.push(result.Item);
-// }
+
 
  acceptChanges = () => {
    this.state.num++;
