@@ -97,7 +97,7 @@ class Chat extends Component {
             currentEmployer: "Fred",
         }
     }
-
+// get user type from user table
     getUserType() {
         const email =  Auth.user.attributes.email
         fetch(
@@ -112,7 +112,7 @@ class Chat extends Component {
              },
           )
       }
-
+// get all matches with userEmail from matches table
     getMatches() {
         const email =  Auth.user.attributes.email
         fetch(
@@ -132,7 +132,6 @@ class Chat extends Component {
             this.getUserType();
             this.getMatches();
         }
-
 
     chooseEmployer = (employer) => {
         // console.log('Employer ',employer.name,' was chosen');
