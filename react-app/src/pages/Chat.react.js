@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import SiteWrapper from "../SiteWrapper.react";
+import Auth from "@aws-amplify/auth";
 
 const DUMMY_DATA = [
     {
@@ -96,6 +97,42 @@ class Chat extends Component {
             currentEmployer: "Fred",
         }
     }
+
+    getUserType() {
+        const email =  Auth.user.attributes.email
+        fetch(
+          `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
+            email )
+          .then((res) => res.json())
+          .then((result) => {
+            if (result.Item !== undefined)
+              this.setState({     
+                  userType: result.Item.userType
+              });
+             },
+          )
+      }
+
+    getMatches() {
+        const email =  Auth.user.attributes.email
+        fetch(
+            `https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` +
+              email )
+            .then((res) => res.json())
+            .then((result) => {
+              if (result.Item !== undefined)
+                this.setState({     
+                    jobKey: result.Item.jobKey
+                });
+               },
+            )
+        }
+
+        componentDidMount() {
+            this.getUserType();
+            this.getMatches();
+        }
+
 
     chooseEmployer = (employer) => {
         // console.log('Employer ',employer.name,' was chosen');

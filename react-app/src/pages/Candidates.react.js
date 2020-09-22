@@ -1,13 +1,10 @@
 // @flow
-
 import React from "react";
 import axios from "axios";
 import { Container, Grid, Card, Form, Header } from "tabler-react";
 import Auth from "@aws-amplify/auth";
 import { Button } from "semantic-ui-react";
-
 import SiteWrapper from "../SiteWrapper.react";
-
 import JobEditModal from "../components/JobEditModal.react";
 import JobFiltersModal from "../components/JobFiltersModal.react";
 import JobNewModal from "../components/JobNewModal.react";
