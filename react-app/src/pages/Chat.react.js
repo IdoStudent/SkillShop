@@ -45,67 +45,15 @@ const DUMMY_DATA = [
     }
 ]
 
-const DUMMY_EMPLOYERS = [
-    {
-        name: "Fred",
-        lastUpdate: "1d"
-    },
-    {
-        name: "Sheryl",
-        lastUpdate: "1d"
-    },
-    {
-        name: "Yaki",
-        lastUpdate: "1d"
-    },
-    {
-        name: "Condoleezza",
-        lastUpdate: "1d"
-    },
-    {
-        name: "Guru",
-        lastUpdate: "1d"
-    },
-    {
-        name: "Stella",
-        lastUpdate: "1d"
-    },
-    {
-        name: "Bobo",
-        lastUpdate: "1d"
-    },
-    {
-        name: "Annie",
-        lastUpdate: "1d"
-    },
-    {
-        name: "Hugo",
-        lastUpdate: "1d"
-    },
-    {
-        name: "Fatima",
-        lastUpdate: "1d"
-    },
-]
-
-const TEST = [
-    {
-        name: "ido"
-    },
-    {
-        name: "yaron"
-    }
-]
-
 class Chat extends Component {
     constructor(){
         super()
         this.state = {
             messages: DUMMY_DATA,
-            employers: DUMMY_EMPLOYERS,
-            currentEmployer: "Fred",
+            currentEmployer: "",
             userType: "",
-            jobKey: []
+            jobKey: [],
+            search: ""
         }
     }
     // get user type from user table
@@ -118,7 +66,6 @@ class Chat extends Component {
             .then((res) => res.json())
             .then((result) => {
                 if (result.Item !== undefined)
-                    // console.log("...");
                     this.setState({     
                         userType: result.Item.userType
                     });
@@ -134,12 +81,7 @@ class Chat extends Component {
               email )
             .then((res) => res.json())
             .then((result) => {
-                // console.log("result length: ",result.length)
                 for (var i = 0; i < result.length; i++)
-                    // console.log(result[i].jobKey);
-                    // this.setState({     
-                    //     jobKey: result[i].jobKey
-                    // });
                     this.state.jobKey.push({ key : result[i].jobKey , lastUpdate : "1d" });
                 },
             )
@@ -151,13 +93,10 @@ class Chat extends Component {
     }
 
     chooseEmployer = (employer) => {
-        // console.log('Employer ',employer.name,' was chosen');
-        this.setState({ currentEmployer:employer.name });
-        console.log("User type2",this.state.userType);
-        for(var i=0;i<this.state.jobKey.length;i++){
-            console.log("match",i,"is:",this.state.jobKey[i]);
-        }
-        
+        console.log("Choose Employer");
+        console.log("name:",employer.key)
+        this.setState({ currentEmployer:employer.key });
+        // console.log("User type2",this.state.userType);
     }
 
     render(){
@@ -199,16 +138,6 @@ class Chat extends Component {
                                             </li>
                                         )
                                     })}
-                                    {/* {this.state.employers.map(employer => {
-                                        return(
-                                            <li key={employer.id} className="emp-item">
-                                                <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
-                                                    <div className="last-update">{employer.lastUpdate}</div>
-                                                    <div className="button-text">{employer.name}</div>
-                                                </button>
-                                            </li>
-                                        )
-                                    })} */}
                                 </ul>
                             </div>
                             {/* Chat */}
