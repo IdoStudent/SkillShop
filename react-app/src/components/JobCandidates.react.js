@@ -23,29 +23,22 @@ class JobCandidates extends React.Component {
 
       num: 0,
       jobseekers: [
-  "userAbout": "bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob bob ",
-  "userCity": "Bob",
-  "userEmail": "nixab93102@mailetk.com",
-  "userFirstName": "BIGMAN ",
-  "userLastName": "Hojmark",
-  "userMiddleName": "Bob",
-  "userPhoneNumber": "0412 312 312",
-  "userPostcode": "3000",
-  "userState": "Bob",
-  "userType": "jobseeker"
+  "userAbout": "",
+  "userCity": "",
+  "userEmail": "",
+  "userFirstName": " ",
+  "userLastName": "",
+  "userMiddleName": "",
+  "userPhoneNumber": "",
+  "userPostcode": "",
+  "userState": "",
+  "userType": ""
 ],
       skills: [
-  "userEmail": "eloise071@sburningk.com",
+  "userEmail": "",
   "userSkills": [
-    "teamwork",
-    "Responsibility",
-    "Flexibility",
-    "Administration",
-    "Adobe Photoshop",
-    "Adobe XD",
-    "Adobe Premier",
-    "Excel",
-    "Microsoft Office"
+    "",
+    ""
   ]
 ],
       filters: ["PHP"],
