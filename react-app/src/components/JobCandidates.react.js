@@ -22,8 +22,25 @@ class JobCandidates extends React.Component {
     this.state = {
 
       num: 0,
-      jobseekers: [],
-      skills: [],
+      jobseekers: [
+  "userAbout": "",
+  "userCity": "",
+  "userEmail": "",
+  "userFirstName": " ",
+  "userLastName": "",
+  "userMiddleName": "",
+  "userPhoneNumber": "",
+  "userPostcode": "",
+  "userState": "",
+  "userType": ""
+],
+      skills: [
+  "userEmail": "",
+  "userSkills": [
+    "",
+    ""
+  ]
+],
       filters: ["PHP"],
     };
   }
@@ -60,41 +77,39 @@ class JobCandidates extends React.Component {
 // code to pull users skills (based off user email) from the database
 
 getBySkills(){
+console.log(this.state.jobseekers);
 
-  let items = [];
-  for (var i = 0; i < jobseeker.length; i++){
-
-  fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/skills?userEmail=${jobseeker[i].userEmail}`)
+  fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/skills?userEmail=${this.state.jobseekers[this.state.num].userEmail}`)
     .then(res => res.json())
     .then((result) => {
-
+      let items = [];
     items.push(result.Item);
 
+    this.setState(
+      {
+        skills: items,
+      },
+      () => {
+        this.filterJobseekers();
+      }
+    );
       }
     )
-  }
-
-  this.setState(
-    {
-      skills: items,
-    },
-    () => {
-      this.filterJobseekers();
-    }
-  );
 }
 
 
 filterJobseekers(){
+console.log(this.state.skills);
+//  if(this.state.filters.every(r => this.state.skills[0].userSkills.includes(r))){
+//
+// }
 
-  // if(this.state.filters.every(r => this.state.skills.Item.userSkills.includes(r))){
-  //   items.push(result.Item);
-  //
 }
 
 
  acceptChanges = () => {
    this.state.num++;
+   this.getBySkills();
    console.log(this.state.num);
    this.forceUpdate();
  };
@@ -108,48 +123,48 @@ filterJobseekers(){
         <Container>
         <Card>
          <Card.Header>
-           <Card.Title>{this.state.filters[this.state.num]} {this.state.num}</Card.Title>
+           <Card.Title>{this.state.jobseekers[this.state.num].userFirstName} {this.state.jobseekers[this.state.num].userLastName}</Card.Title>
          </Card.Header>
          <Card.Body>
           <Grid.Row>
             <Grid.Col md={4}>
               <Form.Group label="First Name">
-                <Form.Input name="firstname" readOnly value={this.state.jobseekers.userFirstName} />
+                <Form.Input name="firstname" readOnly value={this.state.jobseekers[this.state.num].userFirstName} />
               </Form.Group>
             </Grid.Col>
             <Grid.Col md={4}>
               <Form.Group label="Middle Name">
-                <Form.Input name="middlename" readOnly value={this.state.jobseekers.userMiddleName} />
+                <Form.Input name="middlename" readOnly value={this.state.jobseekers[this.state.num].userMiddleName} />
               </Form.Group>
             </Grid.Col>
             <Grid.Col md={4}>
               <Form.Group label="Surname">
-                <Form.Input name="surname" readOnly value={this.state.jobseekers.userLastName}/>
+                <Form.Input name="surname" readOnly value={this.state.jobseekers[this.state.num].userLastName}/>
               </Form.Group>
             </Grid.Col>
             <Grid.Col sm={6} md={4}>
               <Form.Group label="City">
-                <Form.Input name="City" readOnly value={this.state.jobseekers.userCity}/>
+                <Form.Input name="City" readOnly value={this.state.jobseekers[this.state.num].userCity}/>
               </Form.Group>
             </Grid.Col>
             <Grid.Col sm={6} md={3}>
               <Form.Group label="Post Code">
-                <Form.Input name="Post Code" readOnly value={this.state.jobseekers.userPostcode}/>
+                <Form.Input name="Post Code" readOnly value={this.state.jobseekers[this.state.num].userPostcode}/>
               </Form.Group>
             </Grid.Col>
             <Grid.Col md={5}>
               <Form.Group label="Email" >
-                <Form.Input name="Email" readOnly value={this.state.jobseekers.userEmail}/>
+                <Form.Input name="Email" readOnly value={this.state.jobseekers[this.state.num].userEmail}/>
               </Form.Group>
             </Grid.Col>
             <Grid.Col md={12}>
               <Form.Group className="mb=0" label="About Me">
-                <Form.Input name="About Me" readOnly value={this.state.jobseekers.userAbout}/>
+                <Form.Input name="About Me" readOnly value={this.state.jobseekers[this.state.num].userAbout}/>
               </Form.Group>
             </Grid.Col>
             <Grid.Col md={12}>
               <Form.Group className="mb=0" label="Skills">
-                <Form.Input name="Skills" readOnly value={this.state.skills}/>
+                <Form.Input name="Skills" readOnly value={this.state.skills[0].userSkills}/>
               </Form.Group>
             </Grid.Col>
           </Grid.Row>
