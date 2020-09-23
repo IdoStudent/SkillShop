@@ -99,6 +99,12 @@ class Chat extends Component {
         // console.log("User type2",this.state.userType);
     }
 
+    handleSearchChange = (event) => {
+        // console.log("event:",event.target.value);
+        this.setState({search: event.target.value});
+        // console.log("search value:",this.state.search);
+    }
+
     render(){
         return(
             <SiteWrapper>
@@ -109,13 +115,13 @@ class Chat extends Component {
                             {/* JobSeeker Search */}
                             {this.state.userType=="jobseeker" && 
                                 <div className="col-3 search">
-                                    <input className="input-text-search" type="text" placeholder="Search"></input>
+                                    <input className="input-text-search" type="text" placeholder="Search" value={this.state.search} onChange={this.handleSearchChange}></input>
                                 </div>
                             }
                             {/* Employer Search */}
                             {this.state.userType=="employer" && 
                                 <div className="col-3 search">
-                                    implement
+                                    to implement
                                 </div>
                             }
                             {/* Title */}
@@ -126,20 +132,38 @@ class Chat extends Component {
                         {/* Body */}
                         <div className="row">
                             {/* List */}
-                            <div className="col-3 list">
-                                <ul className="emp-list">
-                                    {this.state.jobKey.map(employer => {
-                                        return(
-                                            <li key={employer.id} className="emp-item">
-                                                <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
-                                                    <div className="last-update">{employer.lastUpdate}</div>
-                                                    <div className="button-text">{employer.key}</div>
-                                                </button>
-                                            </li>
-                                        )
-                                    })}
-                                </ul>
-                            </div>
+                            {this.state.search=="" &&
+                                <div className="col-3 list">
+                                    <ul className="emp-list">
+                                        {this.state.jobKey.map(employer => {
+                                            return(
+                                                <li key={employer.id} className="emp-item">
+                                                    <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
+                                                        <div className="last-update">{employer.lastUpdate}</div>
+                                                        <div className="button-text">{employer.key}</div>
+                                                    </button>
+                                                </li>
+                                            )
+                                        })}
+                                    </ul>
+                                </div>
+                            }
+                            {this.state.search!="" &&
+                                <div className="col-3 list">
+                                    <ul className="emp-list">
+                                        {this.state.jobKey.filter(k => k.key.indexOf(this.state.search) > -1).map(employer => {
+                                            return(
+                                                <li key={employer.id} className="emp-item">
+                                                    <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
+                                                        {/* <div className="last-update">{employer.lastUpdate}</div> */}
+                                                        <div className="button-text">{employer.key}</div>
+                                                    </button>
+                                                </li>
+                                            )
+                                        })}
+                                    </ul>
+                                </div>
+                            }
                             {/* Chat */}
                             <div className="col-9">
                                 {/* Messages */}
