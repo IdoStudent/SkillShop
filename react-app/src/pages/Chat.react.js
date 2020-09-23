@@ -95,47 +95,55 @@ class Chat extends Component {
             messages: DUMMY_DATA,
             employers: DUMMY_EMPLOYERS,
             currentEmployer: "Fred",
+            userType: "",
+            jobKey: ""
         }
     }
-// get user type from user table
+    // get user type from user table
     getUserType() {
         const email =  Auth.user.attributes.email
+        console.log("email: ",email);
         fetch(
-          `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
-            email )
-          .then((res) => res.json())
-          .then((result) => {
-            if (result.Item !== undefined)
-              this.setState({     
-                  userType: result.Item.userType
-              });
-             },
-          )
+            `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
+                email )
+            .then((res) => res.json())
+            .then((result) => {
+                if (result.Item !== undefined)
+                    // console.log("...");
+                    this.setState({     
+                        userType: result.Item.userType
+                    });
+                },
+            )
       }
-// get all matches with userEmail from matches table
+    // get all matches with userEmail from matches table
     getMatches() {
         const email =  Auth.user.attributes.email
+        console.log("get matches",email);
         fetch(
             `https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` +
               email )
             .then((res) => res.json())
             .then((result) => {
-              if (result.Item !== undefined)
-                this.setState({     
-                    jobKey: result.Item.jobKey
-                });
-               },
+                if (result.Item !== undefined)
+                    // console.log("...");
+                    this.setState({     
+                        jobKey: result.Item.jobKey
+                    });
+                },
             )
         }
 
-        componentDidMount() {
-            this.getUserType();
-            this.getMatches();
-        }
+    componentDidMount() {
+        this.getUserType();
+        this.getMatches();
+    }
 
     chooseEmployer = (employer) => {
         // console.log('Employer ',employer.name,' was chosen');
         this.setState({ currentEmployer:employer.name });
+        console.log("User type2",this.state.userType);
+        console.log("matches: ",this.state.jobKey);
     }
 
     render(){
@@ -145,10 +153,18 @@ class Chat extends Component {
                     <div className="container">
                         {/* Header */}
                         <div className="row">
-                            {/* Search */}
-                            <div className="col-3 search">
-                                <input className="input-text-search" type="text" placeholder="Search"></input>
-                            </div>
+                            {/* JobSeeker Search */}
+                            {this.state.userType=="jobseeker" && 
+                                <div className="col-3 search">
+                                    <input className="input-text-search" type="text" placeholder="Search"></input>
+                                </div>
+                            }
+                            {/* JobSeeker Search */}
+                            {this.state.userType=="employer" && 
+                                <div className="col-3 search">
+                                    implement
+                                </div>
+                            }
                             {/* Title */}
                             <div className="col-9 title">
                                 <div className="title-text">{this.state.currentEmployer}</div>
