@@ -2,18 +2,18 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  background-color: #F8F8FB !important;
+  background-color: #f8f8fb !important;
 }
 
 .page {
-  background-color: #F8F8FB !important;
+  background-color: #f8f8fb !important;
 }
 
 /* LANDING PAGE STYLES */
 
 .background {
-  background-color: #F8F8FB;
-  background-image: url('./img/background.png');
+  background-color: #f8f8fb;
+  background-image: url("./img/background.png");
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
@@ -86,23 +86,23 @@ body {
   font-size: 3rem;
 }
 
-.landingPage .card{
+.landingPage .card {
   background-color: #ffffff;
   width: 400px;
   min-height: 200px;
   position: absolute;
-  left: 50%; 
+  left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  box-shadow: 0px 0px 17px 1px rgba(0,0,0,0.15);
+  box-shadow: 0px 0px 17px 1px rgba(0, 0, 0, 0.15);
 }
 
-.landingPage .card .h2{
+.landingPage .card .h2 {
   padding: 5%;
 }
 
-.landingPage .card .row{
+.landingPage .card .row {
   margin-top: 2%;
   text-align: center;
 }
@@ -126,25 +126,25 @@ body {
 }
 
 .loginPage {
-  background-color: #F8F8FB;
+  background-color: #f8f8fb;
   width: 100%;
   height: 100%;
 }
 
-.loginPage .card{
+.loginPage .card {
   background-color: #ffffff;
   width: 400px;
   min-height: 240px;
   position: absolute;
-  left: 50%; 
+  left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
   padding-top: 20px;
-  box-shadow: 0px 0px 17px 1px rgba(0,0,0,0.15);
+  box-shadow: 0px 0px 17px 1px rgba(0, 0, 0, 0.15);
 }
 
-.loginPage .wrapper{
+.loginPage .wrapper {
   width: 30%;
   min-height: 600px;
   padding-top: 100px;
@@ -161,7 +161,7 @@ body {
   height: 10px;
 }
 
-.loginPage .errorMsg p{
+.loginPage .errorMsg p {
   color: #cd201f;
   font-size: 0.875rem;
 }
@@ -169,46 +169,46 @@ body {
 .loginPage .ui.button {
   margin-top: 10px;
   width: 65%;
-  background-color: #26CB64;
-  background-image: linear-gradient(to bottom right, #26CB64, #18d311);
+  background-color: #26cb64;
+  background-image: linear-gradient(to bottom right, #26cb64, #18d311);
   color: white;
   font-weight: lighter;
   border-radius: 0px;
 }
 
 .loginPage .ui.button:hover {
-  background-color: #26CB64;
-  background-image: linear-gradient(to bottom right, #26CB64, #18d311);
+  background-color: #26cb64;
+  background-image: linear-gradient(to bottom right, #26cb64, #18d311);
   color: white;
 }
 
-.loginPage .ui.button .icon{
+.loginPage .ui.button .icon {
   color: white !important;
 }
 
 /* REGISTER PAGE STYLES */
 
 .registerPage {
-  background-color: #F8F8FB;
+  background-color: #f8f8fb;
   width: 100%;
   height: 100%;
 }
 
-.registerPage .card{
+.registerPage .card {
   background-color: #ffffff;
   width: 400px;
   min-height: 410px;
   position: absolute;
-  left: 50%; 
+  left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
   padding-top: 20px;
   margin-top: 85px;
-  box-shadow: 0px 0px 17px 1px rgba(0,0,0,0.15);
+  box-shadow: 0px 0px 17px 1px rgba(0, 0, 0, 0.15);
 }
 
-.registerPage .wrapper{
+.registerPage .wrapper {
   width: 30%;
   min-height: 600px;
   padding-top: 100px;
@@ -227,10 +227,10 @@ body {
 
 .registerPage .errorMsg.radios {
   margin-top: -20px;
-  margin-bottom: 15px
+  margin-bottom: 15px;
 }
 
-.registerPage .errorMsg p{
+.registerPage .errorMsg p {
   color: #cd201f;
   font-size: 0.875rem;
 }
@@ -238,20 +238,20 @@ body {
 .registerPage .ui.button {
   margin-top: 10px;
   width: 65%;
-  background-color: #26CB64;
-  background-image: linear-gradient(to bottom right, #26CB64, #18d311);
+  background-color: #26cb64;
+  background-image: linear-gradient(to bottom right, #26cb64, #18d311);
   color: white;
   font-weight: lighter;
   border-radius: 0px;
 }
 
 .registerPage .ui.button:hover {
-  background-color: #26CB64;
-  background-image: linear-gradient(to bottom right, #26CB64, #18d311);
+  background-color: #26cb64;
+  background-image: linear-gradient(to bottom right, #26cb64, #18d311);
   color: white;
 }
 
-.registerPage .ui.button .icon{
+.registerPage .ui.button .icon {
   color: white !important;
 }
 
@@ -262,7 +262,7 @@ body {
 }
 
 .icon.button:hover .icon {
-  color: #26CB64 !important;
+  color: #26cb64 !important;
 }
 
 .selectgroup-input:checked + .selectgroup-button {
@@ -280,7 +280,7 @@ body {
 
 .acceptButton {
   background-color: #fafafa !important;
-  color: #26CB64 !important;
+  color: #26cb64 !important;
   font-weight: lighter !important;
   height: 30px;
   padding-top: 0px !important;
@@ -292,14 +292,14 @@ body {
 }
 
 .acceptButton:hover {
-  background-color: #26CB64 !important;
+  background-color: #26cb64 !important;
 }
 
-.acceptButton .icon{
-  color: #26CB64 !important;
+.acceptButton .icon {
+  color: #26cb64 !important;
 }
 
-.acceptButton:hover .icon{
+.acceptButton:hover .icon {
   color: white !important;
 }
 
@@ -321,21 +321,20 @@ body {
 }
 
 .cancelButton.delete {
-  color: rgba(0,0,0,.87) !important;
+  color: rgba(0, 0, 0, 0.87) !important;
 }
 
 .cancelButton.delete:hover {
-  background-color: rgba(0,0,0,.87)!important;
+  background-color: rgba(0, 0, 0, 0.87) !important;
 }
 
 .cancelButton:hover {
   background-color: #cb2626 !important;
 }
 
-.cancelButton .icon{
+.cancelButton .icon {
   color: white !important;
 }
-
 
 /* MODAL STYLES */
 
@@ -350,7 +349,7 @@ body {
   padding: 0.65rem 1rem !important;
 }
 
-.modalSubmit .acceptButton{
+.modalSubmit .acceptButton {
   margin-right: 100px !important;
 }
 
@@ -370,7 +369,7 @@ body {
   overflow: visible !important;
 }
 
-.modal .content{
+.modal .content {
   border-radius: 0px !important;
 }
 
@@ -390,7 +389,7 @@ body {
 }
 
 .ui.dimmer {
-  background-color: rgba(0,0,0,.85) !important;
+  background-color: rgba(0, 0, 0, 0.85) !important;
 }
 
 /* CANDIDATES SCREEN */
@@ -428,7 +427,7 @@ body {
 }
 
 .pageHeading {
-  text-align: center; 
+  text-align: center;
   padding: 20px;
 }
 
@@ -450,9 +449,9 @@ body {
 /* CHAT */
 
 .my-body {
-  margin-top:100px;
+  margin-top: 100px;
   overflow: hidden;
-  height:100%;
+  height: 100%;
 }
 
 .test {
@@ -462,39 +461,39 @@ body {
 /* search */
 
 .search {
-  border:1px solid rgb(210, 217, 241);
-  height:40px;
+  border: 1px solid rgb(210, 217, 241);
+  height: 40px;
   background-color: white;
 }
 
 .input-text-search {
-  width:100%;
+  width: 100%;
   font-size: 14px;
-  margin-top:10px;
-  border:1px solid rgb(210, 217, 241);
+  margin-top: 10px;
+  border: 1px solid rgb(210, 217, 241);
 }
 
 /* title */
 
 .title {
-  border:1px solid rgb(210, 217, 241);
-  height:40px;
+  border: 1px solid rgb(210, 217, 241);
+  height: 40px;
   background-color: white;
 }
 
 .title-text {
   text-align: center;
   font-size: 20px;
-  margin-top:10px;
+  margin-top: 10px;
   font-weight: 900;
 }
 
 /* list */
 
 .list {
-  height:520px;
-  border-bottom:1px solid rgb(210, 217, 241);
-  border-left:1px solid rgb(210, 217, 241);
+  height: 520px;
+  border-bottom: 1px solid rgb(210, 217, 241);
+  border-left: 1px solid rgb(210, 217, 241);
   white-space: nowrap;
   overflow: scroll;
   scrollbar-width: none;
@@ -502,50 +501,49 @@ body {
 
 .emp-list {
   list-style-type: none;
-  padding:0;
-  margin-left:-11px;
-  margin-right:-10px;
+  padding: 0;
+  margin-left: -11px;
+  margin-right: -10px;
 }
 
 .emp-item {
-  
 }
 
 .button-text {
   margin-left: 25px;
-  margin-bottom:10px;
+  margin-bottom: 10px;
   font-weight: bolder;
 }
 
 .my-button-list {
-  width:100%;
-  height:60px;
-  margin:0;
-  padding:0;
-  text-align:left;
+  width: 100%;
+  height: 60px;
+  margin: 0;
+  padding: 0;
+  text-align: left;
   background-color: transparent;
-  border:1px solid rgb(210, 217, 241);
+  border: 1px solid rgb(210, 217, 241);
 }
 
 .my-button-list:focus {
   background-color: white;
-  border:none;
+  border: none;
 }
 
 .last-update {
   text-align: right;
-  margin-right:10px;
-  font-size:10px;
-  color:gray;
+  margin-right: 10px;
+  font-size: 10px;
+  color: gray;
 }
 
 /* chat */
 
 .chat-box {
-  height:470px;
-  border-top:1px solid rgb(210, 217, 241);
-  border-right:1px solid rgb(210, 217, 241);
-  border-bottom:1px solid rgb(210, 217, 241);
+  height: 470px;
+  border-top: 1px solid rgb(210, 217, 241);
+  border-right: 1px solid rgb(210, 217, 241);
+  border-bottom: 1px solid rgb(210, 217, 241);
   background-color: white;
   overflow: scroll;
   scrollbar-width: none;
@@ -556,79 +554,79 @@ body {
 }
 
 .message-jobseeker {
-  margin:15px 0;
-  text-align:right;
-  padding:5px;
+  margin: 15px 0;
+  text-align: right;
+  padding: 5px;
   margin-right: 30px;
 }
 
 .message-Employer {
-  width:40%;
+  width: 40%;
 }
 
 .message-jobseeker div:nth-child(1) {
-  font-size:11px;
-  opacity:0.9;
-  margin-bottom:6px;
+  font-size: 11px;
+  opacity: 0.9;
+  margin-bottom: 6px;
 }
 
 .message-jobseeker div:nth-child(2) {
-  float:right;
-  background:#6fcf72;
-  margin-left:450px;
-  padding:8px 16px;
+  float: right;
+  background: #6fcf72;
+  margin-left: 450px;
+  padding: 8px 16px;
 }
 
 .message-Employer div:nth-child(1) {
-  font-size:11px;
-  opacity:0.9;
-  margin-bottom:6px;
+  font-size: 11px;
+  opacity: 0.9;
+  margin-bottom: 6px;
 }
 
 .message-Employer div:nth-child(2) {
-  float:left;
-  background:rgb(233, 231, 231);
-  padding:8px 16px;
+  float: left;
+  background: rgb(233, 231, 231);
+  padding: 8px 16px;
 }
 
 .divider {
-  width:100%;
-  color:white;
+  width: 100%;
+  color: white;
 }
 
 /* input */
 
 .text-box {
-  height:50px;
+  height: 50px;
   background-color: white;
-  border:1px solid rgb(210, 217, 241);
+  border: 1px solid rgb(210, 217, 241);
 }
 
 .input-text {
-  width:100%;
+  width: 100%;
   font-size: 14px;
-  margin-top:14px;
-  border:1px solid rgb(210, 217, 241);
+  margin-top: 14px;
+  border: 1px solid rgb(210, 217, 241);
 }
 
 .my-button {
-  height:60%;
-  width:100%;
-  overflow:hidden;
+  height: 60%;
+  width: 100%;
+  overflow: hidden;
   background-color: #3e8e41;
   border: none;
   color: white;
   border-radius: 12px;
   transition-duration: 0.4s;
-  margin-top:10px;
+  margin-top: 10px;
 }
 
 .my-button:hover {
-  background-color:#4CAF50;
+  background-color: #4caf50;
 }
 
 .my-button:active {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
 }
@@ -637,13 +635,13 @@ body {
 
 .siteLogo {
   height: 70px;
-  width: 100%; 
-  background-image: url('./img/logo.png');
+  width: 100%;
+  background-image: url("./img/logo.png");
   background-size: cover;
 }
 
 .sidebar {
-  background-color: #373B53 !important;
+  background-color: #373b53 !important;
   width: 75px !important;
   padding: 0px !important;
   border: none !important;
@@ -658,12 +656,12 @@ body {
 /* SITE WRAPPER - TOP NAV */
 
 .topNav {
-  position:fixed;
-  left:0;
-  top:0;
+  position: fixed;
+  left: 0;
+  top: 0;
   z-index: 998 !important;
   background-color: white;
-  width: 100%; 
+  width: 100%;
   height: 70px;
   padding-left: 120px;
 }
@@ -710,7 +708,7 @@ body {
 .accountInfo .notifications .nav-unread {
   margin-top: -5px;
   left: 20px;
-  background: #26CB64;
+  background: #26cb64;
 }
 
 .accountInfo {
@@ -718,11 +716,11 @@ body {
 }
 
 .verticalDivider {
-  border-right: 1px solid #C9CED6;
+  border-right: 1px solid #c9ced6;
   display: inline;
   margin-left: 40px;
   margin-right: 30px;
-  vertical-align: top
+  vertical-align: top;
 }
 
 /* SITE WRAPPER - MENU ITEMS */
@@ -755,7 +753,7 @@ body {
 .active .item .icon {
   color: #4caf4f46 !important;
   -webkit-text-stroke-width: 2px;
-  -webkit-text-stroke-color: #4CAF50;
+  -webkit-text-stroke-color: #4caf50;
 }
 
 .active .item {
@@ -766,11 +764,11 @@ body {
 
 .logout {
   height: 70px;
-  width: 100%; 
+  width: 100%;
   position: absolute;
   bottom: 0;
   left: 0;
-  border-top: 1px solid #494E67;
+  border-top: 1px solid #494e67;
   text-align: center;
   color: white;
 }
@@ -793,7 +791,6 @@ body {
   border-left: none;
   border-top: none;
 
-
   /* TEXT */
   font-size: 1.15em !important;
 }
@@ -806,6 +803,45 @@ body {
   margin-top: 10px;
 }
 
+/* DOCUMENT UPLOAD */
 
+.dzu-dropzone {
+  border: none !important;
+  overflow: auto !important;
+  background-color: #fafafa;
+}
 
+.dzu-dropzone .dzu-inputLabel {
+  color: rgb(190, 189, 189);
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  font-weight: normal;
+  font-size: 16px;
+}
 
+.dzu-dropzone .dzu-submitButton {
+  background-color: #26cb64;
+  color: white;
+  font-weight: lighter;
+  height: 30px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border-radius: 10em;
+  width: 100px;
+}
+
+.dzu-dropzone .dzu-submitButtonContainer {
+  margin-top: -40px;
+  margin-right: -80%;
+}
+
+.dzu-dropzone .dzu-inputLabelWithFiles {
+  background-color: #E6E6E6;
+  color: #2484FF;
+  font-weight: lighter;
+  height: 30px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border-radius: 10em;
+  width: 100px;
+  margin-left: 4%;
+}

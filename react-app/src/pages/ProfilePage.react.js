@@ -12,6 +12,7 @@ import Skills from "../components/JobseekerProfile/Skills.react";
 import JobseekerExpContainer from "../components/JobseekerProfile/JobseekerExpContainer.react";
 import JobseekerEduContainer from "../components/JobseekerProfile/JobseekerEduContainer.react";
 import RemoveUser from "../components/JobseekerProfile/RemoveUser.react";
+import UploadDocument from "../components/JobseekerProfile/UploadDocument.react";
 
 class ProfilePage extends Component {
   state = {
@@ -58,8 +59,12 @@ class ProfilePage extends Component {
                 {/* Jobseeker Education Set */}
                 <JobseekerEduContainer />
 
-                {/* Remove User Set */}
+                {/* Upload Document */}
+                <UploadDocument />
+
+                {/* Remove User */}
                 <RemoveUser />
+
               </Grid.Col>
             </Grid.Row>
           </Container>
