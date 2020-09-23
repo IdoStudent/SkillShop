@@ -455,6 +455,10 @@ body {
   height:100%;
 }
 
+.test {
+  overflow: hidden;
+}
+
 /* search */
 
 .search {

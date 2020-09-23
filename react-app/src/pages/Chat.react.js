@@ -88,6 +88,15 @@ const DUMMY_EMPLOYERS = [
     },
 ]
 
+const TEST = [
+    {
+        name: "ido"
+    },
+    {
+        name: "yaron"
+    }
+]
+
 class Chat extends Component {
     constructor(){
         super()
@@ -96,7 +105,7 @@ class Chat extends Component {
             employers: DUMMY_EMPLOYERS,
             currentEmployer: "Fred",
             userType: "",
-            jobKey: ""
+            jobKey: []
         }
     }
     // get user type from user table
@@ -125,14 +134,16 @@ class Chat extends Component {
               email )
             .then((res) => res.json())
             .then((result) => {
-                if (result.Item !== undefined)
-                    // console.log("...");
-                    this.setState({     
-                        jobKey: result.Item.jobKey
-                    });
+                // console.log("result length: ",result.length)
+                for (var i = 0; i < result.length; i++)
+                    // console.log(result[i].jobKey);
+                    // this.setState({     
+                    //     jobKey: result[i].jobKey
+                    // });
+                    this.state.jobKey.push({ key : result[i].jobKey , lastUpdate : "1d" });
                 },
             )
-        }
+    }
 
     componentDidMount() {
         this.getUserType();
@@ -143,7 +154,10 @@ class Chat extends Component {
         // console.log('Employer ',employer.name,' was chosen');
         this.setState({ currentEmployer:employer.name });
         console.log("User type2",this.state.userType);
-        console.log("matches: ",this.state.jobKey);
+        for(var i=0;i<this.state.jobKey.length;i++){
+            console.log("match",i,"is:",this.state.jobKey[i]);
+        }
+        
     }
 
     render(){
@@ -159,7 +173,7 @@ class Chat extends Component {
                                     <input className="input-text-search" type="text" placeholder="Search"></input>
                                 </div>
                             }
-                            {/* JobSeeker Search */}
+                            {/* Employer Search */}
                             {this.state.userType=="employer" && 
                                 <div className="col-3 search">
                                     implement
@@ -175,7 +189,17 @@ class Chat extends Component {
                             {/* List */}
                             <div className="col-3 list">
                                 <ul className="emp-list">
-                                    {this.state.employers.map(employer => {
+                                    {this.state.jobKey.map(employer => {
+                                        return(
+                                            <li key={employer.id} className="emp-item">
+                                                <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
+                                                    <div className="last-update">{employer.lastUpdate}</div>
+                                                    <div className="button-text">{employer.key}</div>
+                                                </button>
+                                            </li>
+                                        )
+                                    })}
+                                    {/* {this.state.employers.map(employer => {
                                         return(
                                             <li key={employer.id} className="emp-item">
                                                 <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
@@ -184,7 +208,7 @@ class Chat extends Component {
                                                 </button>
                                             </li>
                                         )
-                                    })}
+                                    })} */}
                                 </ul>
                             </div>
                             {/* Chat */}
