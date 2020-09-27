@@ -37,6 +37,7 @@ class JobCandidates extends React.Component {
     this.getJobseekers();
 
     // need to filter in between here
+    this.filterJobseekers();
 
     // AFTER WE HAVE GOTTEN ALL THE CANDIDATES WE WANT, SET THE FIRST CANDIDATE TO DISPLAY
     this.setCandidate();
@@ -99,14 +100,18 @@ class JobCandidates extends React.Component {
     }
   };
 
-  filterJobseekers() {
+  filterJobseekers = () => {
     // WHEN FILTERING, LOOK THROUGH THE JOBSEEKER ARRAY FOR MATCHES. ANYTHING THAT DOESN'T MATCH, YOU CAN REMOVE FROM THE ARRAY USING 'jobseekers.splice(INDEX, 1)'
     // SPLICE SYNTAX IS: splice(position in array, amount of elements to remove)
 
-    // if(this.state.filters.every(r => this.state.skills.Item.userSkills.includes(r))){
-    //   items.push(result.Item);
-    //
-  }
+    // CHECK IF INITIALISED
+    if (initialised) {
+      console.log("length", jobseekers.length)
+    } else {
+      // IF INITIALISED IS FALSE, RECHECK IN 250ms OTHERWISE OUR DATA WILL BE UNDEFINED
+      setTimeout(this.filterJobseekers, 250);
+    }
+  };
 
   acceptChanges = () => {
     let newNum = this.state.num + 1;

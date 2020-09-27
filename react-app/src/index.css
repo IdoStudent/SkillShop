@@ -806,9 +806,10 @@ body {
 /* DOCUMENT UPLOAD */
 
 .dzu-dropzone {
-  border: none !important;
+  border: 1px dashed #c5c3c3 !important;
   overflow: auto !important;
   background-color: #fafafa;
+
 }
 
 .dzu-dropzone .dzu-inputLabel {
@@ -827,6 +828,7 @@ body {
   padding-bottom: 0px;
   border-radius: 10em;
   width: 100px;
+  margin-top: 65px;
 }
 
 .dzu-dropzone .dzu-submitButtonContainer {
