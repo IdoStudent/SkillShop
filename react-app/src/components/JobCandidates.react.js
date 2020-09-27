@@ -7,6 +7,8 @@ import { Button } from "semantic-ui-react";
 
 var jobseekers = [];
 var initialised = false;
+var skillsSet = false;
+var skillsFiltered = false;
 
 class JobCandidates extends React.Component {
   constructor(props) {
@@ -14,11 +16,12 @@ class JobCandidates extends React.Component {
 
     this.state = {
       num: 0,
+      filters: ["PHP"],
       currentCandidate: {
         userAbout: " ",
         userCity: " ",
         userEmail: " ",
-        userFirstName: " test ",
+        userFirstName: " ",
         userLastName: " ",
         userMiddleName: " ",
         userPhoneNumber: " ",
@@ -62,7 +65,7 @@ class JobCandidates extends React.Component {
           element.userSkills = [" "];
         });
 
-        // (STILL IN THE LOOP) 
+        // (STILL IN THE LOOP)
         // FOR EACH JOBSEEKER IN OUR ARRAY, QUERY THE DATABSAE FOR THEIR SKILLS AND ADD THAT TO THEIR OBJECT IN THE JOBSEEKERS ARRAY
         this.getSkills();
       });
@@ -87,30 +90,37 @@ class JobCandidates extends React.Component {
           }
         });
     }
+    skillsSet = true;
   }
 
   setCandidate = () => {
     // CHECK IF INITIALISED IS TRUE (MEANING THE END OF getSkills() HAS BEEN REACHED AND ALL THE DATA IS SET)
-    if (initialised) {
-      // SET OUR STATE currentCandidate TO THE FIRST INDEX OF OUR FILTERED JOBSEEKERS ARRAY
-      this.setState({ currentCandidate: jobseekers[this.state.num] });
+    if (initialised && skillsFiltered) {
+        // SET OUR STATE currentCandidate TO THE FIRST INDEX OF OUR FILTERED JOBSEEKERS ARRAY
+        this.setState({ currentCandidate: jobseekers[this.state.num] });
     } else {
       // IF INITIALISED IS FALSE, RECHECK IN 250ms OTHERWISE OUR DATA WILL BE UNDEFINED
       setTimeout(this.setCandidate, 250);
     }
+    console.log(this.state.currentCandidate);
   };
 
   filterJobseekers = () => {
     // WHEN FILTERING, LOOK THROUGH THE JOBSEEKER ARRAY FOR MATCHES. ANYTHING THAT DOESN'T MATCH, YOU CAN REMOVE FROM THE ARRAY USING 'jobseekers.splice(INDEX, 1)'
     // SPLICE SYNTAX IS: splice(position in array, amount of elements to remove)
-
     // CHECK IF INITIALISED
-    if (initialised) {
-      console.log("length", jobseekers.length)
+    if (initialised && skillsSet) {
+      for (var i = 0; i < jobseekers.length; i++) {
+        if(!this.state.filters.every(r => jobseekers[i].userSkills.includes(r))){
+          jobseekers.splice(i, 1);
+          i-=1;
+        }
+      }
     } else {
       // IF INITIALISED IS FALSE, RECHECK IN 250ms OTHERWISE OUR DATA WILL BE UNDEFINED
       setTimeout(this.filterJobseekers, 250);
     }
+    skillsFiltered = true;
   };
 
   acceptChanges = () => {
