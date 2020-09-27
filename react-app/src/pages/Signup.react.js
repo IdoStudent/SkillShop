@@ -9,6 +9,7 @@ const validEmailRegex =
   RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
 class Signup extends Component {
+
   state = {
     username: "",
     email: "",
@@ -21,7 +22,9 @@ class Signup extends Component {
     passwordErrMsg: "",
     passwordConfErrMsg: "",
 
-    sendingData: false
+    sendingData: false,
+
+    validRegistration: false
   };
 
   handleSubmit = async (event) => {
@@ -42,11 +45,9 @@ class Signup extends Component {
             "custom:role": this.state.role,
           },
         });
-        console.log(signUpResponse);
-        this.props.history.push({
-          pathname: '/login',
-          email: email,
-      });
+
+        this.setState({validRegistration: true})
+
       } catch (error) {
         this.setState({sendingData: false})
 
@@ -123,7 +124,10 @@ class Signup extends Component {
   };
 
   sendtoLogin = () => {
-    this.props.history.push("/login");
+    this.props.history.push({
+      pathname: '/login',
+      email: this.state.email,
+    });
   };
 
   componentDidMount(){
@@ -136,106 +140,90 @@ class Signup extends Component {
   }
 
   render() {
-    return (
-      <div className="background registerPage">
+    return <div className="background registerPage">
         <Container className="wrapper">
           <Header.H3>Register</Header.H3>
-          <Container className="card">
-            <Grid className="landingGrid">
-              <Grid.Row>
-                {/* ACCOUNT TYPE RADIOS */}
-                <Grid.Col md={10} offset={1}>
-                  <Form.Group label="Select your account type">
-                    <Form.Radio
-                      isInline
-                      label="I'm a Jobseeker"
-                      name="accountType"
-                      value="jobseeker"
-                      onChange={this.handleRadio}
-                      checked={this.state.role === "jobseeker"}
-                    />
-                    <Form.Radio
-                      isInline
-                      label="I'm an Employer"
-                      name="accountType"
-                      value="employer"
-                      onChange={this.handleRadio}
-                      checked={this.state.role === "employer"}
-                    />
-                  </Form.Group>
-                  <Container className="errorMsg radios">
+
+          {this.state.validRegistration === false ? // Display if user has not signed up
+
+            <Container className="card">
+              <Grid className="landingGrid">
+                <Grid.Row>
+                  {/* ACCOUNT TYPE RADIOS */}
+                  <Grid.Col md={10} offset={1}>
+                    <Form.Group label="Select your account type">
+                      <Form.Radio isInline label="I'm a Jobseeker" name="accountType" value="jobseeker" onChange={this.handleRadio} checked={this.state.role === "jobseeker"} />
+                      <Form.Radio isInline label="I'm an Employer" name="accountType" value="employer" onChange={this.handleRadio} checked={this.state.role === "employer"} />
+                    </Form.Group>
+                    <Container className="errorMsg radios">
                       <p> {this.state.roleErrMsg} </p>
                     </Container>
-                </Grid.Col>
+                  </Grid.Col>
 
-                {/* FORM INPUTS */}
-                <Grid.Col md={8} offset={2}>
-                  <Form onSubmit={this.handleSubmit}>
-                    <Form.Group label="Email" isRequired className="formLabelLeft">
-                      <Form.Input
-                        name="email"
-                        value={this.state.email}
-                        onChange={this.onInputChange}
-                        invalid={this.state.emailErr}
-                      />
-                    </Form.Group>
+                  {/* FORM INPUTS */}
+                  <Grid.Col md={8} offset={2}>
+                    <Form>
+                      <Form.Group label="Email" isRequired className="formLabelLeft">
+                        <Form.Input name="email" value={this.state.email} onChange={this.onInputChange} invalid={this.state.emailErr} />
+                      </Form.Group>
 
-                    <Container className="errorMsg">
-                      <p> {this.state.emailErrMsg} </p>
-                    </Container>
+                      <Container className="errorMsg">
+                        <p> {this.state.emailErrMsg} </p>
+                      </Container>
 
-                    <Form.Group label="Password" isRequired className="formLabelLeft">
-                      <Form.Input
-                        name="password"
-                        type="password"
-                        value={this.state.password}
-                        onChange={this.onInputChange}
-                        invalid={this.state.passwordErr}
-                      />
-                    </Form.Group>
+                      <Form.Group label="Password" isRequired className="formLabelLeft">
+                        <Form.Input name="password" type="password" value={this.state.password} onChange={this.onInputChange} invalid={this.state.passwordErr} />
+                      </Form.Group>
 
-                    <Container className="errorMsg">
-                      <p> {this.state.passwordErrMsg} </p>
-                    </Container>
+                      <Container className="errorMsg">
+                        <p> {this.state.passwordErrMsg} </p>
+                      </Container>
 
-                    <Form.Group label="Re-Type Password" isRequired className="formLabelLeft">
-                      <Form.Input
-                        name="passwordConfirm"
-                        type="password"
-                        value={this.state.passwordConfirm}
-                        onChange={this.onInputChange}
-                        invalid={this.state.passwordConfErr}
-                      />
-                    </Form.Group>
+                      <Form.Group label="Re-Type Password" isRequired className="formLabelLeft">
+                        <Form.Input name="passwordConfirm" type="password" value={this.state.passwordConfirm} onChange={this.onInputChange} invalid={this.state.passwordConfErr} />
+                      </Form.Group>
 
-                    <Container className="errorMsg">
-                      <p> {this.state.passwordConfErrMsg} </p>
-                    </Container>
+                      <Container className="errorMsg">
+                        <p> {this.state.passwordConfErrMsg} </p>
+                      </Container>
 
-                    <Button animated={!this.state.sendingData} loading={this.state.sendingData}>
-                      <Button.Content type="submit" visible>
-                        Register
-                      </Button.Content>
-                      {(this.state.sendingData === false) ? <Button.Content hidden><Icon name="arrow right" /></Button.Content> : null}
-                    </Button>
-                  </Form>
-                </Grid.Col>
-              </Grid.Row>
-            </Grid>
-          </Container>
-          <Container className="errorMsg">
-            <p> {this.state.errorMsg} </p>
-          </Container>
+                      <Button animated={!this.state.sendingData} loading={this.state.sendingData} type="button" onClick={this.handleSubmit}>
+                        <Button.Content visible>Register</Button.Content>
+                        {this.state.sendingData === false ? <Button.Content hidden>
+                            <Icon name="arrow right" />
+                          </Button.Content> : null}
+                      </Button>
+                    </Form>
+                  </Grid.Col>
+                </Grid.Row>
+              </Grid>
+            </Container> : // Display if use has successfully registered
+
+            <Container className="card success">
+              <Header.H2>Registration was succesful!</Header.H2>
+
+              <p> Before you can login, you need to confirm your email. <br/> <br/>
+                {" "}
+                To do that, find the email sent by us in your inbox and
+                simply click the link. Once you've done that, you can click
+                the button below to go to the login page.{" "}
+              </p>
+
+              <Button animated type="button" onClick={this.sendtoLogin}>
+                <Button.Content visible>Go to Login</Button.Content>
+                <Button.Content hidden>
+                  <Icon name="arrow right" />
+                </Button.Content>
+              </Button>
+            </Container>}
         </Container>
 
         <p className="bottomRight">
-          Already have an account?{" "}
-          <span onClick={this.sendtoLogin} className="linkText">
+          Already have an account? <span onClick={this.sendtoLogin} className="linkText">
             Login
           </span>
         </p>
-      </div>
-    );
+      </div>;
   }
 }
 

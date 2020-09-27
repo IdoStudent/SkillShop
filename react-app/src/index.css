@@ -255,6 +255,22 @@ body {
   color: white !important;
 }
 
+.registerPage .success {
+  padding-top: 90px;
+  padding-left: 30px;
+  padding-right: 30px;
+  color: #495057; 
+}
+
+.registerPage .success p {
+  margin-top: 20px;
+}
+
+.registerPage .success .ui.animated.button {
+  margin-top: 30px !important;
+  margin: 0 auto;
+}
+
 /* BUTTON STYLES */
 
 .icon.button {

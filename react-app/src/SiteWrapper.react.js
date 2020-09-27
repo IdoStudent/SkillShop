@@ -44,7 +44,6 @@ class SiteWrapper extends React.Component {
   componentDidMount() {
     var date = new Date();
     var hour = date.getHours();
-    console.log(date.getHours());
 
     if (hour < 12) {
       this.setState({ msg: "Good Morning, " });
