@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Container, Grid } from "tabler-react";
 import SiteWrapper from "../SiteWrapper.react";
 import Auth from "@aws-amplify/auth";
 
@@ -109,31 +110,31 @@ class Chat extends Component {
         return(
             <SiteWrapper>
                 <div className="my-body">
-                    <div className="container">
+                    <Container className="container">
                         {/* Header */}
-                        <div className="row">
+                        <Grid.Row className="row">
                             {/* JobSeeker Search */}
                             {this.state.userType=="jobseeker" && 
-                                <div className="col-3 search">
+                                <Grid.Col className="col-3 search">
                                     <input className="input-text-search" type="text" placeholder="Search" value={this.state.search} onChange={this.handleSearchChange}></input>
-                                </div>
+                                </Grid.Col>
                             }
                             {/* Employer Search */}
                             {this.state.userType=="employer" && 
-                                <div className="col-3 search">
+                                <Grid.Col className="col-3 search">
                                     to implement
-                                </div>
+                                </Grid.Col>
                             }
                             {/* Title */}
-                            <div className="col-9 title">
+                            <Grid.Col className="col-9 title">
                                 <div className="title-text">{this.state.currentEmployer}</div>
-                            </div>
-                        </div>
+                            </Grid.Col>
+                        </Grid.Row>
                         {/* Body */}
-                        <div className="row">
+                        <Grid.Row className="row">
                             {/* List */}
                             {this.state.search=="" &&
-                                <div className="col-3 list">
+                                <Grid.Col className="col-3 list">
                                     <ul className="emp-list">
                                         {this.state.jobKey.map(employer => {
                                             return(
@@ -146,28 +147,28 @@ class Chat extends Component {
                                             )
                                         })}
                                     </ul>
-                                </div>
+                                </Grid.Col>
                             }
                             {this.state.search!="" &&
-                                <div className="col-3 list">
+                                <Grid.Col className="col-3 list">
                                     <ul className="emp-list">
                                         {this.state.jobKey.filter(k => k.key.indexOf(this.state.search) > -1).map(employer => {
                                             return(
                                                 <li key={employer.id} className="emp-item">
                                                     <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
-                                                        {/* <div className="last-update">{employer.lastUpdate}</div> */}
+                                                        <div className="last-update">{employer.lastUpdate}</div>
                                                         <div className="button-text">{employer.key}</div>
                                                     </button>
                                                 </li>
                                             )
                                         })}
                                     </ul>
-                                </div>
+                                </Grid.Col>
                             }
                             {/* Chat */}
-                            <div className="col-9">
+                            <Grid.Col className="col-9">
                                 {/* Messages */}
-                                <div className="row chat-box">
+                                <Grid.Row className="row chat-box">
                                     <ul className="message-list">
                                         {this.state.messages.map(message => {
                                             return(
@@ -183,22 +184,22 @@ class Chat extends Component {
                                             )
                                         })}
                                     </ul>      
-                                </div>
+                                </Grid.Row>
                                 {/* Input */}
-                                <div className="row text-box">
-                                    <div className="col-9 col-sm-10 col-md-10 col-lg-11">
+                                <Grid.Row className="row text-box">
+                                    <Grid.Col className="col-9 col-sm-10 col-md-10 col-lg-11">
                                         <input className="input-text" type="text" placeholder="Type message here..."></input>
-                                    </div>
-                                    <div className="col-3 col-sm-2 col-md-2 col-lg-1">
+                                    </Grid.Col>
+                                    <Grid.Col className="col-3 col-sm-2 col-md-2 col-lg-1">
                                         <button className="fa fa-send-o my-button">
                                         </button>
-                                    </div>
-                                </div>   
+                                    </Grid.Col>
+                                </Grid.Row>   
 
-                            </div>
-                        </div>
+                            </Grid.Col>
+                        </Grid.Row>
                                     
-                    </div>
+                    </Container>
                 </div>
             </SiteWrapper>
         )
