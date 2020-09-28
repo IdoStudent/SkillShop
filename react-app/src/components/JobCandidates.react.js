@@ -16,7 +16,7 @@ class JobCandidates extends React.Component {
 
     this.state = {
       num: 0,
-      filters: ["PHP"],
+      filters: ["Responsibility"],
       currentCandidate: {
         userAbout: " ",
         userCity: " ",
@@ -68,6 +68,7 @@ class JobCandidates extends React.Component {
         // (STILL IN THE LOOP)
         // FOR EACH JOBSEEKER IN OUR ARRAY, QUERY THE DATABSAE FOR THEIR SKILLS AND ADD THAT TO THEIR OBJECT IN THE JOBSEEKERS ARRAY
         this.getSkills();
+        console.log(jobseekers);
       });
 
     initialised = true;
@@ -95,14 +96,13 @@ class JobCandidates extends React.Component {
 
   setCandidate = () => {
     // CHECK IF INITIALISED IS TRUE (MEANING THE END OF getSkills() HAS BEEN REACHED AND ALL THE DATA IS SET)
-    if (initialised && skillsFiltered) {
+    if (initialised && skillsFiltered && skillsSet) {
         // SET OUR STATE currentCandidate TO THE FIRST INDEX OF OUR FILTERED JOBSEEKERS ARRAY
         this.setState({ currentCandidate: jobseekers[this.state.num] });
     } else {
       // IF INITIALISED IS FALSE, RECHECK IN 250ms OTHERWISE OUR DATA WILL BE UNDEFINED
       setTimeout(this.setCandidate, 250);
     }
-    console.log(this.state.currentCandidate);
   };
 
   filterJobseekers = () => {
@@ -113,7 +113,7 @@ class JobCandidates extends React.Component {
       for (var i = 0; i < jobseekers.length; i++) {
         if(!this.state.filters.every(r => jobseekers[i].userSkills.includes(r))){
           jobseekers.splice(i, 1);
-          i-=1;
+          i--;
         }
       }
     } else {
