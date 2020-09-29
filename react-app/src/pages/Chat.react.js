@@ -63,13 +63,15 @@ class Chat extends Component {
     constructor(){
         super()
         this.state = {
-            messages: DUMMY_DATA,
+            // change to DUMMY_DATA for fake result
+            messages: [],
             jobTitles: JOB_POSITIONS_DUMMY_DATA,
             currentEmployer: "",
             userType: "",
             jobKey: [],
             search: "",
-            matchId: ""
+            matchId: "",
+            mess: ""
         }
     }
     // get user type from user table
@@ -91,7 +93,6 @@ class Chat extends Component {
     // get all matches with userEmail from matches table
     getMatches() {
         const email =  Auth.user.attributes.email
-        console.log("get matches",email);
         fetch(
             `https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` +
               email )
@@ -105,29 +106,26 @@ class Chat extends Component {
 
     getMatcheId() {
         const email =  Auth.user.attributes.email
-        console.log("get matches",email);
         fetch(
             `https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` +
               email )
             .then((res) => res.json())
             .then((result) => {
-             //       this.state.matchId.push({ matchId : result[0].matchId , lastUpdate : "1d" });
                     this.setState({     
                         matchId: result[0].matchId
                     });
                 },
             )
       }
-
+      // get messages with matchId
     getMessage() {
-        const matchId =  Auth.user.attributes.email
+        const matchId =  this.state.matchId
         fetch(
-            `https://rxo4bx6gwa.execute-api.ap-southeast-2.amazonaws.com/prod/?matchId=` +
-              matchId )
+            `https://rxo4bx6gwa.execute-api.ap-southeast-2.amazonaws.com/prod/?matchId=1`)
             .then((res) => res.json())
             .then((result) => {
                 for (var i = 0; i < result.length; i++)
-                    this.state.jobKey.push({ key : result[i].jobKey , lastUpdate : "1d" });
+                    this.state.messages.push({ messages: result[i].messages , lastUpdate : "1d" });
                 },
             )
     }
@@ -142,7 +140,6 @@ class Chat extends Component {
     chooseEmployer = (employer) => {
         console.log("Choose Employer");
         console.log("name:",employer.key)
-        console.log("matchId" + this.state.matchId)
         // console.log("User type2",this.state.userType);
     }
 
@@ -152,14 +149,20 @@ class Chat extends Component {
         // console.log("search value:",this.state.search);
     }
 
+    //get match id with jobkey
+    handleDropDownMenu = (event) => {
+        console.log('get match id: ' + this.state.matchId)
+        console.log('get message: ' + this.state.messages)
+    }
+
+    
     handleMessageSubmit = async (event) => {
-        
         try {
             const params = {
               matchId:  this.state.matchId,
               messageTime: 123456789,
-              message: "test",
-              userName: "test"
+              message: event.target.message,
+              userName: Auth.user.attributes.email
             };
             await axios.post(
               "https://rxo4bx6gwa.execute-api.ap-southeast-2.amazonaws.com/prod",
@@ -168,7 +171,7 @@ class Chat extends Component {
           } catch (err) {
             console.log(`An error has occurred: ${err}`);
           }
-        };
+    };
     
 
     render(){
@@ -179,20 +182,20 @@ class Chat extends Component {
                         {/* Header */}
                         <Grid.Row className="row">
                             {/* JobSeeker Search */}
-                            {this.state.userType=="jobseeker" && 
+                            {this.state.userType=="employer" && 
                                 <Grid.Col className="col-3 search">
                                     <input className="input-text-search" type="text" placeholder="Search" value={this.state.search} onChange={this.handleSearchChange}></input>
                                 </Grid.Col>
                             }
                             {/* Employer drop down menu */}
-                            {this.state.userType=="employer" && 
+                            {this.state.userType=="jobseeker" && 
                                 <Grid.Col className="col-3 search">
                                     <div>
                                         <form>
-                                            <select className="dropdown">
+                                            <select className="dropdown" onChange={this.handleDropDownMenu}>
                                                 {this.state.jobTitles.map(jobTitle => {
                                                     return(
-                                                        <option value={jobTitle.jobTitle} onChange="">{jobTitle.jobTitle}</option>
+                                                        <option value={jobTitle.jobTitle}>{jobTitle.jobTitle}</option>
                                                     )
                                                 })}
                                             </select>
@@ -261,16 +264,16 @@ class Chat extends Component {
                                     </ul>      
                                 </Grid.Row>
                                 {/* Input */}
-                                <Grid.Row className="row text-box">
-                                    <Grid.Col className="col-9 col-sm-10 col-md-10 col-lg-11">
-                                        <input className="input-text" type="text" placeholder="Type message here..."></input>
-                                    </Grid.Col>
-                                    <Grid.Col className="col-3 col-sm-2 col-md-2 col-lg-1">
-                                        <button className="fa fa-send-o my-button" onClick={this.handleMessageSubmit}>
-                                        </button>
-                                    </Grid.Col>
-                                </Grid.Row>   
-
+                                <form>
+                                    <Grid.Row className="row text-box">
+                                            <Grid.Col className="col-9 col-sm-10 col-md-10 col-lg-11">
+                                                <input className="input-text" type="text" placeholder="Type message here..." name="message"></input>
+                                            </Grid.Col>
+                                            <Grid.Col className="col-3 col-sm-2 col-md-2 col-lg-1">
+                                                <button type="submit" value="" className="my-button" onClick={this.handleMessageSubmit}><i className="fa fa-send-o"></i></button>
+                                            </Grid.Col>
+                                    </Grid.Row>   
+                                </form>
                             </Grid.Col>
                         </Grid.Row>
                                     
