@@ -64,16 +64,16 @@ class Chat extends Component {
         super()
         this.state = {
             // change to DUMMY_DATA for fake result
-            messages: [],
+            messages: DUMMY_DATA,
             jobTitles: JOB_POSITIONS_DUMMY_DATA,
             currentEmployer: "",
             userType: "",
             jobKey: [],
             search: "",
-            matchId: "",
-            mess: ""
+            matchId: ""
         }
     }
+
     // get user type from user table
     getUserType() {
         const email =  Auth.user.attributes.email
@@ -90,6 +90,7 @@ class Chat extends Component {
                 },
             )
       }
+
     // get all matches with userEmail from matches table
     getMatches() {
         const email =  Auth.user.attributes.email
@@ -104,7 +105,8 @@ class Chat extends Component {
             )
     }
 
-    getMatcheId() {
+    // get just matchID for email
+    getMatchId() {
         const email =  Auth.user.attributes.email
         fetch(
             `https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` +
@@ -117,11 +119,13 @@ class Chat extends Component {
                 },
             )
       }
-      // get messages with matchId
-    getMessage() {
-        const matchId =  this.state.matchId
+
+    // get messages depending on matchId 
+    async  getMessage() {
+        const matchId = this.state.matchId;
+        console.log("matchId in message: " + matchId)
         fetch(
-            `https://rxo4bx6gwa.execute-api.ap-southeast-2.amazonaws.com/prod/?matchId=1`)
+            `https://rxo4bx6gwa.execute-api.ap-southeast-2.amazonaws.com/prod/?matchId=1` )
             .then((res) => res.json())
             .then((result) => {
                 for (var i = 0; i < result.length; i++)
@@ -133,7 +137,7 @@ class Chat extends Component {
     componentDidMount() {
         this.getUserType();
         this.getMatches();
-        this.getMatcheId();
+        this.getMatchId();
         this.getMessage();
     }
 
@@ -157,10 +161,13 @@ class Chat extends Component {
 
     
     handleMessageSubmit = async (event) => {
+        var date = new Date();
+        var time = date.getTime();
+
         try {
             const params = {
               matchId:  this.state.matchId,
-              messageTime: 123456789,
+              messageTime: time,
               message: event.target.message,
               userName: Auth.user.attributes.email
             };
