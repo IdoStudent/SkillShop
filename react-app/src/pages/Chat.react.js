@@ -65,12 +65,13 @@ class Chat extends Component {
         this.state = {
             // change to DUMMY_DATA for fake result
             messages: DUMMY_DATA,
+            message: "",
             jobTitles: JOB_POSITIONS_DUMMY_DATA,
             currentEmployer: "",
             userType: "",
             jobKey: [],
             search: "",
-            matchId: ""
+            matchId: "abcdefg"
         }
     }
 
@@ -155,20 +156,24 @@ class Chat extends Component {
 
     //get match id with jobkey
     handleDropDownMenu = (event) => {
-        console.log('get match id: ' + this.state.matchId)
-        console.log('get message: ' + this.state.messages)
+        console.log('get match id: ' + this.state.matchId);
+        console.log('get message: ' + this.state.messages);
     }
 
+    handleMessageChange = (event) => {
+        this.setState({message: event.target.value});
+    }
     
     handleMessageSubmit = async (event) => {
+        
         var date = new Date();
         var time = date.getTime();
 
         try {
             const params = {
-              matchId:  this.state.matchId,
+              matchId:  "abcdefghi",
               messageTime: time,
-              message: event.target.message,
+              message: this.state.message,
               userName: Auth.user.attributes.email
             };
             await axios.post(
@@ -178,6 +183,8 @@ class Chat extends Component {
           } catch (err) {
             console.log(`An error has occurred: ${err}`);
           }
+
+          this.setState({message: ""});
     };
     
 
@@ -271,16 +278,14 @@ class Chat extends Component {
                                     </ul>      
                                 </Grid.Row>
                                 {/* Input */}
-                                <form>
-                                    <Grid.Row className="row text-box">
-                                            <Grid.Col className="col-9 col-sm-10 col-md-10 col-lg-11">
-                                                <input className="input-text" type="text" placeholder="Type message here..." name="message"></input>
-                                            </Grid.Col>
-                                            <Grid.Col className="col-3 col-sm-2 col-md-2 col-lg-1">
-                                                <button type="submit" value="" className="my-button" onClick={this.handleMessageSubmit}><i className="fa fa-send-o"></i></button>
-                                            </Grid.Col>
-                                    </Grid.Row>   
-                                </form>
+                                <Grid.Row className="row text-box">
+                                        <Grid.Col className="col-9 col-sm-10 col-md-10 col-lg-11">
+                                            <input className="input-text" type="text" placeholder="Type message here..." name="message" value={this.state.message} onChange={this.handleMessageChange}></input>
+                                        </Grid.Col>
+                                        <Grid.Col className="col-3 col-sm-2 col-md-2 col-lg-1">
+                                            <button className="my-button fa fa-send-o" onClick={this.handleMessageSubmit}></button>
+                                        </Grid.Col>
+                                </Grid.Row>   
                             </Grid.Col>
                         </Grid.Row>
                                     
