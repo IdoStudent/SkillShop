@@ -68,7 +68,8 @@ class Chat extends Component {
             currentEmployer: "",
             userType: "",
             jobKey: [],
-            search: ""
+            search: "",
+            matchId: ""
         }
     }
     // get user type from user table
@@ -102,6 +103,21 @@ class Chat extends Component {
             )
     }
 
+    getMatcheId() {
+        const email =  Auth.user.attributes.email
+        console.log("get matches",email);
+        fetch(
+            `https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` +
+              email )
+            .then((res) => res.json())
+            .then((result) => {
+             //       this.state.matchId.push({ matchId : result[0].matchId , lastUpdate : "1d" });
+                    this.setState({     
+                        matchId: result[0].matchId
+                    });
+                },
+            )
+      }
 
     getMessage() {
         const matchId =  Auth.user.attributes.email
@@ -119,13 +135,14 @@ class Chat extends Component {
     componentDidMount() {
         this.getUserType();
         this.getMatches();
+        this.getMatcheId();
         this.getMessage();
     }
 
     chooseEmployer = (employer) => {
         console.log("Choose Employer");
         console.log("name:",employer.key)
-        this.setState({ currentEmployer:employer.key });
+        console.log("matchId" + this.state.matchId)
         // console.log("User type2",this.state.userType);
     }
 
@@ -139,7 +156,7 @@ class Chat extends Component {
         
         try {
             const params = {
-              matchId:  "abc",
+              matchId:  this.state.matchId,
               messageTime: 123456789,
               message: "test",
               userName: "test"
