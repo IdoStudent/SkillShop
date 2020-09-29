@@ -88,9 +88,24 @@ class Chat extends Component {
             )
     }
 
+
+    getMessage() {
+        const matchId =  Auth.user.attributes.email
+        fetch(
+            `https://rxo4bx6gwa.execute-api.ap-southeast-2.amazonaws.com/prod/?matchId=` +
+              matchId )
+            .then((res) => res.json())
+            .then((result) => {
+                for (var i = 0; i < result.length; i++)
+                    this.state.jobKey.push({ key : result[i].jobKey , lastUpdate : "1d" });
+                },
+            )
+    }
+
     componentDidMount() {
         this.getUserType();
         this.getMatches();
+        this.getMessage();
     }
 
     chooseEmployer = (employer) => {
