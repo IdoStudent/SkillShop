@@ -16,7 +16,7 @@ class JobCandidates extends React.Component {
 
     this.state = {
       num: 0,
-      filters: ["Responsibility"],
+      filters: ["Flexibility", "Teamwork"],
       currentCandidate: {
         userAbout: " ",
         userCity: " ",
@@ -38,6 +38,7 @@ class JobCandidates extends React.Component {
 
   configureCandidates() {
     this.getJobseekers();
+    this.setFilters();
 
     // need to filter in between here
     this.filterJobseekers();
@@ -74,6 +75,21 @@ class JobCandidates extends React.Component {
     initialised = true;
   }
 
+  async setFilters(){
+    let items = [];
+    fetch("https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=test@test.com")
+    .then((res) => res.json())
+    .then((result) => {
+      items = result[0].skillsFilter;
+
+      this.setState(
+        {
+          filters: items,
+        }
+      );
+    });
+  }
+
   async getSkills() {
     // ITERATE THROUGH THE LENGTH OF THE ARRAY, LOOKING UP EACH USERS SKILLS LISTED IN THE DATABASE
     for (var i = 0; i < jobseekers.length; i++) {
@@ -97,8 +113,12 @@ class JobCandidates extends React.Component {
   setCandidate = () => {
     // CHECK IF INITIALISED IS TRUE (MEANING THE END OF getSkills() HAS BEEN REACHED AND ALL THE DATA IS SET)
     if (initialised && skillsFiltered && skillsSet) {
+      if (jobseekers[this.state.num] != null){
         // SET OUR STATE currentCandidate TO THE FIRST INDEX OF OUR FILTERED JOBSEEKERS ARRAY
         this.setState({ currentCandidate: jobseekers[this.state.num] });
+      } else {
+        alert("No matches for this search");
+      }
     } else {
       // IF INITIALISED IS FALSE, RECHECK IN 250ms OTHERWISE OUR DATA WILL BE UNDEFINED
       setTimeout(this.setCandidate, 250);
@@ -111,7 +131,9 @@ class JobCandidates extends React.Component {
     // CHECK IF INITIALISED
     if (initialised && skillsSet) {
       for (var i = 0; i < jobseekers.length; i++) {
+            console.log(this.state.filters);
         if(!this.state.filters.every(r => jobseekers[i].userSkills.includes(r))){
+          console.log("not a match");
           jobseekers.splice(i, 1);
           i--;
         }
@@ -123,17 +145,39 @@ class JobCandidates extends React.Component {
     skillsFiltered = true;
   };
 
-  acceptChanges = () => {
-    let newNum = this.state.num + 1;
+  acceptCandidate = () => {
+    if (initialised && skillsFiltered && skillsSet){
+      let newNum = this.state.num + 1;
 
-    if (newNum >= jobseekers.length) {
-      console.log("no more candidates");
-      // CAN ADD IN SOME LOGIC FOR WHAT TO DO WHEN THERE'S NO MORE CANDIDATES (REMOVE INFO AND DISPLAY A MESSAGE, POPUP, ALERT, ETC.)
-    } else {
-      this.setState({
-        num: newNum,
-        currentCandidate: jobseekers[newNum],
-      });
+      // If Employer likes candidate then add them to their matches database here
+
+      if (newNum >= jobseekers.length) {
+        console.log("no more candidates");
+        // CAN ADD IN SOME LOGIC FOR WHAT TO DO WHEN THERE'S NO MORE CANDIDATES (REMOVE INFO AND DISPLAY A MESSAGE, POPUP, ALERT, ETC.)
+        alert("No more candidates available at this time");
+      } else {
+        this.setState({
+          num: newNum,
+          currentCandidate: jobseekers[newNum],
+        });
+      }
+    }
+  };
+
+  rejectCandidate = () => {
+    if (initialised && skillsFiltered && skillsSet){
+      let newNum = this.state.num + 1;
+
+      if (newNum >= jobseekers.length) {
+        console.log("no more candidates");
+        // CAN ADD IN SOME LOGIC FOR WHAT TO DO WHEN THERE'S NO MORE CANDIDATES (REMOVE INFO AND DISPLAY A MESSAGE, POPUP, ALERT, ETC.)
+        alert("No more candidates available at this time");
+      } else {
+        this.setState({
+          num: newNum,
+          currentCandidate: jobseekers[newNum],
+        });
+      }
     }
   };
 
@@ -230,7 +274,7 @@ class JobCandidates extends React.Component {
                   negative
                   type="button"
                   color="red"
-                  onClick={this.acceptChanges}
+                  onClick={this.rejectCandidate}
                 >
                   {" "}
                   Dislike{" "}
@@ -240,7 +284,7 @@ class JobCandidates extends React.Component {
                   positive
                   type="submit"
                   color="green"
-                  onClick={this.acceptChanges}
+                  onClick={this.acceptCandidate}
                 >
                   {" "}
                   Like{" "}

@@ -136,6 +136,7 @@ getFirstApi() {
                   <Form.SelectGroupItem
                     label="Teamwork"
                     name="teamwork"
+                    value="Teamwork"
                     checked={this.state.teamwork}
                   />
                   <Form.SelectGroupItem
@@ -146,42 +147,50 @@ getFirstApi() {
                   />
                   <Form.SelectGroupItem
                     label="Responsibility"
-                    name="responsible"
+                    name="responsiblility"
+                    value="Responsibility"
                     checked={this.state.responsible}
                   />
                   <Form.SelectGroupItem
                     label="Time Management"
                     name="timemanagement"
+                    value="Time Management"
                     checked={this.state.timemanagement}
                   />
                   <Form.SelectGroupItem
                     label="Critical Thinking"
                     name="criticalthinking"
+                    value="Critical Thinking"
                     checked={this.state.criticalthinking}
                   />
                   <Form.SelectGroupItem
                     label="Organisation"
                     name="organisation"
+                    value="Organisation"
                     checked={this.state.organisation}
                   />
                   <Form.SelectGroupItem
                     label="Emotional Intelligence"
                     name="emotionalintelligence"
+                    value="Emotional Intelligence"
                     checked={this.state.emotionalintelligence}
                   />
                   <Form.SelectGroupItem
                     label="Attention to Detail"
                     name="attdetail"
+                    value="Attention to Detail"
                     checked={this.state.attdetail}
                   />
                   <Form.SelectGroupItem
                     label="Flexibility"
                     name="flexibility"
+                    value="Flexibility"
                     checked={this.state.flexibility}
                   />
                   <Form.SelectGroupItem
                     label="Customer Service"
                     name="customerservice"
+                    value="Customer Service"
                     checked={this.state.customerservice}
                   />
                 </Form.SelectGroup>

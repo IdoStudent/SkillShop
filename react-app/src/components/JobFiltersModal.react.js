@@ -6,65 +6,65 @@ import { Container, Button, Dropdown, Modal, Icon } from "semantic-ui-react";
 import { Form, Grid } from "tabler-react";
 
 const softSkillsOptions = [
-  { key: "communication", text: "Communication", value: "communication" },
-  { key: "teamwork", text: "Teamwork", value: "teamwork" },
-  { key: "creativity", text: "Creativity", value: "creativity" },
-  { key: "responsible", text: "Responsibility", value: "responsible" },
-  { key: "timemanagement", text: "Time Management", value: "timemanagement" },
+  { key: "communication", text: "Communication", value: "Communication" },
+  { key: "teamwork", text: "Teamwork", value: "Teamwork" },
+  { key: "creativity", text: "Creativity", value: "Creativity" },
+  { key: "responsible", text: "Responsibility", value: "Responsibility" },
+  { key: "timemanagement", text: "Time Management", value: "Time Management" },
   {
     key: "criticalthinking",
     text: "Critical Thinking",
-    value: "criticalthinking",
+    value: "Criticalthinking",
   },
-  { key: "organisation", text: "Organisation", value: "organisation" },
+  { key: "organisation", text: "Organisation", value: "Organisation" },
   {
     key: "emotionalintelligence",
     text: "Emotional Intelligence",
-    value: "emotionalintelligence",
+    value: "Emotional Intelligence",
   },
-  { key: "attdetail", text: "Attention to Detail", value: "attdetail" },
-  { key: "flexibility", text: "Flexibility", value: "flexibility" },
+  { key: "attdetail", text: "Attention to Detail", value: "Attention to Detail" },
+  { key: "flexibility", text: "Flexibility", value: "Flexibility" },
   {
     key: "customerservice",
     text: "Customer Service",
-    value: "customerservice",
+    value: "Customer Service",
   },
 ];
 
 const hardSkillsOptions = [
-  { key: "design", text: "Design", value: "design" },
-  { key: "dataanalysis", text: "Data Analysis", value: "dataanalysis" },
-  { key: "mathmetics", text: "Mathmetics", value: "mathmetics" },
-  { key: "copywriting", text: "Copy Writing", value: "copywriting" },
-  { key: "marketing", text: "Marketing", value: "marketing" },
-  { key: "negotiation", text: "Negotiation", value: "negotiation" },
+  { key: "design", text: "Design", value: "Design" },
+  { key: "dataanalysis", text: "Data Analysis", value: "Data Analysis" },
+  { key: "mathmetics", text: "Mathmetics", value: "Mathmetics" },
+  { key: "copywriting", text: "Copy Writing", value: "Copy Writing" },
+  { key: "marketing", text: "Marketing", value: "Marketing" },
+  { key: "negotiation", text: "Negotiation", value: "Negotiation" },
   {
     key: "projectmanagement",
     text: "Project Management",
-    value: "projectmanagement",
+    value: "Project Management",
   },
-  { key: "administration", text: "Administration", value: "administration" },
-  { key: "language", text: "Foreign Languages", value: "language" },
+  { key: "administration", text: "Administration", value: "Administration" },
+  { key: "language", text: "Foreign Languages", value: "Foreign Languages" },
 ];
 
 const techSkillsOptions = [
-  { key: "adobephotoshop", text: "Adobe Photoshop", value: "adobephotoshop" },
-  { key: "adobexd", text: "Adobe XD", value: "adobexd" },
-  { key: "adobepremier", text: "Adobe Premier", value: "adobepremier" },
-  { key: "excel", text: "Excel", value: "excel" },
+  { key: "adobephotoshop", text: "Adobe Photoshop", value: "Adobe Photoshop" },
+  { key: "adobexd", text: "Adobe XD", value: "Adobe XD" },
+  { key: "adobepremier", text: "Adobe Premier", value: "Adobe Premier" },
+  { key: "excel", text: "Excel", value: "Excel" },
   {
     key: "microsoftoffice",
     text: "Microsoft Office",
-    value: "microsoftoffice",
+    value: "Microsoft Office",
   },
-  { key: "webdevelopment", text: "Web Development", value: "webdevelopment" },
-  { key: "frontend", text: "Front-End", value: "frontend" },
-  { key: "backend", text: "Back-End", value: "backend" },
-  { key: "javascript", text: "Javascript", value: "javascript" },
-  { key: "php", text: "PHP", value: "php" },
-  { key: "c++", text: "C++", value: "c++" },
-  { key: "java", text: "Java", value: "java" },
-  { key: "cloudcomputing", text: "Cloud Computing", value: "cloudcomputing" },
+  { key: "webdevelopment", text: "Web Development", value: "Web Development" },
+  { key: "frontend", text: "Front-End", value: "Front-End" },
+  { key: "backend", text: "Back-End", value: "Back-End" },
+  { key: "javascript", text: "Javascript", value: "Javascript" },
+  { key: "php", text: "PHP", value: "PHP" },
+  { key: "c++", text: "C++", value: "C++" },
+  { key: "java", text: "Java", value: "Java" },
+  { key: "cloudcomputing", text: "Cloud Computing", value: "Cloud Computing" },
 ];
 
 var softSkillsSelected = [];
@@ -99,6 +99,7 @@ class JobFiltersModal extends React.Component {
     };
 
     this.props.acceptChanges(filters);
+    this.props.closeModal();
   };
 
   handleChange = (input) => (event) => {
