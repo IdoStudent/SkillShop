@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Container, Grid } from "tabler-react";
 import SiteWrapper from "../SiteWrapper.react";
 import Auth from "@aws-amplify/auth";
+import axios from "axios";
 
 const DUMMY_DATA = [
     {
@@ -119,10 +120,24 @@ class Chat extends Component {
         // console.log("search value:",this.state.search);
     }
 
-    //get match id with jobkey
-    handleDropDownMenu = (event) => {
-        console.log('get match id')
-    }
+    handleMessageSubmit = async (event) => {
+        
+        try {
+            const params = {
+              matchId:  "abc",
+              messageTime: 123456789,
+              message: "test",
+              userName: "test"
+            };
+            await axios.post(
+              "https://rxo4bx6gwa.execute-api.ap-southeast-2.amazonaws.com/prod",
+              params
+            );
+          } catch (err) {
+            console.log(`An error has occurred: ${err}`);
+          }
+        };
+    
 
     render(){
         return(
@@ -219,7 +234,7 @@ class Chat extends Component {
                                         <input className="input-text" type="text" placeholder="Type message here..."></input>
                                     </Grid.Col>
                                     <Grid.Col className="col-3 col-sm-2 col-md-2 col-lg-1">
-                                        <button className="fa fa-send-o my-button">
+                                        <button className="fa fa-send-o my-button" onClick={this.handleMessageSubmit}>
                                         </button>
                                     </Grid.Col>
                                 </Grid.Row>   
