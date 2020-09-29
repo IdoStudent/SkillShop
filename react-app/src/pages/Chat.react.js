@@ -119,6 +119,11 @@ class Chat extends Component {
         // console.log("search value:",this.state.search);
     }
 
+    //get match id with jobkey
+    handleDropDownMenu = (event) => {
+        console.log('get match id')
+    }
+
     render(){
         return(
             <SiteWrapper>
@@ -127,20 +132,20 @@ class Chat extends Component {
                         {/* Header */}
                         <Grid.Row className="row">
                             {/* JobSeeker Search */}
-                            {this.state.userType=="jobseeker" && 
+                            {this.state.userType=="employer" && 
                                 <Grid.Col className="col-3 search">
                                     <input className="input-text-search" type="text" placeholder="Search" value={this.state.search} onChange={this.handleSearchChange}></input>
                                 </Grid.Col>
                             }
                             {/* Employer drop down menu */}
-                            {this.state.userType=="employer" && 
+                            {this.state.userType=="jobseeker" && 
                                 <Grid.Col className="col-3 search">
                                     <div>
                                         <form>
-                                            <select className="dropdown">
+                                            <select className="dropdown" onChange={this.handleDropDownMenu}>
                                                 {this.state.jobTitles.map(jobTitle => {
                                                     return(
-                                                        <option value={jobTitle.jobTitle} onChange="">{jobTitle.jobTitle}</option>
+                                                        <option value={jobTitle.jobTitle}>{jobTitle.jobTitle}</option>
                                                     )
                                                 })}
                                             </select>
