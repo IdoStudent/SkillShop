@@ -489,6 +489,13 @@ body {
   border: 1px solid rgb(210, 217, 241);
 }
 
+/* drop-down menu */
+
+.dropdown {
+  width:100%;
+  margin-top:10px;
+}
+
 /* title */
 
 .title {
