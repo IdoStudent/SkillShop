@@ -99,6 +99,7 @@ class JobFiltersModal extends React.Component {
     };
 
     this.props.acceptChanges(filters);
+    this.props.closeModal();
   };
 
   handleChange = (input) => (event) => {

@@ -123,7 +123,7 @@ class JobCandidates extends React.Component {
     skillsFiltered = true;
   };
 
-  accept = () => {
+  acceptCandidate = () => {
     if (initialised && skillsFiltered && skillsSet){
       let newNum = this.state.num + 1;
 
@@ -142,7 +142,7 @@ class JobCandidates extends React.Component {
     }
   };
 
-  reject = () => {
+  rejectCandidate = () => {
     if (initialised && skillsFiltered && skillsSet){
       let newNum = this.state.num + 1;
 
@@ -252,7 +252,7 @@ class JobCandidates extends React.Component {
                   negative
                   type="button"
                   color="red"
-                  onClick={this.reject}
+                  onClick={this.rejectCandidate}
                 >
                   {" "}
                   Dislike{" "}
@@ -262,7 +262,7 @@ class JobCandidates extends React.Component {
                   positive
                   type="submit"
                   color="green"
-                  onClick={this.accept}
+                  onClick={this.acceptCandidate}
                 >
                   {" "}
                   Like{" "}
