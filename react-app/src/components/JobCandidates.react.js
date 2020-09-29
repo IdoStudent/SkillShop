@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Container, Grid, Card, Form, Header } from "tabler-react";
 import { Button } from "semantic-ui-react";
+import axios from "axios";
 
 var jobseekers = [];
 var initialised = false;
@@ -72,7 +73,7 @@ class JobCandidates extends React.Component {
         console.log(jobseekers);
       });
 
-    initialised = true;
+      initialised = true;
   }
 
   async setFilters(){
@@ -145,7 +146,7 @@ class JobCandidates extends React.Component {
     skillsFiltered = true;
   };
 
-  acceptCandidate = () => {
+  acceptCandidate = (event) => {
     if (initialised && skillsFiltered && skillsSet){
       let newNum = this.state.num + 1;
 
@@ -159,7 +160,21 @@ class JobCandidates extends React.Component {
         this.setState({
           num: newNum,
           currentCandidate: jobseekers[newNum],
-        });
+        }
+        )
+        try {
+          const params = {
+            userEmail:  jobseekers[this.state.num].userEmail,
+            jobKey: "testJobCandidatesPage",
+            matchId: "testMatchIdJobCandidatesPage"
+          };
+          axios.post(
+            "https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/",
+            params
+          );
+        } catch (err) {
+          console.log(`An error has occurred: ${err}`);
+        };
       }
     }
   };
