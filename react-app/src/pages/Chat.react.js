@@ -127,10 +127,13 @@ class Chat extends Component {
 
     
     handleMessageSubmit = async (event) => {
+        var date = new Date();
+        var time = date.getTime();
+
         try {
             const params = {
               matchId:  "abcdef",
-              messageTime: 123456789,
+              messageTime: time,
               message: event.target.message,
               userName: Auth.user.attributes.email
             };
