@@ -46,11 +46,24 @@ const DUMMY_DATA = [
     }
 ]
 
+const JOB_POSITIONS_DUMMY_DATA = [
+    {
+        jobTitle: "Driver"
+    },
+    {
+        jobTitle: "Programmer"
+    },
+    {
+        jobTitle: "Manager"
+    }
+]
+
 class Chat extends Component {
     constructor(){
         super()
         this.state = {
             messages: DUMMY_DATA,
+            jobTitles: JOB_POSITIONS_DUMMY_DATA,
             currentEmployer: "",
             userType: "",
             jobKey: [],
@@ -119,10 +132,20 @@ class Chat extends Component {
                                     <input className="input-text-search" type="text" placeholder="Search" value={this.state.search} onChange={this.handleSearchChange}></input>
                                 </Grid.Col>
                             }
-                            {/* Employer Search */}
+                            {/* Employer drop down menu */}
                             {this.state.userType=="employer" && 
                                 <Grid.Col className="col-3 search">
-                                    to implement
+                                    <div>
+                                        <form>
+                                            <select className="dropdown">
+                                                {this.state.jobTitles.map(jobTitle => {
+                                                    return(
+                                                        <option value={jobTitle.jobTitle} onChange="">{jobTitle.jobTitle}</option>
+                                                    )
+                                                })}
+                                            </select>
+                                        </form>
+                                    </div>        
                                 </Grid.Col>
                             }
                             {/* Title */}
