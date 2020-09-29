@@ -16,7 +16,7 @@ class JobCandidates extends React.Component {
 
     this.state = {
       num: 0,
-      filters: ["Responsibility"],
+      filters: ["Flexibility", "Teamwork"],
       currentCandidate: {
         userAbout: " ",
         userCity: " ",
@@ -123,17 +123,39 @@ class JobCandidates extends React.Component {
     skillsFiltered = true;
   };
 
-  acceptChanges = () => {
-    let newNum = this.state.num + 1;
+  accept = () => {
+    if (initialised && skillsFiltered && skillsSet){
+      let newNum = this.state.num + 1;
 
-    if (newNum >= jobseekers.length) {
-      console.log("no more candidates");
-      // CAN ADD IN SOME LOGIC FOR WHAT TO DO WHEN THERE'S NO MORE CANDIDATES (REMOVE INFO AND DISPLAY A MESSAGE, POPUP, ALERT, ETC.)
-    } else {
-      this.setState({
-        num: newNum,
-        currentCandidate: jobseekers[newNum],
-      });
+      // If Employer likes candidate then add them to their matches database here
+
+      if (newNum >= jobseekers.length) {
+        console.log("no more candidates");
+        // CAN ADD IN SOME LOGIC FOR WHAT TO DO WHEN THERE'S NO MORE CANDIDATES (REMOVE INFO AND DISPLAY A MESSAGE, POPUP, ALERT, ETC.)
+        alert("No more candidates available at this time");
+      } else {
+        this.setState({
+          num: newNum,
+          currentCandidate: jobseekers[newNum],
+        });
+      }
+    }
+  };
+
+  reject = () => {
+    if (initialised && skillsFiltered && skillsSet){
+      let newNum = this.state.num + 1;
+
+      if (newNum >= jobseekers.length) {
+        console.log("no more candidates");
+        // CAN ADD IN SOME LOGIC FOR WHAT TO DO WHEN THERE'S NO MORE CANDIDATES (REMOVE INFO AND DISPLAY A MESSAGE, POPUP, ALERT, ETC.)
+        alert("No more candidates available at this time");
+      } else {
+        this.setState({
+          num: newNum,
+          currentCandidate: jobseekers[newNum],
+        });
+      }
     }
   };
 
@@ -230,7 +252,7 @@ class JobCandidates extends React.Component {
                   negative
                   type="button"
                   color="red"
-                  onClick={this.acceptChanges}
+                  onClick={this.reject}
                 >
                   {" "}
                   Dislike{" "}
@@ -240,7 +262,7 @@ class JobCandidates extends React.Component {
                   positive
                   type="submit"
                   color="green"
-                  onClick={this.acceptChanges}
+                  onClick={this.accept}
                 >
                   {" "}
                   Like{" "}
