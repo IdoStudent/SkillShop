@@ -127,13 +127,12 @@ class Chat extends Component {
 
     
     handleMessageSubmit = async (event) => {
-        
         try {
             const params = {
-              matchId:  "abc",
+              matchId:  "abcdef",
               messageTime: 123456789,
-              message: "test",
-              userName: "test"
+              message: event.target.message,
+              userName: Auth.user.attributes.email
             };
             await axios.post(
               "https://rxo4bx6gwa.execute-api.ap-southeast-2.amazonaws.com/prod",
@@ -142,7 +141,7 @@ class Chat extends Component {
           } catch (err) {
             console.log(`An error has occurred: ${err}`);
           }
-        };
+    };
     
 
     render(){
@@ -235,16 +234,16 @@ class Chat extends Component {
                                     </ul>      
                                 </Grid.Row>
                                 {/* Input */}
-                                <Grid.Row className="row text-box">
-                                    <Grid.Col className="col-9 col-sm-10 col-md-10 col-lg-11">
-                                        <input className="input-text" type="text" placeholder="Type message here..."></input>
-                                    </Grid.Col>
-                                    <Grid.Col className="col-3 col-sm-2 col-md-2 col-lg-1">
-                                        <button className="fa fa-send-o my-button" onClick={this.handleMessageSubmit}>
-                                        </button>
-                                    </Grid.Col>
-                                </Grid.Row>   
-
+                                <form>
+                                    <Grid.Row className="row text-box">
+                                            <Grid.Col className="col-9 col-sm-10 col-md-10 col-lg-11">
+                                                <input className="input-text" type="text" placeholder="Type message here..." name="message"></input>
+                                            </Grid.Col>
+                                            <Grid.Col className="col-3 col-sm-2 col-md-2 col-lg-1">
+                                                <button type="submit" value="" className="my-button" onClick={this.handleMessageSubmit}><i className="fa fa-send-o"></i></button>
+                                            </Grid.Col>
+                                    </Grid.Row>   
+                                </form>
                             </Grid.Col>
                         </Grid.Row>
                                     
