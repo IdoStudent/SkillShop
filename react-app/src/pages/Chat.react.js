@@ -67,9 +67,11 @@ class Chat extends Component {
             messages: DUMMY_DATA,
             message: "",
             jobTitles: [],
+            currentPosition: "",
             currentEmployer: "",
             userType: "",
             jobKey: [],
+            employersList: [],
             search: "",
             matchId: "abcdefg"
         }
@@ -101,6 +103,7 @@ class Chat extends Component {
             .then((res) => res.json())
             .then((result) => {
                 for (var i = 0; i < result.length; i++)
+                    // console.log(result[i].jobKey);
                     this.state.jobKey.push({ key : result[i].jobKey , lastUpdate : "1d" });
                 },
             )
@@ -157,8 +160,14 @@ class Chat extends Component {
 
     //get match id with jobkey
     handleDropDownMenu = (event) => {
-        console.log('get match id: ' + this.state.matchId);
-        console.log('get message: ' + this.state.messages);
+        // console.log('get match id: ' + this.state.matchId);
+        // console.log('get message: ' + this.state.messages);
+
+        // console.log(event.target.value);
+
+        // console.log(this.state.jobTitles[0].jobKey);
+        this.setState({ currentPosition: event.target.value });
+        // console.log(this.state.currentPosition);
     }
 
     handleMessageChange = (event) => {
@@ -196,7 +205,7 @@ class Chat extends Component {
             .then((res) => res.json())
             .then((result) => {
                 for (var i = 0; i < result.length; i++)
-                    this.setState({ jobTitles: this.state.jobTitles.concat(result[i].jobTitle) });
+                    this.setState({ jobTitles: this.state.jobTitles.concat({jobTitle: result[i].jobTitle, jobKey: result[i].jobKey}) });
                 },
             )
     }
@@ -221,9 +230,10 @@ class Chat extends Component {
                                     <div>
                                         <form>
                                             <select className="dropdown" onChange={this.handleDropDownMenu}>
+                                                <option disabled selected value> -- select a position -- </option>
                                                 {this.state.jobTitles.map(jobTitle => {
                                                     return(
-                                                        <option value={jobTitle}>{jobTitle}</option>
+                                                        <option value={jobTitle.jobKey}>{jobTitle.jobTitle}</option>
                                                     )
                                                 })}
                                             </select>
@@ -239,7 +249,7 @@ class Chat extends Component {
                         {/* Body */}
                         <Grid.Row className="row">
                             {/* List */}
-                            {this.state.search=="" &&
+                            {this.state.search=="" && this.state.userType=="employer" &&
                                 <Grid.Col className="col-3 list">
                                     <ul className="emp-list">
                                         {this.state.jobKey.map(employer => {
@@ -255,10 +265,27 @@ class Chat extends Component {
                                     </ul>
                                 </Grid.Col>
                             }
-                            {this.state.search!="" &&
+                            {this.state.search!="" && this.state.userType=="employer" &&
                                 <Grid.Col className="col-3 list">
                                     <ul className="emp-list">
                                         {this.state.jobKey.filter(k => k.key.indexOf(this.state.search) > -1).map(employer => {
+                                            return(
+                                                <li key={employer.id} className="emp-item">
+                                                    <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
+                                                        <div className="last-update">{employer.lastUpdate}</div>
+                                                        <div className="button-text">{employer.key}</div>
+                                                    </button>
+                                                </li>
+                                            )
+                                        })}
+                                    </ul>
+                                </Grid.Col>
+                            }
+                            {/* employer side list */}
+                            {this.state.search=="" && this.state.userType=="jobseeker" &&
+                                <Grid.Col className="col-3 list">
+                                    <ul className="emp-list">
+                                        {this.state.jobKey.map(employer => {
                                             return(
                                                 <li key={employer.id} className="emp-item">
                                                     <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
