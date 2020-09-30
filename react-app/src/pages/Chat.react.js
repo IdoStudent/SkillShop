@@ -66,7 +66,7 @@ class Chat extends Component {
             // change to DUMMY_DATA for fake result
             messages: DUMMY_DATA,
             message: "",
-            jobTitles: JOB_POSITIONS_DUMMY_DATA,
+            jobTitles: [],
             currentEmployer: "",
             userType: "",
             jobKey: [],
@@ -136,6 +136,7 @@ class Chat extends Component {
     }
 
     componentDidMount() {
+        this.getJobTitles();
         this.getUserType();
         this.getMatches();
         this.getMatchId();
@@ -186,6 +187,19 @@ class Chat extends Component {
 
           this.setState({message: ""});
     };
+
+    getJobTitles = (event) => {
+        console.log('get job titles');
+        const email =  Auth.user.attributes.email
+        fetch(
+            `https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` + email)
+            .then((res) => res.json())
+            .then((result) => {
+                for (var i = 0; i < result.length; i++)
+                    this.setState({ jobTitles: this.state.jobTitles.concat(result[i].jobTitle) });
+                },
+            )
+    }
     
 
     render(){
@@ -209,7 +223,7 @@ class Chat extends Component {
                                             <select className="dropdown" onChange={this.handleDropDownMenu}>
                                                 {this.state.jobTitles.map(jobTitle => {
                                                     return(
-                                                        <option value={jobTitle.jobTitle}>{jobTitle.jobTitle}</option>
+                                                        <option value={jobTitle}>{jobTitle}</option>
                                                     )
                                                 })}
                                             </select>
