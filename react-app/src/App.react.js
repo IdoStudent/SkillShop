@@ -52,27 +52,7 @@ class App extends React.Component {
       console.log(error);
     }
     this.setState({ isAuthenticating: false });
-
-    //this.checkUserData(Auth.user.attributes.email)
-
-    //console.log(Auth.user.attributes)
   }
-
- /*checkUserData = (email) => {
-    fetch(
-      `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
-        email
-    )
-      .then((res) => res.json())
-      .then((result) => {
-        if (result.Item !== undefined) {
-          // If the user's first name has a length greater than 0, assume that the user has filled out general information data
-          if (result.Item.userFirstName.length > 0) {
-            this.setState({userHasData: true})
-          }
-        }
-      });
-  };*/
 
   render() {
     const authProps = {
@@ -93,15 +73,17 @@ class App extends React.Component {
                 path="/"
                 render={(props) => <LandingPage {...props} auth={authProps} />}
               />
-              <Route
-                exact
+
+              <NoUser
+                authed={this.state.isAuthenticated}
                 path="/login"
-                render={(props) => <Login {...props} auth={authProps} />}
+                component={Login}
               />
-              <Route
-                exact
+
+              <NoUser
+                authed={this.state.isAuthenticated}
                 path="/signup"
-                render={(props) => <Signup {...props} auth={authProps} />}
+                component={Signup}
               />
 
               {/* IN PROGRESS */}
@@ -114,7 +96,6 @@ class App extends React.Component {
               {/* PRIVATE ROUTES (USER NEEDS TO BE AUTHENTICATED) */}
               {/* JOBSEEKER PAGES */}
               <PrivateRoute
-                userHasData={this.state.userHasData}
                 authed={this.state.isAuthenticated}
                 path="/myprofile"
                 component={ProfilePage}
@@ -122,7 +103,6 @@ class App extends React.Component {
 
               {/* EMPLOYER PAGES */}
               <PrivateRoute
-                userHasData={this.state.userHasData}
                 authed={this.state.isAuthenticated}
                 path="/candidates"
                 component={Candidates}
@@ -146,8 +126,7 @@ class App extends React.Component {
 }
 
 // Redirect function - redirects to login if user is not authenticated
-function PrivateRoute({ userHasData, component: Component, authed, ...rest }) {
-  //console.log("user has data", userHasData)
+function PrivateRoute({ component: Component, authed, ...rest }) {
   return (
     <Route
       {...rest}
@@ -158,6 +137,22 @@ function PrivateRoute({ userHasData, component: Component, authed, ...rest }) {
           <Redirect
             to={{ pathname: "/login", state: { from: props.location } }}
           />
+        )
+      }
+    />
+  );
+}
+
+// Redirect function - redirects to myProfile if user is authenticated
+function NoUser({ component: Component, authed, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        authed === false ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to={{ pathname: "/myprofile" }} />
         )
       }
     />
