@@ -16,6 +16,7 @@ import {
   Signup,
   Chat,
   Help,
+  ProfileSetup
 } from "./pages";
 
 import "tabler-react/dist/Tabler.css";
@@ -99,6 +100,12 @@ class App extends React.Component {
                 authed={this.state.isAuthenticated}
                 path="/myprofile"
                 component={ProfilePage}
+              />
+
+              <PrivateRoute
+                authed={this.state.isAuthenticated}
+                path="/profilesetup"
+                component={ProfileSetup}
               />
 
               {/* EMPLOYER PAGES */}

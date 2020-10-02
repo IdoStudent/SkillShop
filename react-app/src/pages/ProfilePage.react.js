@@ -17,6 +17,8 @@ import UploadDocument from "../components/JobseekerProfile/UploadDocument.react"
 class ProfilePage extends Component {
   state = {
     open: false,
+
+    noData: false,
   };
 
   openModal = () => {

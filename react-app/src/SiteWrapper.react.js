@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from "react";
-import { NavLink, Redirect } from "react-router-dom";
+import { NavLink, Redirect, withRouter } from "react-router-dom";
 
 import Auth from "@aws-amplify/auth";
 
@@ -21,22 +21,33 @@ class SiteWrapper extends React.Component {
       msg: " ",
       userFirstName: null,
 
+      noData: false,
+
       redirect: false,
     };
 
     this.signOut = this.signOut.bind(this);
   }
 
-  async getUserData(email) {
+  getUserData = (email) => {
     fetch(
       `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
         email
     )
       .then((res) => res.json())
       .then((result) => {
+        
         // If length is undefined, that means for some reason it's not returning data at all, so dont try and access fields that dont exist
         if (result.Item !== undefined) {
-          this.setState({ userFirstName: result.Item.userFirstName });
+          let name = result.Item.userFirstName
+          
+          this.setState({ userFirstName: name })
+        } else {
+
+          this.props.history.push({
+            pathname: '/profilesetup',
+        });
+
         }
       });
   }
@@ -53,13 +64,13 @@ class SiteWrapper extends React.Component {
       this.setState({ msg: "Good Evening, " });
     }
 
-    this.getUserData(Auth.user.attributes.email);
+    this.getUserData(Auth.user.attributes.email)
   }
 
   async signOut() {
     try {
       // UNCOMMENT BELOW LINE TO ACTUALLY SIGN OUT USERS (tested and works)
-      //await Auth.signOut();
+      await Auth.signOut();
 
       this.setState({ redirect: true });
     } catch (error) {
@@ -69,7 +80,7 @@ class SiteWrapper extends React.Component {
 
   render() {
     if (this.state.redirect) {
-      return <Redirect push to="/login" />;
+      return <Redirect push to="/" />;
     }
     return (
       <div className="wrapper">
@@ -171,4 +182,4 @@ class SiteWrapper extends React.Component {
   }
 }
 
-export default SiteWrapper;
+export default withRouter(SiteWrapper);

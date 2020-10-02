@@ -37,16 +37,15 @@ class Login extends Component {
         );
         this.props.auth.setAuthStatus(true);
         this.props.auth.setUser(user);
-        // this.props.history.push("/");
 
         let role = user.attributes["custom:role"];
         // console.log(role);
 
         if (role === "employer") {
-          // console.log('route to employer profile');
+          console.log('route to employer profile');
           this.props.history.push("/candidates");
         } else if (role === "jobseeker") {
-          // console.log('route to jobseeker profile');
+          console.log('route to jobseeker profile');
           this.props.history.push("/myprofile");
         }
       } catch (error) {
