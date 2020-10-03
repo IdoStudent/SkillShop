@@ -22,7 +22,11 @@ const softSkillsOptions = [
     text: "Emotional Intelligence",
     value: "Emotional Intelligence",
   },
-  { key: "attdetail", text: "Attention to Detail", value: "Attention to Detail" },
+  {
+    key: "attdetail",
+    text: "Attention to Detail",
+    value: "Attention to Detail",
+  },
   { key: "flexibility", text: "Flexibility", value: "Flexibility" },
   {
     key: "customerservice",
@@ -88,17 +92,12 @@ class JobFiltersModal extends React.Component {
   };
 
   acceptChanges = () => {
-    let skills = softSkillsSelected
-      .concat(hardSkillsSelected)
-      .concat(techSkillsSelected);
+    // Store filters in local storage (they will be reset each time the job profile changes)
+    // They need to be converted into a JSON array first as localStorage can only take strings
+    localStorage.setItem("softSkillsFilter", JSON.stringify(softSkillsSelected));
+    localStorage.setItem("hardSkillsFilter", JSON.stringify(hardSkillsSelected));
+    localStorage.setItem("techSkillsFilter", JSON.stringify(techSkillsSelected));
 
-    let filters = {
-      skills: skills,
-      experience: this.state.experience,
-      education: this.state.education,
-    };
-
-    this.props.acceptChanges(filters);
     this.props.closeModal();
   };
 
@@ -117,7 +116,9 @@ class JobFiltersModal extends React.Component {
   render() {
     return (
       <Modal closeOnDimmerClick={false} open={true}>
-        <Modal.Header>Changing Filters for {this.props.data.jobTitle}</Modal.Header>
+        <Modal.Header>
+          Changing Filters for {this.props.data.jobTitle}
+        </Modal.Header>
         <Modal.Content>
           <Container>
             <Grid.Row>
@@ -152,9 +153,8 @@ class JobFiltersModal extends React.Component {
                 <Form.Group name="softskills" label="Soft Skills">
                   <Dropdown
                     placeholder="Soft Skills"
-                    fluid
-                    multiple
-                    selection
+                    fluid multiple selection
+                    defaultValue={JSON.parse(localStorage.getItem("softSkillsFilter"))}
                     options={softSkillsOptions}
                     onChange={this.handleSelectSoft}
                   />
@@ -166,9 +166,8 @@ class JobFiltersModal extends React.Component {
                 <Form.Group name="hardskills" label="Hard Skills">
                   <Dropdown
                     placeholder="Hard Skills"
-                    fluid
-                    multiple
-                    selection
+                    fluid multiple selection
+                    defaultValue={JSON.parse(localStorage.getItem("hardSkillsFilter"))}
                     options={hardSkillsOptions}
                     onChange={this.handleSelectHard}
                   />
@@ -180,9 +179,8 @@ class JobFiltersModal extends React.Component {
                 <Form.Group name="techskills" label="Tech Skills">
                   <Dropdown
                     placeholder="Tech Skills"
-                    fluid
-                    multiple
-                    selection
+                    fluid multiple selection
+                    defaultValue={JSON.parse(localStorage.getItem("techSkillsFilter"))}
                     options={techSkillsOptions}
                     onChange={this.handleSelectTech}
                   />

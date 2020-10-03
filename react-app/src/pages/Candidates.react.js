@@ -156,6 +156,11 @@ class Candidates extends React.Component {
     this.setState({
       selectValue: event.target.value,
     });
+
+    // Reset the filters in local storage (because they're only applicable for the job profile that was selected when they were added to storage)
+    localStorage.setItem('softSkillsFilter', JSON.stringify([ ]))
+    localStorage.setItem('hardSkillsFilter', JSON.stringify([ ]))
+    localStorage.setItem('techSkillsFilter', JSON.stringify([ ]))
   };
 
   acceptChangesInfo = (newInfo) => {
@@ -231,39 +236,6 @@ class Candidates extends React.Component {
     console.log(newInfo);
 
     this.setState({ openNew: false });
-  };
-
-  setFilters = (filters) => {
-    // filters will return an object with all the filters
-    // access individual filters like: filters.experience, filters.education, filters.skills
-    // filters.skills is an array of skills (strings). anything in the array has been selected
-
-    // Get current profile information
-    let currentProfile = this.state.data[this.state.selectValue];
-
-    console.log(filters);
-
-    try {
-      // Map the data so it sends the current profile information with the new filters
-      const params = {
-        userEmail: currentProfile.userEmail,
-        jobKey: currentProfile.jobKey,
-        jobTitle: currentProfile.jobTitle,
-        jobLocation: currentProfile.jobLocation,
-        jobIndustry: currentProfile.jobIndustry,
-        jobAbout: currentProfile.jobAbout,
-        educationFilter: filters.education,
-        experienceFilter: filters.experience,
-        skillsFilter: filters.skills,
-      };
-
-      axios.post(
-        "https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod",
-        params
-      );
-    } catch (err) {
-      console.log(`An error has occurred: ${err}`);
-    }
   };
 
   render() {
@@ -342,7 +314,6 @@ class Candidates extends React.Component {
             <JobFiltersModal
               closeModal={this.closeModalFilter}
               data={this.state.data[this.state.selectValue]}
-              acceptChanges={this.setFilters}
             />
           ) : null}
 

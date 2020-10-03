@@ -32,7 +32,7 @@ class Login extends Component {
     if (this.validateForm()) {
       try {
         const params = {
-          //userEmail: Auth.user.attributes.email,
+          userEmail: Auth.user.attributes.email,
           userFirstName: this.state.firstName,
           userMiddleName: "",
           userLastName: this.state.surname,

@@ -77,18 +77,11 @@ class JobCandidates extends React.Component {
   }
 
   async setFilters(){
-    let items = [];
-    fetch("https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=test@test.com")
-    .then((res) => res.json())
-    .then((result) => {
-      items = result[0].skillsFilter;
-
-      this.setState(
-        {
-          filters: items,
-        }
-      );
-    });
+    // GET FILTERS FROM LOCAL STORAGE: 
+    
+    // JSON.parse(localStorage.getItem("softSkillsFilter")
+    // JSON.parse(localStorage.getItem("hardSkillsFilter")
+    // JSON.parse(localStorage.getItem("techSkillsFilter")
   }
 
   async getSkills() {
