@@ -156,25 +156,6 @@ class Chat extends Component {
             )
     }
 
-    // getEmployersEmail(key){
-    //     console.log('getEmployersEmail');
-    //     console.log('key:',key);
-
-    //     // var email = "ido";
-
-    //     fetch(
-    //         `https://s38llqiaed.execute-api.ap-southeast-2.amazonaws.com/prod/?jobKey=` + key )
-    //         .then((res) => res.json())
-    //         .then((result) => {
-    //             console.log('result:',result[0].userEmail);
-    //             // this.email = result[0].userEmail;
-    //             this.setState({ employersEmail: result[0].userEmail });
-    //         },)
-
-    //     console.log('this email:',this.state.employersEmail);
-    //     return this.state.employersEmail
-    // }
-
     getEmployersEmail = async () => {
         console.log('getEmployersEmail');
         console.log('jobKeys length:',this.state.jobKeys.length);
@@ -211,8 +192,10 @@ class Chat extends Component {
 
     chooseEmployer = (employer) => {
         console.log("Choose Employer");
-        console.log("name:",employer.key)
-        
+        console.log("name:",this.state.employersNames.filter((em) => em.key == 
+        (this.state.employersEmails.filter((emp) => emp.key == employer.key)[0].email))[0].name);
+        this.setState({ currentEmployer : this.state.employersNames.filter((em) => em.key == 
+            (this.state.employersEmails.filter((emp) => emp.key == employer.key)[0].email))[0].name});
 
     }
 
