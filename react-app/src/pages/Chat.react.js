@@ -70,11 +70,28 @@ class Chat extends Component {
             currentPosition: "",
             currentEmployer: "",
             userType: "",
-            jobKey: [],
+            jobKeys: [],
             employersList: [],
             search: "",
-            matchId: "abcdefg"
+            matchId: "abcdefg",
+            employersEmails: [],
+            Loading: true
         }
+    }
+
+    async componentDidMount() {   
+        await this.getMatches();
+        this.getJobTitles();
+        this.getUserType();
+        this.getMatchId();
+        this.getMessage();
+        await this.getEmployersEmail();
+        
+        //test
+        console.log('my email:',Auth.user.attributes.email);
+        console.log('user type:', this.state.userType);
+
+        this.setState({ loading : false });
     }
 
     // get user type from user table
@@ -94,19 +111,28 @@ class Chat extends Component {
             )
       }
 
-    // get all matches with userEmail from matches table
-    getMatches() {
-        const email =  Auth.user.attributes.email
-        fetch(
-            `https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` +
-              email )
+    async getUserName(email){
+        console.log('Get User Name for email:',email);
+        console.log( await fetch( `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` + email )
             .then((res) => res.json())
             .then((result) => {
-                for (var i = 0; i < result.length; i++)
-                    // console.log(result[i].jobKey);
-                    this.state.jobKey.push({ key : result[i].jobKey , lastUpdate : "1d" });
-                },
-            )
+                console.log('result',result.Item.userFirstName);
+                return result.Item.userFirstName;
+            })
+        )
+    }
+
+    // get all matches with userEmail from matches table
+    async getMatches() {
+        const email =  Auth.user.attributes.email
+        await fetch(
+            `https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` + email )
+            .then((res) => res.json())
+            .then((result) => {
+                for (var i = 0; i < result.length; i++){
+                    this.state.jobKeys.push({ key : result[i].jobKey , lastUpdate : "1d" , email : result[i].userEmail });
+                }
+            })
     }
 
     // get just matchID for email
@@ -117,9 +143,10 @@ class Chat extends Component {
               email )
             .then((res) => res.json())
             .then((result) => {
-                    this.setState({     
-                        matchId: result[0].matchId
-                    });
+                console.log('result length',result.length);
+                    // this.setState({     
+                    //     matchId: result[0].matchId
+                    // });
                 },
             )
       }
@@ -138,18 +165,50 @@ class Chat extends Component {
             )
     }
 
-    componentDidMount() {
-        this.getJobTitles();
-        this.getUserType();
-        this.getMatches();
-        this.getMatchId();
-        this.getMessage();
+    // getEmployersEmail(key){
+    //     console.log('getEmployersEmail');
+    //     console.log('key:',key);
+
+    //     // var email = "ido";
+
+    //     fetch(
+    //         `https://s38llqiaed.execute-api.ap-southeast-2.amazonaws.com/prod/?jobKey=` + key )
+    //         .then((res) => res.json())
+    //         .then((result) => {
+    //             console.log('result:',result[0].userEmail);
+    //             // this.email = result[0].userEmail;
+    //             this.setState({ employersEmail: result[0].userEmail });
+    //         },)
+
+    //     console.log('this email:',this.state.employersEmail);
+    //     return this.state.employersEmail
+    // }
+
+    getEmployersEmail = async () => {
+        console.log('getEmployersEmail');
+        console.log('jobKeys length:',this.state.jobKeys.length);
+        for(var i=0;i<this.state.jobKeys.length;i++){
+            console.log('jobKey',this.state.jobKeys[i]);
+
+            await fetch(`https://s38llqiaed.execute-api.ap-southeast-2.amazonaws.com/prod/?jobKey=` + this.state.jobKeys[i].key )
+                .then((res) => res.json())
+                .then((result) => {
+                    console.log('Result:',result[0].userEmail);
+                    this.state.employersEmails.push({ key : this.state.jobKeys[i].key , email : result[0].userEmail });
+                })
+        }
+
+        console.log('length of employers',this.state.employersEmails.length);
+        for(var i=0;i<this.state.employersEmails.length;i++){
+            console.log('employer Email:',this.state.employersEmails[i]);
+        }
     }
 
     chooseEmployer = (employer) => {
         console.log("Choose Employer");
         console.log("name:",employer.key)
-        // console.log("User type2",this.state.userType);
+        
+
     }
 
     handleSearchChange = (event) => {
@@ -167,7 +226,7 @@ class Chat extends Component {
 
         // console.log(this.state.jobTitles[0].jobKey);
         this.setState({ currentPosition: event.target.value });
-        // console.log(this.state.currentPosition);
+        console.log('current position:',this.state.currentPosition);
     }
 
     handleMessageChange = (event) => {
@@ -209,7 +268,6 @@ class Chat extends Component {
                 },
             )
     }
-    
 
     render(){
         return(
@@ -219,13 +277,13 @@ class Chat extends Component {
                         {/* Header */}
                         <Grid.Row className="row">
                             {/* JobSeeker Search */}
-                            {this.state.userType=="employer" && 
+                            {this.state.userType=="jobseeker" && 
                                 <Grid.Col className="col-3 search">
                                     <input className="input-text-search" type="text" placeholder="Search" value={this.state.search} onChange={this.handleSearchChange}></input>
                                 </Grid.Col>
                             }
                             {/* Employer drop down menu */}
-                            {this.state.userType=="jobseeker" && 
+                            {this.state.userType=="employer" && 
                                 <Grid.Col className="col-3 search">
                                     <div>
                                         <form>
@@ -249,15 +307,20 @@ class Chat extends Component {
                         {/* Body */}
                         <Grid.Row className="row">
                             {/* List */}
-                            {this.state.search=="" && this.state.userType=="employer" &&
+                            {this.state.search=="" && this.state.userType=="jobseeker" &&
                                 <Grid.Col className="col-3 list">
                                     <ul className="emp-list">
-                                        {this.state.jobKey.map(employer => {
+                                        {this.state.jobKeys.map(employer => {
+                                            // console.log('length of employers render',this.state.employersEmails.length);
+                                            // console.log('is it true?',employer.key == this.state.employersEmails[0].key);
                                             return(
                                                 <li key={employer.id} className="emp-item">
                                                     <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
                                                         <div className="last-update">{employer.lastUpdate}</div>
-                                                        <div className="button-text">{employer.key}</div>
+                                                        {/* {this.state.employersEmails[0] ? <div className="button-text">{this.state.employersEmails
+                                                        .filter((emp) => emp.key == employer.key).email}</div> : 'ido'} */}
+                                                        {this.state.loading == false ? <div className="button-text">{this.state.employersEmails
+                                                        .filter((emp) => emp.key == employer.key)[0].email}</div> : 'Loading...'}
                                                     </button>
                                                 </li>
                                             )
@@ -265,10 +328,10 @@ class Chat extends Component {
                                     </ul>
                                 </Grid.Col>
                             }
-                            {this.state.search!="" && this.state.userType=="employer" &&
+                            {this.state.search!="" && this.state.userType=="jobseeker" &&
                                 <Grid.Col className="col-3 list">
                                     <ul className="emp-list">
-                                        {this.state.jobKey.filter(k => k.key.indexOf(this.state.search) > -1).map(employer => {
+                                        {this.state.jobKeys.filter(k => k.key.indexOf(this.state.search) > -1).map(employer => {
                                             return(
                                                 <li key={employer.id} className="emp-item">
                                                     <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
@@ -282,15 +345,15 @@ class Chat extends Component {
                                 </Grid.Col>
                             }
                             {/* employer side list */}
-                            {this.state.search=="" && this.state.userType=="jobseeker" &&
+                            {this.state.search=="" && this.state.userType=="employer" &&
                                 <Grid.Col className="col-3 list">
                                     <ul className="emp-list">
-                                        {this.state.jobKey.map(employer => {
+                                        {this.state.jobKeys.map(employer => {
                                             return(
                                                 <li key={employer.id} className="emp-item">
                                                     <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
                                                         <div className="last-update">{employer.lastUpdate}</div>
-                                                        <div className="button-text">{employer.key}</div>
+                                                        <div className="button-text">{employer.email}</div>
                                                     </button>
                                                 </li>
                                             )
