@@ -75,6 +75,7 @@ class Chat extends Component {
             search: "",
             matchId: "abcdefg",
             employersEmails: [],
+            employersNames: [],
             Loading: true
         }
     }
@@ -86,6 +87,7 @@ class Chat extends Component {
         this.getMatchId();
         this.getMessage();
         await this.getEmployersEmail();
+        await this.getEmployersNames();
         
         //test
         console.log('my email:',Auth.user.attributes.email);
@@ -110,17 +112,6 @@ class Chat extends Component {
                 },
             )
       }
-
-    async getUserName(email){
-        console.log('Get User Name for email:',email);
-        console.log( await fetch( `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` + email )
-            .then((res) => res.json())
-            .then((result) => {
-                console.log('result',result.Item.userFirstName);
-                return result.Item.userFirstName;
-            })
-        )
-    }
 
     // get all matches with userEmail from matches table
     async getMatches() {
@@ -201,6 +192,20 @@ class Chat extends Component {
         console.log('length of employers',this.state.employersEmails.length);
         for(var i=0;i<this.state.employersEmails.length;i++){
             console.log('employer Email:',this.state.employersEmails[i]);
+        }
+    }
+
+    getEmployersNames = async () => {
+        console.log('getEmployersNames');
+        for(var i=0;i<this.state.employersEmails.length;i++){
+            await fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` + this.state.employersEmails[i].email )
+                .then((res) => res.json())
+                .then((result) => {
+                    if(typeof result.Item !== 'undefined'){
+                        console.log('user Name:',result.Item.userFirstName);
+                        this.state.employersNames.push({ key : this.state.employersEmails[i].email , name : result.Item.userFirstName });
+                    }
+                })
         }
     }
 
@@ -317,10 +322,10 @@ class Chat extends Component {
                                                 <li key={employer.id} className="emp-item">
                                                     <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
                                                         <div className="last-update">{employer.lastUpdate}</div>
-                                                        {/* {this.state.employersEmails[0] ? <div className="button-text">{this.state.employersEmails
-                                                        .filter((emp) => emp.key == employer.key).email}</div> : 'ido'} */}
-                                                        {this.state.loading == false ? <div className="button-text">{this.state.employersEmails
-                                                        .filter((emp) => emp.key == employer.key)[0].email}</div> : 'Loading...'}
+                                                        {this.state.loading == false ? <div className="button-text">
+                                                            {this.state.employersNames.filter((em) => em.key == 
+                                                            (this.state.employersEmails.filter((emp) => emp.key == employer.key)[0].email))[0].name}
+                                                        </div> : 'Loading...'}
                                                     </button>
                                                 </li>
                                             )
@@ -336,7 +341,8 @@ class Chat extends Component {
                                                 <li key={employer.id} className="emp-item">
                                                     <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
                                                         <div className="last-update">{employer.lastUpdate}</div>
-                                                        <div className="button-text">{employer.key}</div>
+                                                        {this.state.loading == false ? <div className="button-text">{this.state.employersEmails
+                                                        .filter((emp) => emp.key == employer.key)[0].email}</div> : 'Loading...'}
                                                     </button>
                                                 </li>
                                             )
