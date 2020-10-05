@@ -217,9 +217,7 @@ class Chat extends Component {
     }
 
     handleSearchChange = (event) => {
-        // console.log("event:",event.target.value);
         this.setState({search: event.target.value});
-        // console.log("search value:",this.state.search);
     }
 
     //get match id with jobkey
@@ -284,7 +282,8 @@ class Chat extends Component {
                             {/* JobSeeker Search */}
                             {this.state.userType=="jobseeker" && 
                                 <Grid.Col className="col-3 search">
-                                    <input className="input-text-search" type="text" placeholder="Search" value={this.state.search} onChange={this.handleSearchChange}></input>
+                                    <input className="input-text-search" type="text" placeholder="Search" value={this.state.search} 
+                                        onChange={this.handleSearchChange}></input>
                                 </Grid.Col>
                             }
                             {/* Employer drop down menu */}
@@ -316,8 +315,6 @@ class Chat extends Component {
                                 <Grid.Col className="col-3 list">
                                     <ul className="emp-list">
                                         {this.state.jobKeys.map(employer => {
-                                            // console.log('length of employers render',this.state.employersEmails.length);
-                                            // console.log('is it true?',employer.key == this.state.employersEmails[0].key);
                                             return(
                                                 <li key={employer.id} className="emp-item">
                                                     <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
@@ -336,13 +333,17 @@ class Chat extends Component {
                             {this.state.search!="" && this.state.userType=="jobseeker" &&
                                 <Grid.Col className="col-3 list">
                                     <ul className="emp-list">
-                                        {this.state.jobKeys.filter(k => k.key.indexOf(this.state.search) > -1).map(employer => {
+                                        {this.state.jobKeys.filter(k => this.state.employersNames.filter((em) => em.key ==
+                                        (this.state.employersEmails.filter((emp) => emp.key == k.key)[0].email))[0].name
+                                        .indexOf(this.state.search) > -1).map(employer => {
                                             return(
                                                 <li key={employer.id} className="emp-item">
                                                     <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
                                                         <div className="last-update">{employer.lastUpdate}</div>
-                                                        {this.state.loading == false ? <div className="button-text">{this.state.employersEmails
-                                                        .filter((emp) => emp.key == employer.key)[0].email}</div> : 'Loading...'}
+                                                        {this.state.loading == false ? <div className="button-text">
+                                                            {this.state.employersNames.filter((em) => em.key == 
+                                                            (this.state.employersEmails.filter((emp) => emp.key == employer.key)[0].email))[0].name}
+                                                        </div> : 'Loading...'}
                                                     </button>
                                                 </li>
                                             )
