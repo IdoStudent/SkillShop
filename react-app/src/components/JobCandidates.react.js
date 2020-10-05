@@ -77,11 +77,18 @@ class JobCandidates extends React.Component {
   }
 
   async setFilters(){
-    // GET FILTERS FROM LOCAL STORAGE: 
-    
-    // JSON.parse(localStorage.getItem("softSkillsFilter")
-    // JSON.parse(localStorage.getItem("hardSkillsFilter")
-    // JSON.parse(localStorage.getItem("techSkillsFilter")
+    // GET FILTERS FROM LOCAL STORAGE:
+
+    let items = [];
+
+    items = JSON.parse(localStorage.getItem("softSkillsFilter")).concat(
+            JSON.parse(localStorage.getItem("hardSkillsFilter"))).concat(
+            JSON.parse(localStorage.getItem("techSkillsFilter")));
+
+    this.setState({
+      filters: items,
+    });
+
   }
 
   async getSkills() {

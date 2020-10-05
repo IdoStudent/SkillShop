@@ -88,7 +88,7 @@ class Candidates extends React.Component {
 
  async getThirdApi(email){
     console.log(email)
-    fetch("http://demo5322112.mockable.io/TESTTEST")
+    fetch('https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=' + email)
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
