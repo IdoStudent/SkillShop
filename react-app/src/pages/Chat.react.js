@@ -47,18 +47,6 @@ const DUMMY_DATA = [
     }
 ]
 
-const JOB_POSITIONS_DUMMY_DATA = [
-    {
-        jobTitle: "Driver"
-    },
-    {
-        jobTitle: "Programmer"
-    },
-    {
-        jobTitle: "Manager"
-    }
-]
-
 class Chat extends Component {
     constructor(){
         super()
@@ -76,31 +64,38 @@ class Chat extends Component {
             matchId: "abcdefg",
             employersEmails: [],
             employersNames: [],
+            jobseekersEmails: [],
             Loading: true
         }
     }
 
     async componentDidMount() {   
-        await this.getMatches();
-        this.getJobTitles();
-        this.getUserType();
-        this.getMatchId();
-        this.getMessage();
-        await this.getEmployersEmail();
-        await this.getEmployersNames();
-        
-        //test
         console.log('my email:',Auth.user.attributes.email);
+        await this.getUserType();
         console.log('user type:', this.state.userType);
 
+        if(this.state.userType == 'jobseeker'){
+            await this.getMatches();
+            // this.getMatchId();
+            // this.getMessage();
+            await this.getEmployersEmail();
+            await this.getEmployersNames();
+        }
+        else if(this.state.userType == 'employer'){
+            await this.getJobTitles();
+            await this.getJobseekersEmails();
+            // this.getJobseekersNames();
+            this.setState({ loading : false });
+        }
+
+        //finish loading
         this.setState({ loading : false });
     }
 
     // get user type from user table
-    getUserType() {
+    async getUserType() {
         const email =  Auth.user.attributes.email
-        console.log("email: ",email);
-        fetch(
+        await fetch(
             `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
                 email )
             .then((res) => res.json())
@@ -113,7 +108,7 @@ class Chat extends Component {
             )
       }
 
-    // get all matches with userEmail from matches table
+    // get all matches with userEmail from matches table (jobseeker)
     async getMatches() {
         const email =  Auth.user.attributes.email
         await fetch(
@@ -176,6 +171,21 @@ class Chat extends Component {
         }
     }
 
+    getJobseekersEmails = async () => {
+        // console.log('getJobseekersEmails');
+        // console.log('length of job titles:',this.state.jobTitles.length);
+
+        for(var i=0;i<this.state.jobTitles.length;i++){
+            // console.log('job title:',this.state.jobTitles[i].jobKey);
+            await fetch(`https://q35g00j27k.execute-api.ap-southeast-2.amazonaws.com/prod/?jobKey=` + this.state.jobTitles[i].jobKey )
+                .then((res) => res.json())
+                .then((result) => {
+                    console.log('Result:',result[0].userEmail);
+                    this.state.jobseekersEmails.push({ key : this.state.jobTitles[i].jobKey , emails : result });
+                })
+        }
+    }
+
     getEmployersNames = async () => {
         console.log('getEmployersNames');
         for(var i=0;i<this.state.employersEmails.length;i++){
@@ -207,12 +217,6 @@ class Chat extends Component {
 
     //get match id with jobkey
     handleDropDownMenu = (event) => {
-        // console.log('get match id: ' + this.state.matchId);
-        // console.log('get message: ' + this.state.messages);
-
-        // console.log(event.target.value);
-
-        // console.log(this.state.jobTitles[0].jobKey);
         this.setState({ currentPosition: event.target.value });
         console.log('current position:',this.state.currentPosition);
     }
@@ -244,10 +248,10 @@ class Chat extends Component {
           this.setState({message: ""});
     };
 
-    getJobTitles = (event) => {
-        console.log('get job titles');
+    getJobTitles = async (event) => {
+        // console.log('get job titles');
         const email =  Auth.user.attributes.email
-        fetch(
+        await fetch(
             `https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` + email)
             .then((res) => res.json())
             .then((result) => {
@@ -338,22 +342,35 @@ class Chat extends Component {
                                 </Grid.Col>
                             }
                             {/* employer side list */}
-                            {this.state.search=="" && this.state.userType=="employer" &&
-                                <Grid.Col className="col-3 list">
+                            {this.state.loading == false ? (this.state.userType=="employer" ? (this.state.currentPosition !== "" ? 
+                                (<Grid.Col className="col-3 list">
                                     <ul className="emp-list">
-                                        {this.state.jobKeys.map(employer => {
-                                            return(
-                                                <li key={employer.id} className="emp-item">
-                                                    <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
-                                                        <div className="last-update">{employer.lastUpdate}</div>
-                                                        <div className="button-text">{employer.email}</div>
-                                                    </button>
-                                                </li>
-                                            )
-                                        })}
+                                        {this.state.jobseekersEmails.filter((jse) => jse.key == this.state.currentPosition)
+                                        [0].emails.map(email => {
+                                                return(
+                                                    <li key={email.id} className="emp-item">
+                                                        <button className="my-button-list">
+                                                            {/* <div className="last-update">{employer.lastUpdate}</div> */}
+                                                            <div className="button-text">{email.userEmail}</div>
+                                                        </button>
+                                                    </li>
+                                                )
+                                            })
+                                        }
                                     </ul>
-                                </Grid.Col>
-                            }
+                                </Grid.Col>)
+                            :
+                            (<Grid.Col className="col-3 list">
+                                <ul className="emp-list">
+                                    
+                                </ul>
+                            </Grid.Col>))        
+                            : console.log("huh?")) : 
+                            (<Grid.Col className="col-3 list">
+                                <ul className="emp-list">
+                                    loading...
+                                </ul>
+                            </Grid.Col>)  }
                             {/* Chat */}
                             <Grid.Col className="col-9">
                                 {/* Messages */}
