@@ -192,8 +192,10 @@ class Chat extends Component {
 
     chooseEmployer = (employer) => {
         console.log("Choose Employer");
+
         console.log("name:",this.state.employersNames.filter((em) => em.key == 
         (this.state.employersEmails.filter((emp) => emp.key == employer.key)[0].email))[0].name);
+
         this.setState({ currentEmployer : this.state.employersNames.filter((em) => em.key == 
             (this.state.employersEmails.filter((emp) => emp.key == employer.key)[0].email))[0].name});
 
@@ -313,12 +315,13 @@ class Chat extends Component {
                                     </ul>
                                 </Grid.Col>
                             }
+                            {/* list post search */}
                             {this.state.search!="" && this.state.userType=="jobseeker" &&
                                 <Grid.Col className="col-3 list">
                                     <ul className="emp-list">
                                         {this.state.jobKeys.filter(k => this.state.employersNames.filter((em) => em.key ==
-                                        (this.state.employersEmails.filter((emp) => emp.key == k.key)[0].email))[0].name
-                                        .indexOf(this.state.search) > -1).map(employer => {
+                                        (this.state.employersEmails.filter((emp) => emp.key == k.key)[0].email))[0].name.toLowerCase()
+                                        .indexOf(this.state.search.toLowerCase()) > -1).map(employer => {
                                             return(
                                                 <li key={employer.id} className="emp-item">
                                                     <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
