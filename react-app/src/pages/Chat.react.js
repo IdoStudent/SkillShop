@@ -56,7 +56,7 @@ class Chat extends Component {
             message: "",
             jobTitles: [],
             currentPosition: "",
-            currentEmployer: "",
+            chosenUser: "",
             userType: "",
             jobKeys: [],
             employersList: [],
@@ -231,9 +231,19 @@ class Chat extends Component {
         console.log("name:",this.state.employersNames.filter((em) => em.key == 
         (this.state.employersEmails.filter((emp) => emp.key == employer.key)[0].email))[0].name);
 
-        this.setState({ currentEmployer : this.state.employersNames.filter((em) => em.key == 
+        this.setState({ chosenUser : this.state.employersNames.filter((em) => em.key == 
             (this.state.employersEmails.filter((emp) => emp.key == employer.key)[0].email))[0].name});
+    }
 
+    chooseJobseeker = (jobseeker) => {
+        console.log("Choose Jobseeker");
+
+        console.log(jobseeker);
+
+        console.log("name:",this.state.jobseekersNames.filter((js) => js.key == 
+        (this.state.jobseekersEmails.filter((jsr) => jsr.key == jobseeker.key)[0].email))[0].name);
+
+        this.setState({ chosenUser : this.state.jobseekersNames.filter((js) => js.key == jobseeker.email)[0].name});
     }
 
     handleSearchChange = (event) => {
@@ -319,7 +329,7 @@ class Chat extends Component {
                             }
                             {/* Title */}
                             <Grid.Col className="col-9 title">
-                                <div className="title-text">{this.state.currentEmployer}</div>
+                                <div className="title-text">{this.state.chosenUser}</div>
                             </Grid.Col>
                         </Grid.Row>
                         {/* Body */}
@@ -374,7 +384,7 @@ class Chat extends Component {
                                         .map(jobseeker => {
                                                 return(
                                                     <li key={jobseeker.id} className="emp-item">
-                                                        <button className="my-button-list">
+                                                        <button className="my-button-list" onClick={() => this.chooseJobseeker(jobseeker)}>
                                                             <div className="last-update">{jobseeker.lastUpdate}</div>
                                                             <div className="button-text">{
                                                                 this.state.jobseekersNames.filter((jsn) => jsn.key == jobseeker.email)[0].name
