@@ -29,6 +29,8 @@ class Login extends Component {
   handleSubmit = async (event) => {
     event.preventDefault();
 
+    let userType = Auth.user.attributes['custom:role']
+
     if (this.validateForm()) {
       try {
         const params = {
@@ -40,7 +42,7 @@ class Login extends Component {
           userPostCode: this.state.postcode,
           userState: this.state.state,
           userAbout: "",
-          userType: Auth.user.attributes['custom:role'],
+          userType: userType,
           userPhoneNumber: "",
         };
 
@@ -48,6 +50,17 @@ class Login extends Component {
           "https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata",
           params
         );
+
+        if(userType == "jobseeker") {
+          this.props.history.push({
+            pathname: "/myprofile",
+          });
+        } else {
+          this.props.history.push({
+            pathname: "/candidates",
+          });
+        }
+
       } catch (err) {
         console.log(`An error has occurred: ${err}`);
       }
