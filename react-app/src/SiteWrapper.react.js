@@ -44,7 +44,9 @@ class SiteWrapper extends React.Component {
           this.setState({ userFirstName: name })
         } else {
 
-          // UNCOMMENT TO REDIRECT USER TO SETUP SCREEN
+          console.log("no data")
+
+          //UNCOMMENT TO REDIRECT USER TO SETUP SCREEN
           /*this.props.history.push({
             pathname: '/profilesetup',
           });*/
@@ -70,10 +72,12 @@ class SiteWrapper extends React.Component {
 
   async signOut() {
     try {
-      // UNCOMMENT BELOW LINE TO ACTUALLY SIGN OUT USERS (tested and works)
-      await Auth.signOut();
 
+      await Auth.signOut();
       this.setState({ redirect: true });
+
+      console.log(Auth.user)
+
     } catch (error) {
       console.log("error signing out: ", error);
     }
