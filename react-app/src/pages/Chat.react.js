@@ -253,6 +253,7 @@ class Chat extends Component {
     //get match id with jobkey
     handleDropDownMenu = (event) => {
         this.setState({ currentPosition: event.target.value });
+        this.setState({ chosenUser : "" });
         console.log('current position:',this.state.currentPosition);
     }
 
