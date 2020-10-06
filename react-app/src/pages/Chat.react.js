@@ -65,6 +65,8 @@ class Chat extends Component {
             employersEmails: [],
             employersNames: [],
             jobseekersEmails: [],
+            jobSeekersEmailsList: [],
+            jobseekersNames: [],
             Loading: true
         }
     }
@@ -84,6 +86,7 @@ class Chat extends Component {
         else if(this.state.userType == 'employer'){
             await this.getJobTitles();
             await this.getJobseekersEmails();
+            await this.getJobseekersNames();
             // this.getJobseekersNames();
             this.setState({ loading : false });
         }
@@ -180,8 +183,13 @@ class Chat extends Component {
             await fetch(`https://q35g00j27k.execute-api.ap-southeast-2.amazonaws.com/prod/?jobKey=` + this.state.jobTitles[i].jobKey )
                 .then((res) => res.json())
                 .then((result) => {
-                    console.log('Result:',result[0].userEmail);
-                    this.state.jobseekersEmails.push({ key : this.state.jobTitles[i].jobKey , emails : result });
+                    // console.log('Result:',result[0].userEmail);
+                    // console.log('length of result:',result.length);
+                    for(var j=0;j<result.length;j++){
+                        // console.log(result[j].userEmail);
+                        this.state.jobseekersEmails.push({ key : this.state.jobTitles[i].jobKey, lastUpdate : "1d" , email : result[j].userEmail });
+                        this.state.jobSeekersEmailsList.push(result[j].userEmail);
+                    }
                 })
         }
     }
@@ -195,6 +203,23 @@ class Chat extends Component {
                     if(typeof result.Item !== 'undefined'){
                         console.log('user Name:',result.Item.userFirstName);
                         this.state.employersNames.push({ key : this.state.employersEmails[i].email , name : result.Item.userFirstName });
+                    }
+                })
+        }
+    }
+
+    getJobseekersNames = async () => {
+        console.log('getJobseekersNames');
+
+        // console.log('length of jobseekers email list:',this.state.jobSeekersEmailsList.length);
+        for(var i=0;i<this.state.jobSeekersEmailsList.length;i++){
+            // console.log(this.state.jobSeekersEmailsList[i]);
+            await fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` + this.state.jobSeekersEmailsList[i] )
+                .then((res) => res.json())
+                .then((result) => {
+                    if(typeof result.Item !== 'undefined'){
+                        // console.log('user Name:',result.Item.userFirstName);
+                        this.state.jobseekersNames.push({ key : this.state.jobSeekersEmailsList[i] , name : result.Item.userFirstName });
                     }
                 })
         }
@@ -346,12 +371,14 @@ class Chat extends Component {
                                 (<Grid.Col className="col-3 list">
                                     <ul className="emp-list">
                                         {this.state.jobseekersEmails.filter((jse) => jse.key == this.state.currentPosition)
-                                        [0].emails.map(email => {
+                                        .map(jobseeker => {
                                                 return(
-                                                    <li key={email.id} className="emp-item">
+                                                    <li key={jobseeker.id} className="emp-item">
                                                         <button className="my-button-list">
-                                                            {/* <div className="last-update">{employer.lastUpdate}</div> */}
-                                                            <div className="button-text">{email.userEmail}</div>
+                                                            <div className="last-update">{jobseeker.lastUpdate}</div>
+                                                            <div className="button-text">{
+                                                                this.state.jobseekersNames.filter((jsn) => jsn.key == jobseeker.email)[0].name
+                                                            }</div>
                                                         </button>
                                                     </li>
                                                 )
