@@ -5,6 +5,7 @@ import Dropzone from "react-dropzone-uploader";
 import "react-dropzone-uploader/dist/styles.css";
 import S3FileUpload from 'react-s3';
 import reactS3, { uploadFile } from 'react-s3';
+import axios from "axios";
 
 const config = {
   bucketName: 'skillshopdocs',
@@ -30,23 +31,31 @@ class UploadDocument extends React.Component {
 
   handleChangeStatus = ({ meta, file }, status) => {
     console.log(status, meta, file);
-  };
-
-  handleSubmit = (files, allFiles) => {
-    console.log(files.map((f) => f.meta));
-    allFiles.forEach((f) => f.remove());
-       
-  };
-
-  upload=(e, files)=>{
-    S3FileUpload.uploadFile(files[0], config)
+    S3FileUpload.uploadFile(file, config)
     .then((data)=> {
         console.log(data.location)
+        
+        const params = {
+          userEmail: "test1@gmail.com",
+          documentLocation: data.location
+        }
+
+        axios.post(
+          "https://ezc5p5i8b2.execute-api.ap-southeast-2.amazonaws.com/prod",
+          params
+        );
     })
     .catch( (err)=>{
         alert(err)
     })
-  }
+  };
+
+  handleSubmit = (files, allFiles) => {
+    console.log(files.map((f) => f.meta));
+    allFiles.forEach((f) => f.remove());   
+  };
+
+
 
   render() {
     return (
@@ -57,7 +66,8 @@ class UploadDocument extends React.Component {
           <Dropzone
             getUploadParams={this.getUploadParams}
             onChangeStatus={this.handleChangeStatus}
-            onSubmit={this.upload}
+            type="file"
+            onSubmit={this.handleSubmit}
             multiple={false}
             maxFiles={1}
             accept="*"
