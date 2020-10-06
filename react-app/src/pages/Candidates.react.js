@@ -263,29 +263,45 @@ class Candidates extends React.Component {
                           </Form.Select>
                         </Form.Group>
                       </Grid.Col>
-                      <Grid.Col offset={4} md={4}>
-                        <Button
-                          floated="right"
-                          basic
-                          icon="plus"
-                          type="button"
-                          onClick={this.openModalNew}
-                        />
-                        <Button
-                          floated="right"
-                          basic
-                          icon="filter"
-                          type="button"
-                          onClick={this.openModalFilter}
-                        />
-                        <Button
-                          floated="right"
-                          icon="pencil"
-                          type="button"
-                          basic
-                          onClick={this.openModalInfo}
-                        />
-                      </Grid.Col>
+                      {
+                          this.state.data.length > 0 ? (
+                            <Grid.Col offset={4} md={4}>
+
+                            <Button
+                              floated="right"
+                              basic
+                              icon="plus"
+                              type="button"
+                              onClick={this.openModalNew}
+                            />
+                            <Button
+                              floated="right"
+                              basic
+                              icon="filter"
+                              type="button"
+                              onClick={this.openModalFilter}
+                            />
+                            <Button
+                              floated="right"
+                              icon="pencil"
+                              type="button"
+                              basic
+                              onClick={this.openModalInfo}
+                            />
+                          </Grid.Col>
+                          ) : (
+                            <Grid.Col offset={4} md={4}>
+                            <Button
+                              floated="right"
+                              basic
+                              icon="plus"
+                              type="button"
+                              onClick={this.openModalNew}
+                            />
+                          </Grid.Col>
+                          )
+                        }
+                     
                     </Grid.Row>
                   </Card.Body>
                 </Container>
