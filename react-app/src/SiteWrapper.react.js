@@ -44,12 +44,9 @@ class SiteWrapper extends React.Component {
           this.setState({ userFirstName: name })
         } else {
 
-          console.log("no data")
-
-          //UNCOMMENT TO REDIRECT USER TO SETUP SCREEN
-          /*this.props.history.push({
+          this.props.history.push({
             pathname: '/profilesetup',
-          });*/
+          });
 
         }
       });

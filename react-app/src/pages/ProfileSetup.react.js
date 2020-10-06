@@ -55,7 +55,7 @@ class Login extends Component {
   };
 
   validateForm = () => {
-    let validInput = false;
+    let validInput = true;
 
     let fName = this.state.firstName;
     let surname = this.state.surname;
@@ -124,6 +124,10 @@ class Login extends Component {
   onInputChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
+      fNameInvalid: false,
+      surnameInvalid: false,
+      postcodeInvalid: false,
+      stateInvalid: false
     });
   };
 
@@ -135,7 +139,7 @@ class Login extends Component {
           <p> Since it's your first time here, we need some basic details from you to begin setting up your profile. You'll have to complete the full profile setup in 'My Profile'. Until you've filled out some more basic information about yourself such as a decsription and some experience, you won't appear in candidate searches.
               </p>
           <Container className="card">
-            <Form onSubmit={this.handleSubmit}>
+            <Form>
               <Grid.Row>
                 <Grid.Col md={10} offset={1}>
                   <Form.Group label="First Name" isRequired>
@@ -191,7 +195,7 @@ class Login extends Component {
                 </Grid.Col>
               </Grid.Row>
 
-              <Button animated>
+              <Button animated onClick={this.handleSubmit}>
                 <Button.Content type="submit" visible>
                   Let's go!
                 </Button.Content>
