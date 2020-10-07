@@ -34,17 +34,29 @@ class ProfilePage extends Component {
     const userType = Auth.user.attributes["custom:role"];
 
     return (
-      <SiteWrapper>
+      <SiteWrapper>        
+        
+        {userType == "jobseeker" ? (
         <Alert type="warning" className="fixed">
+        <center>
+          All information on your profile is publicly available to potential
+          employers.{" "}
+          <span onClick={this.openModal} className="link">
+            {" "}
+            Learn more{" "}
+          </span>
+        </center>
+      </Alert>
+        ) :
+        (
+          <Alert type="info" className="fixed">
           <center>
-            All information on your profile is publicly available to potential
-            employers.{" "}
-            <span onClick={this.openModal} className="link">
-              {" "}
-              Learn more{" "}
-            </span>
+            This information is only for our record. Any candidates that you match with will only see your first name. {" "}
           </center>
         </Alert>
+        )
+  }
+
         <div className="spacer" />
         <div className="my-3 my-md-5">
           <Container>
