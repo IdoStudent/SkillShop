@@ -223,7 +223,6 @@ class Candidates extends React.Component {
         jobLocation: newInfo[1],
         jobIndustry: newInfo[2],
         jobAbout: newInfo[3],
-        //don't need to add filters here because this is a new Job
       };
       axios.post(
         "https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod",
@@ -258,6 +257,7 @@ class Candidates extends React.Component {
                             id="profile"
                             onChange={this.handleSelect}
                             value={this.state.selectValue}
+                            disabled={this.state.data.length > 0 ? ( false ) : ( true )}
                           >
                             {this.state.selectItems}
                           </Form.Select>
@@ -310,8 +310,13 @@ class Candidates extends React.Component {
                 {/* Candidate Info */}
                 <Container className="card" name="candidateInfo">
                   <Card.Body>
-                    {/* Insert candidate info component */}
-                    <JobCandidates />
+                    {
+                      this.state.data.length > 0 ? 
+                      ( <JobCandidates /> ) 
+                      :
+                      ( <p> You don't have any existing job profiles. Create one to start finding candidates! </p> ) 
+                    }
+                    
                   </Card.Body>
                 </Container>
               </Grid.Col>
