@@ -4,7 +4,7 @@ import { Button, Modal, Icon } from "semantic-ui-react";
 import Dropzone from "react-dropzone-uploader";
 import "react-dropzone-uploader/dist/styles.css";
 import S3FileUpload from 'react-s3';
-import reactS3, { uploadFile } from 'react-s3';
+//import reactS3, { uploadFile } from 'react-s3';
 import axios from "axios";
 import Auth from "@aws-amplify/auth";
 

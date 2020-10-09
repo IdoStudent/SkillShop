@@ -31,20 +31,18 @@ class Login extends Component {
       // AWS Cognito integration here
       try {
         this.setState({sendingData: true})
-        const user = await Auth.signIn(
+
+        await Auth.signIn(
           this.state.username,
           this.state.password
         );
-        this.props.auth.setAuthStatus(true);
-        this.props.auth.setUser(user);
 
-        let role = user.attributes["custom:role"];
-        // console.log(role);
+        let role = Auth.user.attributes["custom:role"];
 
-        if (role === "employer") {
+        if (role == "employer") {
           console.log('route to employer profile');
           this.props.history.push("/candidates");
-        } else if (role === "jobseeker") {
+        } else if (role == "jobseeker") {
           console.log('route to jobseeker profile');
           this.props.history.push("/myprofile");
         }
@@ -65,6 +63,8 @@ class Login extends Component {
             errorMsg: "Incorrect username or password.",
           });
         }
+
+        console.log(error)
       }
     }
   };
@@ -130,7 +130,7 @@ class Login extends Component {
             <Grid className="landingGrid">
               <Grid.Row>
                 <Grid.Col md={8} offset={2}>
-                  <Form onSubmit={this.handleSubmit}>
+                  <Form>
                     <Form.Group label="Email" className="formLabelLeft">
                       <Form.Input
                         name="username"
@@ -149,7 +149,7 @@ class Login extends Component {
                         invalid={this.state.passwordErr}
                       />
                     </Form.Group>
-                    <Button animated={!this.state.sendingData} loading={this.state.sendingData}>
+                    <Button animated={!this.state.sendingData} loading={this.state.sendingData} onClick={this.handleSubmit}>
                       <Button.Content type="submit" visible>
                         Login
                       </Button.Content>

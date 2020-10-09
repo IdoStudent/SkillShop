@@ -13,6 +13,9 @@ import { Menu, Sidebar, Icon as IconMain } from "semantic-ui-react";
 // tkt27786@cuoly.com
 // 12345678
 
+// employer@test.com
+// 12345678
+
 class SiteWrapper extends React.Component {
   constructor(props) {
     super(props);
@@ -36,22 +39,18 @@ class SiteWrapper extends React.Component {
     )
       .then((res) => res.json())
       .then((result) => {
-        
         // If length is undefined, that means for some reason it's not returning data at all, so dont try and access fields that dont exist
         if (result.Item !== undefined) {
-          let name = result.Item.userFirstName
-          
-          this.setState({ userFirstName: name })
+          let name = result.Item.userFirstName;
+
+          this.setState({ userFirstName: name });
         } else {
-
-          // UNCOMMENT TO REDIRECT USER TO SETUP SCREEN
-          /*this.props.history.push({
-            pathname: '/profilesetup',
-          });*/
-
+          this.props.history.push({
+            pathname: "/profilesetup",
+          });
         }
       });
-  }
+  };
 
   componentDidMount() {
     var date = new Date();
@@ -65,15 +64,15 @@ class SiteWrapper extends React.Component {
       this.setState({ msg: "Good Evening, " });
     }
 
-    this.getUserData(Auth.user.attributes.email)
+    this.getUserData(Auth.user.attributes.email);
   }
 
   async signOut() {
     try {
-      // UNCOMMENT BELOW LINE TO ACTUALLY SIGN OUT USERS (tested and works)
       await Auth.signOut();
-
       this.setState({ redirect: true });
+
+      console.log(Auth.user);
     } catch (error) {
       console.log("error signing out: ", error);
     }
@@ -83,6 +82,8 @@ class SiteWrapper extends React.Component {
     if (this.state.redirect) {
       return <Redirect push to="/" />;
     }
+
+    const userType = Auth.user.attributes["custom:role"];
     return (
       <div className="wrapper">
         {/* SIDEBAR */}
@@ -92,18 +93,23 @@ class SiteWrapper extends React.Component {
 
           {/* MENU ITEMS */}
           <div className="menuItems">
-            <NavLink exact activeClassName="active" to="/myprofile">
-              <Menu.Item>
-                <IconMain name="home" className="icon" />
-              </Menu.Item>
-            </NavLink>
 
-            <NavLink exact activeClassName="active" to="/candidates">
-              <Menu.Item>
-                <IconMain name="users" className="icon" />
-              </Menu.Item>
-            </NavLink>
+            {/* If the user is an employer, show the navigation link for the candidates page, otherwise show the navigation link for the profile page */}
+            {userType == "employer" ? (
+              <NavLink exact activeClassName="active" to="/candidates">
+                <Menu.Item>
+                  <IconMain name="users" className="icon" />
+                </Menu.Item>
+              </NavLink>
+            ) : (
+              <NavLink exact activeClassName="active" to="/myprofile">
+                <Menu.Item>
+                  <IconMain name="home" className="icon" />
+                </Menu.Item>
+              </NavLink>
+            )}
 
+            {/* Both users can access chat */}
             <NavLink exact activeClassName="active" to="/chat">
               <Menu.Item>
                 <IconMain name="comments" className="icon" />

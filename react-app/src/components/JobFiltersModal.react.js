@@ -79,9 +79,6 @@ class JobFiltersModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      experience: props.data.experienceFilter,
-      education: props.data.educationFilter,
-
       // Modal State
       open: false,
     };

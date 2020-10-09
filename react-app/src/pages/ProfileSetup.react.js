@@ -29,6 +29,8 @@ class Login extends Component {
   handleSubmit = async (event) => {
     event.preventDefault();
 
+    let userType = Auth.user.attributes['custom:role']
+
     if (this.validateForm()) {
       try {
         const params = {
@@ -40,7 +42,7 @@ class Login extends Component {
           userPostCode: this.state.postcode,
           userState: this.state.state,
           userAbout: "",
-          userType: Auth.user.attributes['custom:role'],
+          userType: userType,
           userPhoneNumber: "",
         };
 
@@ -48,6 +50,17 @@ class Login extends Component {
           "https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata",
           params
         );
+
+        if(userType == "jobseeker") {
+          this.props.history.push({
+            pathname: "/myprofile",
+          });
+        } else {
+          this.props.history.push({
+            pathname: "/candidates",
+          });
+        }
+
       } catch (err) {
         console.log(`An error has occurred: ${err}`);
       }
@@ -55,7 +68,7 @@ class Login extends Component {
   };
 
   validateForm = () => {
-    let validInput = false;
+    let validInput = true;
 
     let fName = this.state.firstName;
     let surname = this.state.surname;
@@ -124,6 +137,10 @@ class Login extends Component {
   onInputChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
+      fNameInvalid: false,
+      surnameInvalid: false,
+      postcodeInvalid: false,
+      stateInvalid: false
     });
   };
 
@@ -135,7 +152,7 @@ class Login extends Component {
           <p> Since it's your first time here, we need some basic details from you to begin setting up your profile. You'll have to complete the full profile setup in 'My Profile'. Until you've filled out some more basic information about yourself such as a decsription and some experience, you won't appear in candidate searches.
               </p>
           <Container className="card">
-            <Form onSubmit={this.handleSubmit}>
+            <Form>
               <Grid.Row>
                 <Grid.Col md={10} offset={1}>
                   <Form.Group label="First Name" isRequired>
@@ -191,7 +208,7 @@ class Login extends Component {
                 </Grid.Col>
               </Grid.Row>
 
-              <Button animated>
+              <Button animated onClick={this.handleSubmit}>
                 <Button.Content type="submit" visible>
                   Let's go!
                 </Button.Content>

@@ -123,6 +123,13 @@ class RemoveUser extends React.Component {
                 <p><b>Are you sure you want to delete your profile?</b> </p>
                 <p>This will completely remove your user account from the system. This means that all your information, matches, and chat history will be <b>permanently</b> deleted. If you wish to access SkillShop again you will
                 need to create a new account and start from scratch. </p>
+                {
+                  Auth.user.attributes["custom:role"] == "employer" ? 
+                  (
+                  <p> If your business wishes to continue using SkillShop's platform, we highly recommend that you transfer ownership of your account instead of deleting it. </p>
+                  ) : 
+                  (<p></p>)
+                }
                 <p>Deleting your account is irreversible!</p>
               </Modal.Content>
     

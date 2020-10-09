@@ -42,6 +42,18 @@ class App extends React.Component {
     console.log("set user");
   };
 
+  isUserAuthenticated = () => {
+    let isAuthenticated = true;
+
+    console.log("app auth", Auth.user)
+    if(Auth.user === null) {
+      isAuthenticated = false;
+      console.log("no user")
+    }
+
+    return isAuthenticated;
+  }
+
   async componentDidMount() {
     try {
       const session = await Auth.currentSession();
@@ -49,10 +61,13 @@ class App extends React.Component {
       console.log(session);
       const user = await Auth.currentAuthenticatedUser();
       this.setUser(user);
+      
     } catch (error) {
       console.log(error);
     }
     this.setState({ isAuthenticating: false });
+
+    this.isUserAuthenticated()
   }
 
   render() {
@@ -76,13 +91,11 @@ class App extends React.Component {
               />
 
               <NoUser
-                authed={this.state.isAuthenticated}
                 path="/login"
                 component={Login}
               />
 
               <NoUser
-                authed={this.state.isAuthenticated}
                 path="/signup"
                 component={Signup}
               />
@@ -97,13 +110,11 @@ class App extends React.Component {
               {/* PRIVATE ROUTES (USER NEEDS TO BE AUTHENTICATED) */}
               {/* JOBSEEKER PAGES */}
               <PrivateRoute
-                authed={this.state.isAuthenticated}
                 path="/myprofile"
                 component={ProfilePage}
               />
 
               <PrivateRoute
-                authed={this.state.isAuthenticated}
                 path="/profilesetup"
                 component={ProfileSetup}
               />
@@ -133,12 +144,12 @@ class App extends React.Component {
 }
 
 // Redirect function - redirects to login if user is not authenticated
-function PrivateRoute({ component: Component, authed, ...rest }) {
+function PrivateRoute({ component: Component, ...rest }) {
   return (
     <Route
       {...rest}
       render={(props) =>
-        authed === true ? (
+        Auth.user !== null ? (
           <Component {...props} />
         ) : (
           <Redirect
@@ -151,12 +162,12 @@ function PrivateRoute({ component: Component, authed, ...rest }) {
 }
 
 // Redirect function - redirects to myProfile if user is authenticated
-function NoUser({ component: Component, authed, ...rest }) {
+function NoUser({ component: Component, ...rest }) {
   return (
     <Route
       {...rest}
       render={(props) =>
-        authed === false ? (
+        Auth.user === null ? (
           <Component {...props} />
         ) : (
           <Redirect to={{ pathname: "/myprofile" }} />

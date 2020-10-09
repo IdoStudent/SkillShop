@@ -4,6 +4,7 @@ import React, { Component } from "react";
 
 import { Container, Grid, Header, Alert } from "tabler-react";
 import { Button, Modal } from "semantic-ui-react";
+import { Auth } from "aws-amplify";
 
 import SiteWrapper from "../SiteWrapper.react";
 
@@ -30,43 +31,63 @@ class ProfilePage extends Component {
   };
 
   render() {
+    const userType = Auth.user.attributes["custom:role"];
+
     return (
-      <SiteWrapper>
+      <SiteWrapper>        
+        
+        {userType == "jobseeker" ? (
         <Alert type="warning" className="fixed">
+        <center>
+          All information on your profile is publicly available to potential
+          employers.{" "}
+          <span onClick={this.openModal} className="link">
+            {" "}
+            Learn more{" "}
+          </span>
+        </center>
+      </Alert>
+        ) :
+        (
+          <Alert type="info" className="fixed">
           <center>
-            All information on your profile is publicly available to potential
-            employers.{" "}
-            <span onClick={this.openModal} className="link">
-              {" "}
-              Learn more{" "}
-            </span>
+            This information is only for our record. Any candidates that you match with will only see your first name. {" "}
           </center>
         </Alert>
-        <div className="spacer"></div>
+        )
+  }
+
+        <div className="spacer" />
         <div className="my-3 my-md-5">
           <Container>
             <Grid.Row>
               <Grid.Col lg={12}>
                 <Header.H1 className="pageHeading">Your Profile</Header.H1>
 
-                {/* Jobseeker General Information Set */}
-                <GeneralInformation />
+                {userType == "jobseeker" ? (
+                  <div>
+                    {/* Jobseeker General Information Set */}
+                    <GeneralInformation />
 
-                {/* Jobseeker Skills Set */}
-                <Skills />
+                    {/* Jobseeker Skills Set */}
+                    <Skills />
 
-                {/* Jobseeker Experience Set */}
-                <JobseekerExpContainer />
+                    {/* Jobseeker Experience Set */}
+                    <JobseekerExpContainer />
 
-                {/* Jobseeker Education Set */}
-                <JobseekerEduContainer />
+                    {/* Jobseeker Education Set */}
+                    <JobseekerEduContainer />
 
-                {/* Upload Document */}
-                <UploadDocument />
+                    {/* Upload Document */}
+                    <UploadDocument />
+                  </div>
+                ) : (
+                  // If not a jobseeker, just display the general information set so the user can still change their name and information
+                  <GeneralInformation />
+                )}
 
                 {/* Remove User */}
                 <RemoveUser />
-
               </Grid.Col>
             </Grid.Row>
           </Container>
@@ -75,16 +96,29 @@ class ProfilePage extends Component {
           <Modal open={this.state.open}>
             <Modal.Header>
               <span className="xButtonHeader"> Your public information </span>
-              <Button className="xButton" onClick={this.closeModal} icon="x"/>{" "}
+              <Button
+                className="xButton"
+                onClick={this.closeModal}
+                icon="x"
+              />{" "}
             </Modal.Header>
             <Modal.Content>
               <p>
-                <b>Everything you put on your profile will be publically available for any potential employers to see</b>{" "}
+                <b>
+                  Everything you put on your profile will be publically
+                  available for any potential employers to see
+                </b>{" "}
               </p>
               <p>
-                In order to help facilitate matches, we need to show potential employers your information! This means that for any job we deem you to be a good match for, that business will be able to see your full name, location, description
-                and any experience and education information that you have added. Your privacy is important to us and we only use this information to help match you with potential employers. It is a breach of our terms of service for any employers to 
-                share any information about you with anyone else.
+                In order to help facilitate matches, we need to show potential
+                employers your information! This means that for any job we deem
+                you to be a good match for, that business will be able to see
+                your full name, location, description and any experience and
+                education information that you have added. Your privacy is
+                important to us and we only use this information to help match
+                you with potential employers. It is a breach of our terms of
+                service for any employers to share any information about you
+                with anyone else.
               </p>
             </Modal.Content>
           </Modal>

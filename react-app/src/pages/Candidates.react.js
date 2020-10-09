@@ -223,7 +223,6 @@ class Candidates extends React.Component {
         jobLocation: newInfo[1],
         jobIndustry: newInfo[2],
         jobAbout: newInfo[3],
-        //don't need to add filters here because this is a new Job
       };
       axios.post(
         "https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod",
@@ -258,34 +257,51 @@ class Candidates extends React.Component {
                             id="profile"
                             onChange={this.handleSelect}
                             value={this.state.selectValue}
+                            disabled={this.state.data.length > 0 ? ( false ) : ( true )}
                           >
                             {this.state.selectItems}
                           </Form.Select>
                         </Form.Group>
                       </Grid.Col>
-                      <Grid.Col offset={4} md={4}>
-                        <Button
-                          floated="right"
-                          basic
-                          icon="plus"
-                          type="button"
-                          onClick={this.openModalNew}
-                        />
-                        <Button
-                          floated="right"
-                          basic
-                          icon="filter"
-                          type="button"
-                          onClick={this.openModalFilter}
-                        />
-                        <Button
-                          floated="right"
-                          icon="pencil"
-                          type="button"
-                          basic
-                          onClick={this.openModalInfo}
-                        />
-                      </Grid.Col>
+                      {
+                          this.state.data.length > 0 ? (
+                            <Grid.Col offset={4} md={4}>
+
+                            <Button
+                              floated="right"
+                              basic
+                              icon="plus"
+                              type="button"
+                              onClick={this.openModalNew}
+                            />
+                            <Button
+                              floated="right"
+                              basic
+                              icon="filter"
+                              type="button"
+                              onClick={this.openModalFilter}
+                            />
+                            <Button
+                              floated="right"
+                              icon="pencil"
+                              type="button"
+                              basic
+                              onClick={this.openModalInfo}
+                            />
+                          </Grid.Col>
+                          ) : (
+                            <Grid.Col offset={4} md={4}>
+                            <Button
+                              floated="right"
+                              basic
+                              icon="plus"
+                              type="button"
+                              onClick={this.openModalNew}
+                            />
+                          </Grid.Col>
+                          )
+                        }
+                     
                     </Grid.Row>
                   </Card.Body>
                 </Container>
@@ -294,8 +310,13 @@ class Candidates extends React.Component {
                 {/* Candidate Info */}
                 <Container className="card" name="candidateInfo">
                   <Card.Body>
-                    {/* Insert candidate info component */}
-                    <JobCandidates />
+                    {
+                      this.state.data.length > 0 ? 
+                      ( <JobCandidates /> ) 
+                      :
+                      ( <p> You don't have any existing job profiles. Create one to start finding candidates! </p> ) 
+                    }
+                    
                   </Card.Body>
                 </Container>
               </Grid.Col>
