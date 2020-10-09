@@ -6,6 +6,7 @@ import "react-dropzone-uploader/dist/styles.css";
 import S3FileUpload from 'react-s3';
 import reactS3, { uploadFile } from 'react-s3';
 import axios from "axios";
+import Auth from "@aws-amplify/auth";
 
 const config = {
   bucketName: 'skillshopdocs',
@@ -36,7 +37,7 @@ class UploadDocument extends React.Component {
         console.log(data.location)
         
         const params = {
-          userEmail: "test1@gmail.com",
+          userEmail: Auth.user.attributes.email,
           documentLocation: data.location
         }
 
