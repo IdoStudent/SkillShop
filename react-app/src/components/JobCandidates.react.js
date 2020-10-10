@@ -7,16 +7,16 @@ import { Button } from "semantic-ui-react";
 import axios from "axios";
 
 var jobseekers = [];
-var initialised = false;
-var skillsSet = false;
-var skillsFiltered = false;
+var num = 0;
 
 class JobCandidates extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      num: 0,
+      initialised: false,
+      skillsSet: false,
+      skillsFiltered: false,
       filters: ["Flexibility", "Teamwork"],
       currentCandidate: {
         userAbout: " ",
@@ -56,6 +56,7 @@ class JobCandidates extends React.Component {
       .then((res) => res.json())
       .then((result) => {
         // FOR EACH USER, CHECK USER TYPE AND ADD TO ARRAY IF THEY'RE A JOBSEEKER
+        jobseekers.length = 0;
         for (var i = 0; i < result.length; i++) {
           if (result[i].userType === "jobseeker") {
             jobseekers.push(result[i]);
@@ -73,7 +74,9 @@ class JobCandidates extends React.Component {
         console.log(jobseekers);
       });
 
-      initialised = true;
+      this.setState({
+        initialised: true,
+      });
   }
 
   async setFilters(){
@@ -102,21 +105,26 @@ class JobCandidates extends React.Component {
       )
         .then((res) => res.json())
         .then((result) => {
+          console.log(result.Item);
           // IF RESULT.ITEM === UNDEFINED IT MEANS THE USER HAS NO SKILLS INFORMATION IN THE DATABASE SO WE WILL GET AN ERROR IF WE TRY TO ACCESS IT
           if (result.Item !== undefined) {
             jobseekers[i].userSkills = result.Item.userSkills;
           }
         });
     }
-    skillsSet = true;
+
+    this.setState({
+      skillsSet: true,
+    });
+
   }
 
   setCandidate = () => {
     // CHECK IF INITIALISED IS TRUE (MEANING THE END OF getSkills() HAS BEEN REACHED AND ALL THE DATA IS SET)
-    if (initialised && skillsFiltered && skillsSet) {
-      if (jobseekers[this.state.num] != null){
+    if (this.state.initialised && this.state.skillsFiltered && this.state.skillsSet) {
+      if (jobseekers[num] != null){
         // SET OUR STATE currentCandidate TO THE FIRST INDEX OF OUR FILTERED JOBSEEKERS ARRAY
-        this.setState({ currentCandidate: jobseekers[this.state.num] });
+        this.setState({ currentCandidate: jobseekers[num] });
       } else {
         alert("No matches for this search");
       }
@@ -130,7 +138,7 @@ class JobCandidates extends React.Component {
     // WHEN FILTERING, LOOK THROUGH THE JOBSEEKER ARRAY FOR MATCHES. ANYTHING THAT DOESN'T MATCH, YOU CAN REMOVE FROM THE ARRAY USING 'jobseekers.splice(INDEX, 1)'
     // SPLICE SYNTAX IS: splice(position in array, amount of elements to remove)
     // CHECK IF INITIALISED
-    if (initialised && skillsSet) {
+    if (this.state.initialised && this.state.skillsSet) {
       for (var i = 0; i < jobseekers.length; i++) {
             console.log(this.state.filters);
         if(!this.state.filters.every(r => jobseekers[i].userSkills.includes(r))){
@@ -143,28 +151,31 @@ class JobCandidates extends React.Component {
       // IF INITIALISED IS FALSE, RECHECK IN 250ms OTHERWISE OUR DATA WILL BE UNDEFINED
       setTimeout(this.filterJobseekers, 250);
     }
-    skillsFiltered = true;
+    this.setState({
+      skillsFiltered: true,
+    });
   };
 
   acceptCandidate = (event) => {
-    if (initialised && skillsFiltered && skillsSet){
-      let newNum = this.state.num + 1;
+    if (this.state.initialised && this.state.skillsFiltered && this.state.skillsSet){
+      let newNum = num + 1;
 
       // If Employer likes candidate then add them to their matches database here
 
       if (newNum >= jobseekers.length) {
         console.log("no more candidates");
+        num++;
         // CAN ADD IN SOME LOGIC FOR WHAT TO DO WHEN THERE'S NO MORE CANDIDATES (REMOVE INFO AND DISPLAY A MESSAGE, POPUP, ALERT, ETC.)
         alert("No more candidates available at this time");
       } else {
+        num++;
         this.setState({
-          num: newNum,
           currentCandidate: jobseekers[newNum],
         }
         )
         try {
           const params = {
-            userEmail:  jobseekers[this.state.num].userEmail,
+            userEmail:  jobseekers[num].userEmail,
             jobKey: "testJobCandidatesPage",
             matchId: "testMatchIdJobCandidatesPage"
           };
@@ -180,16 +191,17 @@ class JobCandidates extends React.Component {
   };
 
   rejectCandidate = () => {
-    if (initialised && skillsFiltered && skillsSet){
-      let newNum = this.state.num + 1;
+    if (this.state.initialised && this.state.skillsFiltered && this.state.skillsSet){
+      let newNum = num + 1;
 
       if (newNum >= jobseekers.length) {
         console.log("no more candidates");
+        num++;
         // CAN ADD IN SOME LOGIC FOR WHAT TO DO WHEN THERE'S NO MORE CANDIDATES (REMOVE INFO AND DISPLAY A MESSAGE, POPUP, ALERT, ETC.)
         alert("No more candidates available at this time");
       } else {
+        num++;
         this.setState({
-          num: newNum,
           currentCandidate: jobseekers[newNum],
         });
       }
@@ -282,6 +294,17 @@ class JobCandidates extends React.Component {
                 </Form.Group>
               </Grid.Col>
             </Grid.Row>
+            </Card.Body>
+            <Card.Body>
+            <Grid.Col md={12}>
+              <Form.Group className="mb=0" label="Job Experience">
+                <Form.Input
+                  name="Job Experience"
+                  readOnly
+                  value={this.state.currentCandidate.userSkills}
+                />
+              </Form.Group>
+            </Grid.Col>
             <Grid.Row>
               <Grid.Col md={12}>
                 <Button
