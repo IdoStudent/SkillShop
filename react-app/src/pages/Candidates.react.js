@@ -301,7 +301,7 @@ class Candidates extends React.Component {
                           </Grid.Col>
                           )
                         }
-                     
+
                     </Grid.Row>
                   </Card.Body>
                 </Container>
@@ -311,12 +311,12 @@ class Candidates extends React.Component {
                 <Container className="card" name="candidateInfo">
                   <Card.Body>
                     {
-                      this.state.data.length > 0 ? 
-                      ( <JobCandidates /> ) 
+                      this.state.data.length > 0 ?
+                      ( <JobCandidates /> )
                       :
-                      ( <p> You don't have any existing job profiles. Create one to start finding candidates! </p> ) 
+                      ( <p> You don't have any existing job profiles. Create one to start finding candidates! </p> )
                     }
-                    
+
                   </Card.Body>
                 </Container>
               </Grid.Col>

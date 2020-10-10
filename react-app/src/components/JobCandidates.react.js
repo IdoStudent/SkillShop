@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Container, Grid, Card, Form, Header, Dimmer } from "tabler-react";
+import { Container, Grid, Card, Form, Header, Dimmer, Icon } from "tabler-react";
 import { Button } from "semantic-ui-react";
 import axios from "axios";
 
@@ -105,7 +105,6 @@ class JobCandidates extends React.Component {
       )
         .then((res) => res.json())
         .then((result) => {
-          console.log(result.Item);
           // IF RESULT.ITEM === UNDEFINED IT MEANS THE USER HAS NO SKILLS INFORMATION IN THE DATABASE SO WE WILL GET AN ERROR IF WE TRY TO ACCESS IT
           if (result.Item !== undefined) {
             jobseekers[i].userSkills = result.Item.userSkills;
@@ -140,7 +139,6 @@ class JobCandidates extends React.Component {
     // CHECK IF INITIALISED
     if (this.state.initialised && this.state.skillsSet) {
       for (var i = 0; i < jobseekers.length; i++) {
-            console.log(this.state.filters);
         if(!this.state.filters.every(r => jobseekers[i].userSkills.includes(r))){
           console.log("not a match");
           jobseekers.splice(i, 1);
@@ -211,126 +209,79 @@ class JobCandidates extends React.Component {
   render() {
     return (
       <Container>
-        <Card>
-          <Card.Header>
-            <Card.Title>
-              {this.state.currentCandidate.userFirstName}
-              &nbsp;
-              {this.state.currentCandidate.userLastName}
-            </Card.Title>
-          </Card.Header>
-          {
+        {
             this.state.initialised && this.state.skillsFiltered && this.state.skillsSet ?
 
-          (<Card.Body>
-            <Grid.Row>
-              <Grid.Col md={4}>
-                <Form.Group label="First Name">
-                  <Form.Input
-                    name="firstname"
-                    readOnly
-                    value={this.state.currentCandidate.userFirstName}
-                  />
-                </Form.Group>
-              </Grid.Col>
-              <Grid.Col md={4}>
-                <Form.Group label="Middle Name">
-                  <Form.Input
-                    name="middlename"
-                    readOnly
-                    value={this.state.currentCandidate.userMiddleName}
-                  />
-                </Form.Group>
-              </Grid.Col>
-              <Grid.Col md={4}>
-                <Form.Group label="Surname">
-                  <Form.Input
-                    name="surname"
-                    readOnly
-                    value={this.state.currentCandidate.userLastName}
-                  />
-                </Form.Group>
-              </Grid.Col>
-              <Grid.Col sm={6} md={4}>
-                <Form.Group label="City">
-                  <Form.Input
-                    name="City"
-                    readOnly
-                    value={this.state.currentCandidate.userCity}
-                  />
-                </Form.Group>
-              </Grid.Col>
-              <Grid.Col sm={6} md={3}>
-                <Form.Group label="Post Code">
-                  <Form.Input
-                    name="Post Code"
-                    readOnly
-                    value={this.state.currentCandidate.userPostcode}
-                  />
-                </Form.Group>
-              </Grid.Col>
-              <Grid.Col md={5}>
-                <Form.Group label="Email">
-                  <Form.Input
-                    name="Email"
-                    readOnly
-                    value={this.state.currentCandidate.userEmail}
-                  />
-                </Form.Group>
-              </Grid.Col>
-              <Grid.Col md={12}>
-                <Form.Group className="mb=0" label="About Me">
-                  <Form.Input
-                    name="About Me"
-                    readOnly
-                    value={this.state.currentCandidate.userAbout}
-                  />
-                </Form.Group>
-              </Grid.Col>
-              <Grid.Col md={12}>
-                <Form.Group className="mb=0" label="Skills">
-                  <Form.Input
-                    name="Skills"
-                    readOnly
-                    value={this.state.currentCandidate.userSkills}
-                  />
-                </Form.Group>
-              </Grid.Col>
-            </Grid.Row>
-            <Grid.Col md={12}>
-              <Form.Group className="mb=0" label="Job Experience">
-                <Form.Input
-                  name="Job Experience"
-                  readOnly
-                  value={this.state.currentCandidate.userSkills}
-                />
-              </Form.Group>
-            </Grid.Col>
-            <Grid.Row>
-              <Grid.Col md={12}>
+          (
+            <div>
+              <div className="margin1">
+                <h1 className="zeroMargin">
+                  <p>{this.state.currentCandidate.userFirstName}  {this.state.currentCandidate.userLastName}</p>
+                </h1>
+
+                <Icon prefix="fa" name="map-marker" />
+                &nbsp;
+                <span>{this.state.currentCandidate.userCity}, Australia</span>
+              </div>
+
+            <div className="infoRow">
+              <div className="infoLabel">
+                <span>ABOUT</span>
+              </div>
+              <div className="info">
+                <span>{this.state.currentCandidate.userAbout}</span>
+              </div>
+            </div>
+            <div className="infoRow">
+              <div className="infoLabel">
+                <span>TOP SKILLS</span>
+              </div>
+              <div className="info">
+                <p>{this.state.currentCandidate.userSkills}</p>
+              </div>
+            </div>
+            <div className="infoRow">
+              <div className="infoLabel">
+                <span>JOB EXPERIENCE</span>
+              </div>
+              <div className="info">
+                <p></p>
+              </div>
+            </div>
+            <div className="infoRow">
+              <div className="infoLabel">
+                <span>EDUCATION</span>
+              </div>
+              <div className="info">
+                <p></p>
+              </div>
+            </div>
+
+            <div className="buttonBox buttonBorder">
                 <Button
-                  floated="left"
-                  negative
+                  className="buttonwidth cancelButton"
                   type="button"
                   color="red"
                   onClick={this.rejectCandidate}
                 >
-                  {" "}
-                  Dislike{" "}
+                <Icon prefix="fa" name="times" />
+                  {""}  Pass{""}
                 </Button>
+              </div>
+              <div className="buttonBox">
                 <Button
-                  floated="right"
-                  positive
+                  className="buttonwidth acceptButton"
                   type="submit"
                   color="green"
                   onClick={this.acceptCandidate}
                 >
-                  {" "}
-                  Like{" "}
+                <Icon prefix="fa" name="check" />
+                  {""}  Like{""}
                 </Button>
-              </Grid.Col>
-            </Grid.Row>
-          </Card.Body>)
+            </div>
+          </div>
+
+          )
           :
           (
             <Card.Body>
@@ -339,7 +290,6 @@ class JobCandidates extends React.Component {
             </Card.Body>
             )
         }
-        </Card>
       </Container>
     );
   }
