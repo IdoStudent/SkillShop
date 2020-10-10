@@ -232,6 +232,7 @@ class JobCandidates extends React.Component {
                 <span>{this.state.currentCandidate.userAbout}</span>
               </div>
             </div>
+
             <div className="infoRow">
               <div className="infoLabel">
                 <span>TOP SKILLS</span>
@@ -240,6 +241,7 @@ class JobCandidates extends React.Component {
                 <p>{this.state.currentCandidate.userSkills}</p>
               </div>
             </div>
+
             <div className="infoRow">
               <div className="infoLabel">
                 <span>JOB EXPERIENCE</span>
@@ -248,6 +250,7 @@ class JobCandidates extends React.Component {
                 <p></p>
               </div>
             </div>
+
             <div className="infoRow">
               <div className="infoLabel">
                 <span>EDUCATION</span>
@@ -260,8 +263,6 @@ class JobCandidates extends React.Component {
             <div className="buttonBox buttonBorder">
                 <Button
                   className="buttonwidth cancelButton"
-                  type="button"
-                  color="red"
                   onClick={this.rejectCandidate}
                 >
                 <Icon prefix="fa" name="times" />
@@ -271,8 +272,6 @@ class JobCandidates extends React.Component {
               <div className="buttonBox">
                 <Button
                   className="buttonwidth acceptButton"
-                  type="submit"
-                  color="green"
                   onClick={this.acceptCandidate}
                 >
                 <Icon prefix="fa" name="check" />

@@ -965,7 +965,7 @@ body {
 
 .buttonwidth {
   margin-right: 0;
-  font-size: 40px;
+  font-size: 20px !important;
   height: 75px;
   width: 100%;
 }
