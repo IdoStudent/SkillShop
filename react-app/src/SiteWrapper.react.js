@@ -136,7 +136,6 @@ class SiteWrapper extends React.Component {
                 name={this.state.userFirstName}
                 options={[
                   { icon: "user", value: "Profile", to: "/myprofile" },
-                  { icon: "settings", value: "Settings", to: "/settings" },
                   "divider",
                   "help",
                   {

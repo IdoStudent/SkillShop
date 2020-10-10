@@ -241,6 +241,7 @@ class Candidates extends React.Component {
     return (
       <SiteWrapper>
         <div className="my-3 my-md-5">
+        <div className="spacer" />
           <Container>
             <Grid.Row>
               <Grid.Col lg={12}>
