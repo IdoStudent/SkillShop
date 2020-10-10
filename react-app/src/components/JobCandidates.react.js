@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Container, Grid, Card, Form, Header } from "tabler-react";
+import { Container, Grid, Card, Form, Header, Dimmer } from "tabler-react";
 import { Button } from "semantic-ui-react";
 import axios from "axios";
 
@@ -219,7 +219,10 @@ class JobCandidates extends React.Component {
               {this.state.currentCandidate.userLastName}
             </Card.Title>
           </Card.Header>
-          <Card.Body>
+          {
+            this.state.initialised && this.state.skillsFiltered && this.state.skillsSet ?
+
+          (<Card.Body>
             <Grid.Row>
               <Grid.Col md={4}>
                 <Form.Group label="First Name">
@@ -294,8 +297,6 @@ class JobCandidates extends React.Component {
                 </Form.Group>
               </Grid.Col>
             </Grid.Row>
-            </Card.Body>
-            <Card.Body>
             <Grid.Col md={12}>
               <Form.Group className="mb=0" label="Job Experience">
                 <Form.Input
@@ -329,7 +330,15 @@ class JobCandidates extends React.Component {
                 </Button>
               </Grid.Col>
             </Grid.Row>
-          </Card.Body>
+          </Card.Body>)
+          :
+          (
+            <Card.Body>
+            <Dimmer active loader>
+            </Dimmer>
+            </Card.Body>
+            )
+        }
         </Card>
       </Container>
     );
