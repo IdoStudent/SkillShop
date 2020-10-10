@@ -208,16 +208,12 @@ class Candidates extends React.Component {
   };
 
   createNewProfile = (newInfo, email) => {
-    // This can be done in a few ways but I think the best way (in terms of reliability) would be to first send the data to the database, and then just force a reload of this component so it does a new API call and collects the newly created data
-    // I think if we append the data to the state directly it leaves too many possibilities for a mistmatch between what is on the front-end and what's on the database
-    // It's doable both ways though so doesn't really matter
-
     // Generate a unique id
     let jobKey = uuidv4()
         // Get current profile information
     try {
       const params = {
-        userEmail: this.state.email,
+        userEmail: Auth.user.attributes.email,
         jobKey: jobKey,
         jobTitle: newInfo[0],
         jobLocation: newInfo[1],
@@ -228,6 +224,8 @@ class Candidates extends React.Component {
         "https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod",
         params
       );
+      console.log("post new profile")
+      console.log("new profile email", Auth.user.attributes.email)
     } catch (err) {
       console.log(`An error has occurred: ${err}`);
     }

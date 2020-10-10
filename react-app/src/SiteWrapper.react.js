@@ -150,34 +150,16 @@ class SiteWrapper extends React.Component {
             <div className="verticalDivider" />
 
             <div className="notifications">
-              <NavLink exact to="/chat">
-                <Notification.Tray unread={true}>
+                <Notification.Tray unread={false}>
                   <Notification
                     message={
                       <React.Fragment>
-                        You have a new match with <strong>Envato</strong>!
+                        <i>You have no new notifications</i>
                       </React.Fragment>
                     }
-                    time="10 minutes ago"
                   />
-                  <Notification
-                    message={
-                      <React.Fragment>
-                        You have <strong>2</strong> unread messages.
-                      </React.Fragment>
-                    }
-                    time="1 hour ago"
-                  />
-                  <Notification
-                    message={
-                      <React.Fragment>
-                        You have a new match with <strong>Deloitte</strong>!
-                      </React.Fragment>
-                    }
-                    time="24 hours ago"
-                  />
+              
                 </Notification.Tray>
-              </NavLink>
             </div>
           </div>
         </div>
