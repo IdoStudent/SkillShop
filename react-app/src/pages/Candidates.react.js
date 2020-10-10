@@ -207,7 +207,7 @@ class Candidates extends React.Component {
     }
   };
 
-  createNewProfile = (newInfo, email) => {
+  createNewProfile = (newInfo) => {
     // Generate a unique id
     let jobKey = uuidv4()
         // Get current profile information
@@ -224,8 +224,6 @@ class Candidates extends React.Component {
         "https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod",
         params
       );
-      console.log("post new profile")
-      console.log("new profile email", Auth.user.attributes.email)
     } catch (err) {
       console.log(`An error has occurred: ${err}`);
     }

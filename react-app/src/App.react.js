@@ -15,7 +15,7 @@ import {
   Candidates,
   Signup,
   Chat,
-  Help,
+  About,
   ProfileSetup
 } from "./pages";
 
@@ -129,8 +129,8 @@ class App extends React.Component {
               {/* MISC */}
               <Route
                 exact
-                path="/help"
-                render={(props) => <Help {...props} auth={authProps} />}
+                path="/about"
+                render={(props) => <About {...props} auth={authProps} />}
               />
 
               {/* ERROR PAGE (NO VALID ROUTE) */}

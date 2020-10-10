@@ -137,7 +137,7 @@ class SiteWrapper extends React.Component {
                 options={[
                   { icon: "user", value: "Profile", to: "/myprofile" },
                   "divider",
-                  "help",
+                  { icon: "info", value: "About SkillShop", to: "/about" },
                   {
                     icon: "log-out",
                     value: "Logout",
