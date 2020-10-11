@@ -362,25 +362,42 @@ class Chat extends Component {
 
     handleMessageSubmit = async (event) => {
         
+        // console.log('handle message submit');
+        // console.log(this.state.message);
+
         var date = new Date();
         var time = date.getTime();
 
-        try {
-            const params = {
-              matchId:  "abcdefghi",
-              messageTime: time,
-              message: this.state.message,
-              userName: Auth.user.attributes.email
-            };
-            await axios.post(
-              "https://rxo4bx6gwa.execute-api.ap-southeast-2.amazonaws.com/prod",
-              params
-            );
-          } catch (err) {
-            console.log(`An error has occurred: ${err}`);
-          }
+        // console.log('time:',time);
+        if(this.state.currentMatchID !== ""){
+            console.log('there exists a current match id');
+            try {
+                const params = {
+                  matchId:  this.state.currentMatchID,
+                  messageTime: time,
+                  message: this.state.message,
+                  userName: Auth.user.attributes.email
+                };
+                await axios.post(
+                  "https://rxo4bx6gwa.execute-api.ap-southeast-2.amazonaws.com/prod",
+                  params
+                );
+            } catch (err) {
+                console.log(`An error has occurred: ${err}`);
+            }
+        }else{
+            console.log('there does NOT exist a current match id');
+        }
 
-          this.setState({message: ""});
+        this.setState({message: ""});
+        this.setState({ loading : true });
+        this.setState({ messages : []});
+        if(this.state.userType == "employer"){
+            await this.getEmpMessages();
+        }else{
+            await this.getSeekMessages();
+        }
+        this.setState({ loading : false });
     };
 
     handleMessageChange = (event) => {
