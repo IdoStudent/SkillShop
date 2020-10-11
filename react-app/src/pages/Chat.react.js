@@ -517,7 +517,9 @@ class Chat extends Component {
                                                     <div>
                                                         {message.chat}
                                                     </div>
-                                                    <div className="divider">empty</div>
+                                                    {/* <br></br> */}
+                                                    {/* <div className="divider">empty</div> */}
+                                                    {/* <div className="divider">empty</div> */}
                                                 </li>
                                             )
                                         })
