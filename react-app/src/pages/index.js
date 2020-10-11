@@ -4,7 +4,7 @@ import ProfileSetup from "./ProfileSetup.react";
 import EmployerSetup from "./EmployerSetup.react";
 import Candidates from "./Candidates.react";
 import Chat from "./Chat.react";
-import Help from "./help.react";
+import About from "./about.react";
 
 import LandingPage  from "./LandingPage.react";
 import Signup from "./Signup.react";
@@ -21,5 +21,5 @@ export {
   Login,
   Candidates,
   Chat,
-  Help
+  About
 };

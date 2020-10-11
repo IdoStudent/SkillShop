@@ -10,9 +10,14 @@ import JobFiltersModal from "../components/JobFiltersModal.react";
 import JobNewModal from "../components/JobNewModal.react";
 import JobCandidates from "../components/JobCandidates.react";
 
+import NotificationSystem from 'react-notification-system';
+import { container } from "aws-amplify";
+
 const uuidv4 = require("uuid/v4")
 
 class Candidates extends React.Component {
+  notificationSystem = React.createRef();
+
   constructor(props) {
     super(props);
 
@@ -29,89 +34,39 @@ class Candidates extends React.Component {
       // For example, if the first job profile in the list is selected, our value will be 0 (index 0). If we want to get the industry of this job profile, we can do so by typing: {this.state.data[this.state.selectValue].industry}
       selectValue: 0,
 
-      // Modal State for information edit
-      openInfo: false,
-
-      // Modal State for filters edit
-      openFilter: false,
+      initialised: false,
     };
   }
-  getEmailApi() {
-    return Auth.currentAuthenticatedUser().then((user) => {
-      const { attributes = {} } = user;
-      let email =  attributes['email']
-      return email
-    })}
-  // GET email for form
-  getFirstApi() {
-    return Auth.currentAuthenticatedUser().then((user) => {
-      this.setState({
-        email: user.attributes.email,
-        formemail: user.attributes.email,
-      });
-    });
-  }
-  // GET user data
-  async getSecondApi(email) {
-    fetch(
-      `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
-        email )
-      .then((res) => res.json())
-      .then((result) => {
-        if (result.Item !== undefined)
-        // If length is undefined, that means for some reason it's not returning data at all, so dont try and access fields that dont exist
-          this.setState({
-            firstname: result.Item.userFirstName,
-            middlename: result.Item.userMiddleName,
-            surname: result.Item.userLastName,
-            city: result.Item.userCity,
-            postcode: result.Item.userPostcode,
-            state: result.Item.userState,
-            about: result.Item.userAbout,
 
-            formfirstname: result.Item.userFirstName,
-            formmiddlename: result.Item.userMiddleName,
-            formsurname: result.Item.userLastName,
-            formcity: result.Item.userCity,
-            formpostcode: result.postcode,
-            formstate: result.Item.userState,
-            formabout: result.Item.userAbout,
-          });
-          console.log() },
-      )
-  }
-  // pass before mount
-  BeforeDidMount() {
-    this.getEmailApi().then((email) => this.getSecondApi(email));
-    this.getEmailApi().then((email) => this.getThirdApi(email));
-  }
-
- async getThirdApi(email){
-    console.log(email)
+  getJobProfiles(){
+    let email = Auth.user.attributes.email
     fetch('https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=' + email)
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
-        // Create a temporary array to hold our individual items (job profiles)
-        let items = [];
-        for (var i = 0; i < result.length; i++) {
-          items.push(result[i]);
-        }
 
-        // Once we've iterated through the whole list, copy the value of our temporary array to our state array
-        this.setState(
-          {
-            data: items,
-          },
-          () => {
-            // Once the state has updated, create our dropdown list items
-            this.createSelectItems();
+          // Create a temporary array to hold our individual items (job profiles)
+          let items = [];
+
+          for (var i = 0; i < result.length; i++) {
+            items.push(result[i]);
           }
-        );
+
+          // Once we've iterated through the whole list, copy the value of our temporary array to our state array
+          this.setState(
+            {
+              data: items,
+            },
+            () => {
+              // Once the state has updated, create our dropdown list items
+              this.createSelectItems();
+            }
+          );
+
       });
   }
+
   componentDidMount() {
-    this.BeforeDidMount();
+    this.getJobProfiles();
   }
   openModalInfo = () => {
     this.setState({ openInfo: true });
@@ -202,22 +157,20 @@ class Candidates extends React.Component {
         "https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod",
         params
       );
+
+      this.addSuccessNotification()
     } catch (err) {
       console.log(`An error has occurred: ${err}`);
     }
   };
 
-  createNewProfile = (newInfo, email) => {
-    // This can be done in a few ways but I think the best way (in terms of reliability) would be to first send the data to the database, and then just force a reload of this component so it does a new API call and collects the newly created data
-    // I think if we append the data to the state directly it leaves too many possibilities for a mistmatch between what is on the front-end and what's on the database
-    // It's doable both ways though so doesn't really matter
-
+  createNewProfile = (newInfo) => {
     // Generate a unique id
     let jobKey = uuidv4()
         // Get current profile information
     try {
       const params = {
-        userEmail: this.state.email,
+        userEmail: Auth.user.attributes.email,
         jobKey: jobKey,
         jobTitle: newInfo[0],
         jobLocation: newInfo[1],
@@ -237,10 +190,21 @@ class Candidates extends React.Component {
     this.setState({ openNew: false });
   };
 
+  addSuccessNotification = () => {
+    const notification = this.notificationSystem.current;
+    notification.addNotification({
+      message: 'The information for ' + this.state.data[this.state.selectValue].jobTitle + ' was successfully updated',
+      level: 'success',
+      position: 'br'
+    });
+  };
+
   render() {
     return (
       <SiteWrapper>
+        <NotificationSystem ref={this.notificationSystem}/>
         <div className="my-3 my-md-5">
+        <div className="spacer" />
           <Container>
             <Grid.Row>
               <Grid.Col lg={12}>
@@ -308,13 +272,13 @@ class Candidates extends React.Component {
                 </div>
 
                 {/* Candidate Info */}
-                <Container className="card" name="candidateInfo">
+                <Container className="card">
                   <Card.Body>
                     {
                       this.state.data.length > 0 ?
                       ( <JobCandidates /> )
                       :
-                      ( <p> You don't have any existing job profiles. Create one to start finding candidates! </p> )
+                      ( <p className="noProfiles"> You don't have any existing job profiles. Create one to start finding candidates! </p> )
                     }
 
                   </Card.Body>

@@ -2,14 +2,18 @@
 
 import * as React from "react";
 
-import { Container, Grid, Card, Form, Header, Dimmer, Icon } from "tabler-react";
+import { Container, Card, Dimmer, Icon } from "tabler-react";
 import { Button } from "semantic-ui-react";
 import axios from "axios";
+
+import NotificationSystem from "react-notification-system";
 
 var jobseekers = [];
 var num = 0;
 
 class JobCandidates extends React.Component {
+  notificationSystem = React.createRef();
+
   constructor(props) {
     super(props);
 
@@ -30,6 +34,7 @@ class JobCandidates extends React.Component {
         userSkills: " ",
         userState: " ",
       },
+      noCandidates: false,
     };
   }
 
@@ -74,24 +79,23 @@ class JobCandidates extends React.Component {
         console.log(jobseekers);
       });
 
-      this.setState({
-        initialised: true,
-      });
+    this.setState({
+      initialised: true,
+    });
   }
 
-  async setFilters(){
+  async setFilters() {
     // GET FILTERS FROM LOCAL STORAGE:
 
     let items = [];
 
-    items = JSON.parse(localStorage.getItem("softSkillsFilter")).concat(
-            JSON.parse(localStorage.getItem("hardSkillsFilter"))).concat(
-            JSON.parse(localStorage.getItem("techSkillsFilter")));
+    items = JSON.parse(localStorage.getItem("softSkillsFilter"))
+      .concat(JSON.parse(localStorage.getItem("hardSkillsFilter")))
+      .concat(JSON.parse(localStorage.getItem("techSkillsFilter")));
 
     this.setState({
       filters: items,
     });
-
   }
 
   async getSkills() {
@@ -115,13 +119,16 @@ class JobCandidates extends React.Component {
     this.setState({
       skillsSet: true,
     });
-
   }
 
   setCandidate = () => {
     // CHECK IF INITIALISED IS TRUE (MEANING THE END OF getSkills() HAS BEEN REACHED AND ALL THE DATA IS SET)
-    if (this.state.initialised && this.state.skillsFiltered && this.state.skillsSet) {
-      if (jobseekers[num] != null){
+    if (
+      this.state.initialised &&
+      this.state.skillsFiltered &&
+      this.state.skillsSet
+    ) {
+      if (jobseekers[num] != null) {
         // SET OUR STATE currentCandidate TO THE FIRST INDEX OF OUR FILTERED JOBSEEKERS ARRAY
         this.setState({ currentCandidate: jobseekers[num] });
       } else {
@@ -139,7 +146,9 @@ class JobCandidates extends React.Component {
     // CHECK IF INITIALISED
     if (this.state.initialised && this.state.skillsSet) {
       for (var i = 0; i < jobseekers.length; i++) {
-        if(!this.state.filters.every(r => jobseekers[i].userSkills.includes(r))){
+        if (
+          !this.state.filters.every((r) => jobseekers[i].userSkills.includes(r))
+        ) {
           console.log("not a match");
           jobseekers.splice(i, 1);
           i--;
@@ -154,75 +163,105 @@ class JobCandidates extends React.Component {
     });
   };
 
-  acceptCandidate = (event) => {
-    if (this.state.initialised && this.state.skillsFiltered && this.state.skillsSet){
-      let newNum = num + 1;
-
-      // If Employer likes candidate then add them to their matches database here
-
-      if (newNum >= jobseekers.length) {
-        console.log("no more candidates");
-        num++;
-        // CAN ADD IN SOME LOGIC FOR WHAT TO DO WHEN THERE'S NO MORE CANDIDATES (REMOVE INFO AND DISPLAY A MESSAGE, POPUP, ALERT, ETC.)
-        alert("No more candidates available at this time");
-      } else {
-        num++;
-        this.setState({
-          currentCandidate: jobseekers[newNum],
-        }
-        )
-        try {
-          const params = {
-            userEmail:  jobseekers[num].userEmail,
-            jobKey: "testJobCandidatesPage",
-            matchId: "testMatchIdJobCandidatesPage"
-          };
-          axios.post(
-            "https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/",
-            params
-          );
-        } catch (err) {
-          console.log(`An error has occurred: ${err}`);
+  acceptCandidate = () => {
+    if (
+      this.state.initialised &&
+      this.state.skillsFiltered &&
+      this.state.skillsSet
+    ) {
+      // Post the match to the databsae
+      try {
+        const params = {
+          userEmail: jobseekers[num].userEmail,
+          jobKey: "testJobCandidatesPage",
+          matchId: "testMatchIdJobCandidatesPage",
         };
+        axios.post(
+          "https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/",
+          params
+        );
+
+        this.likeNotification();
+      } catch (err) {
+        console.log(`An error has occurred: ${err}`);
       }
-    }
-  };
 
-  rejectCandidate = () => {
-    if (this.state.initialised && this.state.skillsFiltered && this.state.skillsSet){
-      let newNum = num + 1;
-
-      if (newNum >= jobseekers.length) {
-        console.log("no more candidates");
-        num++;
-        // CAN ADD IN SOME LOGIC FOR WHAT TO DO WHEN THERE'S NO MORE CANDIDATES (REMOVE INFO AND DISPLAY A MESSAGE, POPUP, ALERT, ETC.)
-        alert("No more candidates available at this time");
+      // Increment the current index and check if there are still more candidates to show
+      num++;
+      if (num >= jobseekers.length) {
+        this.setState({noCandidates: true})
       } else {
-        num++;
         this.setState({
-          currentCandidate: jobseekers[newNum],
+          currentCandidate: jobseekers[num],
         });
       }
     }
   };
 
+  rejectCandidate = () => {
+    if (
+      this.state.initialised &&
+      this.state.skillsFiltered &&
+      this.state.skillsSet
+    ) {
+      num++;
+
+      this.passNotification();
+
+      if (num >= jobseekers.length) {
+        this.setState({noCandidates: true})
+      } else {
+        this.setState({
+          currentCandidate: jobseekers[num],
+        });
+      }
+    }
+  };
+
+  likeNotification = () => {
+    const notification = this.notificationSystem.current;
+    notification.addNotification({
+      message:
+        "You matched with " +
+        this.state.currentCandidate.userFirstName +
+        ". Head to the chat page to start a conversation with them!",
+      level: "success",
+      position: "br",
+    });
+  };
+
+  passNotification = () => {
+    const notification = this.notificationSystem.current;
+    notification.addNotification({
+      message:
+        "You passed " +
+        this.state.currentCandidate.userFirstName +
+        ". They won't be shown to you again for this job profile.",
+      level: "error",
+      position: "br",
+    });
+  };
+
   render() {
     return (
       <Container>
-        {
-            this.state.initialised && this.state.skillsFiltered && this.state.skillsSet ?
-
-          (
-            <div>
-              <div className="margin1">
-                <h1 className="zeroMargin">
-                  <p>{this.state.currentCandidate.userFirstName}  {this.state.currentCandidate.userLastName}</p>
-                </h1>
-
-                <Icon prefix="fa" name="map-marker" />
-                &nbsp;
-                <span>{this.state.currentCandidate.userCity}, Australia</span>
-              </div>
+        <NotificationSystem ref={this.notificationSystem} />
+        {this.state.initialised &&
+        this.state.skillsFiltered &&
+        this.state.skillsSet &&
+        this.state.noCandidates === false ? (
+          <div>
+            <div className="margin1">
+              <h1 className="zeroMargin">
+                <p>
+                  {this.state.currentCandidate.userFirstName}{" "}
+                  {this.state.currentCandidate.userLastName}
+                </p>
+              </h1>
+              <Icon prefix="fa" name="map-marker" />
+              &nbsp;
+              <span>{this.state.currentCandidate.userCity}, Australia</span>
+            </div>
 
             <div className="infoRow">
               <div className="infoLabel">
@@ -247,7 +286,7 @@ class JobCandidates extends React.Component {
                 <span>JOB EXPERIENCE</span>
               </div>
               <div className="info">
-                <p></p>
+                <p />
               </div>
             </div>
 
@@ -256,39 +295,42 @@ class JobCandidates extends React.Component {
                 <span>EDUCATION</span>
               </div>
               <div className="info">
-                <p></p>
+                <p />
               </div>
             </div>
 
             <div className="buttonBox buttonBorder">
-                <Button
-                  className="buttonwidth cancelButton"
-                  onClick={this.rejectCandidate}
-                >
+              <Button
+                className="buttonwidth passButton"
+                onClick={this.rejectCandidate}
+              >
                 <Icon prefix="fa" name="times" />
-                  {""}  Pass{""}
-                </Button>
-              </div>
-              <div className="buttonBox">
-                <Button
-                  className="buttonwidth acceptButton"
-                  onClick={this.acceptCandidate}
-                >
+                {""} Pass
+                {""}
+              </Button>
+            </div>
+            <div className="buttonBox">
+              <Button
+                className="buttonwidth likeButton"
+                onClick={this.acceptCandidate}
+              >
                 <Icon prefix="fa" name="check" />
-                  {""}  Like{""}
-                </Button>
+                {""} Like
+                {""}
+              </Button>
             </div>
           </div>
-
-          )
-          :
-          (
+        ) : this.state.noCandidates ? (
+          <p className="noCandidates"> There are no more suitable candidates to show for the selected job profile. If you have filters on, you can try removing some in order to view a broader range of candidates. Otherwise,
+          you can check back another time when additional candidates are found for your chosen filters.</p>
+        ) : (
+          <div id="candidatesLoader">
             <Card.Body>
-            <Dimmer active loader>
-            </Dimmer>
+              <Dimmer active loader />
+              <p> Fetching Candidates... </p>
             </Card.Body>
-            )
-        }
+          </div>
+        )}
       </Container>
     );
   }
