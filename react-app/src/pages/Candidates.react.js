@@ -32,67 +32,11 @@ class Candidates extends React.Component {
       // Select value defines what option is currently selected, based on the array of data. We can get information about the current selection by indexing the array and accessing the value we want
       // For example, if the first job profile in the list is selected, our value will be 0 (index 0). If we want to get the industry of this job profile, we can do so by typing: {this.state.data[this.state.selectValue].industry}
       selectValue: 0,
-
-      // Modal State for information edit
-      openInfo: false,
-
-      // Modal State for filters edit
-      openFilter: false,
     };
   }
 
-  getEmailApi() {
-    return Auth.currentAuthenticatedUser().then((user) => {
-      const { attributes = {} } = user;
-      let email =  attributes['email']
-      return email
-    })}
-  // GET email for form
-  getFirstApi() {
-    return Auth.currentAuthenticatedUser().then((user) => {
-      this.setState({
-        email: user.attributes.email,
-        formemail: user.attributes.email,
-      });
-    });
-  }
-  // GET user data
-  async getSecondApi(email) {
-    fetch(
-      `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
-        email )
-      .then((res) => res.json())
-      .then((result) => {
-        if (result.Item !== undefined)
-        // If length is undefined, that means for some reason it's not returning data at all, so dont try and access fields that dont exist
-          this.setState({
-            firstname: result.Item.userFirstName,
-            middlename: result.Item.userMiddleName,
-            surname: result.Item.userLastName,
-            city: result.Item.userCity,
-            postcode: result.Item.userPostcode,
-            state: result.Item.userState,
-            about: result.Item.userAbout,
-
-            formfirstname: result.Item.userFirstName,
-            formmiddlename: result.Item.userMiddleName,
-            formsurname: result.Item.userLastName,
-            formcity: result.Item.userCity,
-            formpostcode: result.postcode,
-            formstate: result.Item.userState,
-            formabout: result.Item.userAbout,
-          });
-          console.log() },
-      )
-  }
-  // pass before mount
-  BeforeDidMount() {
-    this.getEmailApi().then((email) => this.getSecondApi(email));
-    this.getEmailApi().then((email) => this.getThirdApi(email));
-  }
-
- async getThirdApi(email){
-    console.log(email)
+ async getJobProfiles(){
+    let email = Auth.user.attributes.email
     fetch('https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=' + email)
       .then((res) => res.json())
       .then((result) => {
@@ -115,8 +59,9 @@ class Candidates extends React.Component {
         );
       });
   }
+
   componentDidMount() {
-    this.BeforeDidMount();
+    this.getJobProfiles();
   }
   openModalInfo = () => {
     this.setState({ openInfo: true });

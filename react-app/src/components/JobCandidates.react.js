@@ -6,7 +6,7 @@ import { Container, Card, Dimmer, Icon } from "tabler-react";
 import { Button } from "semantic-ui-react";
 import axios from "axios";
 
-import NotificationSystem from 'react-notification-system';
+import NotificationSystem from "react-notification-system";
 
 var jobseekers = [];
 var num = 0;
@@ -78,24 +78,23 @@ class JobCandidates extends React.Component {
         console.log(jobseekers);
       });
 
-      this.setState({
-        initialised: true,
-      });
+    this.setState({
+      initialised: true,
+    });
   }
 
-  async setFilters(){
+  async setFilters() {
     // GET FILTERS FROM LOCAL STORAGE:
 
     let items = [];
 
-    items = JSON.parse(localStorage.getItem("softSkillsFilter")).concat(
-            JSON.parse(localStorage.getItem("hardSkillsFilter"))).concat(
-            JSON.parse(localStorage.getItem("techSkillsFilter")));
+    items = JSON.parse(localStorage.getItem("softSkillsFilter"))
+      .concat(JSON.parse(localStorage.getItem("hardSkillsFilter")))
+      .concat(JSON.parse(localStorage.getItem("techSkillsFilter")));
 
     this.setState({
       filters: items,
     });
-
   }
 
   async getSkills() {
@@ -119,13 +118,16 @@ class JobCandidates extends React.Component {
     this.setState({
       skillsSet: true,
     });
-
   }
 
   setCandidate = () => {
     // CHECK IF INITIALISED IS TRUE (MEANING THE END OF getSkills() HAS BEEN REACHED AND ALL THE DATA IS SET)
-    if (this.state.initialised && this.state.skillsFiltered && this.state.skillsSet) {
-      if (jobseekers[num] != null){
+    if (
+      this.state.initialised &&
+      this.state.skillsFiltered &&
+      this.state.skillsSet
+    ) {
+      if (jobseekers[num] != null) {
         // SET OUR STATE currentCandidate TO THE FIRST INDEX OF OUR FILTERED JOBSEEKERS ARRAY
         this.setState({ currentCandidate: jobseekers[num] });
       } else {
@@ -143,7 +145,9 @@ class JobCandidates extends React.Component {
     // CHECK IF INITIALISED
     if (this.state.initialised && this.state.skillsSet) {
       for (var i = 0; i < jobseekers.length; i++) {
-        if(!this.state.filters.every(r => jobseekers[i].userSkills.includes(r))){
+        if (
+          !this.state.filters.every((r) => jobseekers[i].userSkills.includes(r))
+        ) {
           console.log("not a match");
           jobseekers.splice(i, 1);
           i--;
@@ -159,27 +163,30 @@ class JobCandidates extends React.Component {
   };
 
   acceptCandidate = () => {
-    if (this.state.initialised && this.state.skillsFiltered && this.state.skillsSet){
-
+    if (
+      this.state.initialised &&
+      this.state.skillsFiltered &&
+      this.state.skillsSet
+    ) {
       // Post the match to the databsae
       try {
         const params = {
-          userEmail:  jobseekers[num].userEmail,
+          userEmail: jobseekers[num].userEmail,
           jobKey: "testJobCandidatesPage",
-          matchId: "testMatchIdJobCandidatesPage"
+          matchId: "testMatchIdJobCandidatesPage",
         };
         axios.post(
           "https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/",
           params
         );
 
-        this.likeNotification()
+        this.likeNotification();
       } catch (err) {
         console.log(`An error has occurred: ${err}`);
-      };
+      }
 
       // Increment the current index and check if there are still more candidates to show
-      num++
+      num++;
       if (num >= jobseekers.length) {
         console.log("no more candidates");
         // CAN ADD IN SOME LOGIC FOR WHAT TO DO WHEN THERE'S NO MORE CANDIDATES (REMOVE INFO AND DISPLAY A MESSAGE, POPUP, ALERT, ETC.)
@@ -187,16 +194,20 @@ class JobCandidates extends React.Component {
       } else {
         this.setState({
           currentCandidate: jobseekers[num],
-        })
+        });
       }
     }
   };
 
   rejectCandidate = () => {
-    if (this.state.initialised && this.state.skillsFiltered && this.state.skillsSet){
-      num++
+    if (
+      this.state.initialised &&
+      this.state.skillsFiltered &&
+      this.state.skillsSet
+    ) {
+      num++;
 
-      this.passNotification()
+      this.passNotification();
 
       if (num >= jobseekers.length) {
         console.log("no more candidates");
@@ -213,39 +224,46 @@ class JobCandidates extends React.Component {
   likeNotification = () => {
     const notification = this.notificationSystem.current;
     notification.addNotification({
-      message: 'You matched with ' + this.state.currentCandidate.userFirstName + '. Head to the chat page to start a conversation with them!',
-      level: 'success',
-      position: 'br'
+      message:
+        "You matched with " +
+        this.state.currentCandidate.userFirstName +
+        ". Head to the chat page to start a conversation with them!",
+      level: "success",
+      position: "br",
     });
   };
 
   passNotification = () => {
     const notification = this.notificationSystem.current;
     notification.addNotification({
-      message: 'You passed ' + this.state.currentCandidate.userFirstName + '. They won\'t be shown to you again for this job profile.',
-      level: 'error',
-      position: 'br'
+      message:
+        "You passed " +
+        this.state.currentCandidate.userFirstName +
+        ". They won't be shown to you again for this job profile.",
+      level: "error",
+      position: "br",
     });
   };
 
   render() {
     return (
       <Container>
-        <NotificationSystem ref={this.notificationSystem}/>
-        {
-            this.state.initialised && this.state.skillsFiltered && this.state.skillsSet ?
-
-          (
-            <div>
-              <div className="margin1">
-                <h1 className="zeroMargin">
-                  <p>{this.state.currentCandidate.userFirstName}  {this.state.currentCandidate.userLastName}</p>
-                </h1>
-
-                <Icon prefix="fa" name="map-marker" />
-                &nbsp;
-                <span>{this.state.currentCandidate.userCity}, Australia</span>
-              </div>
+        <NotificationSystem ref={this.notificationSystem} />
+        {this.state.initialised &&
+        this.state.skillsFiltered &&
+        this.state.skillsSet ? (
+          <div>
+            <div className="margin1">
+              <h1 className="zeroMargin">
+                <p>
+                  {this.state.currentCandidate.userFirstName}{" "}
+                  {this.state.currentCandidate.userLastName}
+                </p>
+              </h1>
+              <Icon prefix="fa" name="map-marker" />
+              &nbsp;
+              <span>{this.state.currentCandidate.userCity}, Australia</span>
+            </div>
 
             <div className="infoRow">
               <div className="infoLabel">
@@ -270,7 +288,7 @@ class JobCandidates extends React.Component {
                 <span>JOB EXPERIENCE</span>
               </div>
               <div className="info">
-                <p></p>
+                <p />
               </div>
             </div>
 
@@ -279,39 +297,39 @@ class JobCandidates extends React.Component {
                 <span>EDUCATION</span>
               </div>
               <div className="info">
-                <p></p>
+                <p />
               </div>
             </div>
 
             <div className="buttonBox buttonBorder">
-                <Button
-                  className="buttonwidth passButton"
-                  onClick={this.rejectCandidate}
-                >
+              <Button
+                className="buttonwidth passButton"
+                onClick={this.rejectCandidate}
+              >
                 <Icon prefix="fa" name="times" />
-                  {""}  Pass{""}
-                </Button>
-              </div>
-              <div className="buttonBox">
-                <Button
-                  className="buttonwidth likeButton"
-                  onClick={this.acceptCandidate}
-                >
+                {""} Pass
+                {""}
+              </Button>
+            </div>
+            <div className="buttonBox">
+              <Button
+                className="buttonwidth likeButton"
+                onClick={this.acceptCandidate}
+              >
                 <Icon prefix="fa" name="check" />
-                  {""}  Like{""}
-                </Button>
+                {""} Like
+                {""}
+              </Button>
             </div>
           </div>
-
-          )
-          :
-          (
+        ) : (
+          <div id="candidatesLoader">
             <Card.Body>
-            <Dimmer active loader>
-            </Dimmer>
+              <Dimmer active loader />
+              <p> Fetching Candidates... </p>
             </Card.Body>
-            )
-        }
+          </div>
+        )}
       </Container>
     );
   }

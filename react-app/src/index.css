@@ -562,6 +562,18 @@ body {
   margin-bottom: 40px;
 }
 
+#candidatesLoader p {
+  margin-top: 4rem;
+}
+
+#candidatesLoader .card-body {
+  text-align: center;
+}
+
+#candidatesLoader .dimmer {
+  margin-top: 1rem;
+}
+
 /* MISC */
 
 .formLabelLeft {
