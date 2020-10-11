@@ -52,7 +52,7 @@ class Chat extends Component {
         super()
         this.state = {
             // change to DUMMY_DATA for fake result
-            messages: DUMMY_DATA,
+            messages: [],
             message: "",
             jobTitles: [],
             currentPosition: "",
@@ -67,6 +67,8 @@ class Chat extends Component {
             jobseekersEmails: [],
             jobSeekersEmailsList: [],
             jobseekersNames: [],
+            currentMatchID: "",
+            matchIDs: [],
             Loading: true
         }
     }
@@ -78,8 +80,6 @@ class Chat extends Component {
 
         if(this.state.userType == 'jobseeker'){
             await this.getMatches();
-            // this.getMatchId();
-            // this.getMessage();
             await this.getEmployersEmail();
             await this.getEmployersNames();
         }
@@ -87,7 +87,8 @@ class Chat extends Component {
             await this.getJobTitles();
             await this.getJobseekersEmails();
             await this.getJobseekersNames();
-            // this.getJobseekersNames();
+            await this.getMatchID();
+            await this.getMessages();
             this.setState({ loading : false });
         }
 
@@ -124,34 +125,59 @@ class Chat extends Component {
             })
     }
 
-    // get just matchID for email
-    getMatchId() {
-        const email =  Auth.user.attributes.email
-        fetch(
-            `https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` +
-              email )
-            .then((res) => res.json())
-            .then((result) => {
-                console.log('result length',result.length);
-                    // this.setState({     
-                    //     matchId: result[0].matchId
-                    // });
-                },
-            )
-      }
+    getMatchID = async () => {
+        // console.log('getMatchID');
+
+        // console.log('jobseekers email',jobseeker.email);
+        // console.log('jobseekers key',jobseeker.key);
+
+        // console.log(`https://ra45wkav0m.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` + jobseeker.email + `idoyaron90@gmail.com&jobKey=` + jobseeker.key);
+
+        for(var i=0;i<this.state.jobseekersEmails.length;i++){
+            // console.log(this.state.jobseekersEmails[i]);
+            await fetch(
+                `https://ra45wkav0m.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` + this.state.jobseekersEmails[i].email 
+                + `&jobKey=` + this.state.jobseekersEmails[i].key)
+                .then((res) => res.json())
+                .then((result) => {
+                    // console.log('result:',result[0].matchId);
+                    this.state.matchIDs.push({ jobKey : this.state.jobseekersEmails[i].key, email : this.state.jobseekersEmails[i].email , matchID : result[0].matchId });
+                })
+        }    
+    }
 
     // get messages depending on matchId 
-    async  getMessage() {
-        const matchId = this.state.matchId;
-        console.log("matchId in message: " + matchId)
-        fetch(
-            `https://rxo4bx6gwa.execute-api.ap-southeast-2.amazonaws.com/prod/?matchId=1` )
+    getMessages = async () => {
+        // console.log('get messages');
+
+        for(var i=0;i<this.state.matchIDs.length;i++){
+            // console.log(this.state.matchIDs[i]);
+            await fetch(`https://rxo4bx6gwa.execute-api.ap-southeast-2.amazonaws.com/prod/?matchId=` + this.state.matchIDs[i].matchID)
             .then((res) => res.json())
             .then((result) => {
-                for (var i = 0; i < result.length; i++)
-                    this.state.messages.push({ messages: result[i].messages , lastUpdate : "1d" });
-                },
-            )
+                // console.log(result);
+                // this.state.messages.push({ matchID : this.state.matchIDs[i].matchID, chat : result });
+                for (var j=0;j<result.length;j++){
+                    console.log(result[j]);
+                    console.log(result[j].userName);
+                    console.log(Auth.user.attributes.email);
+
+                    //get name and role
+                    var userName = ""
+                    var userRole = ""
+                    if(result[j].userName == Auth.user.attributes.email){
+                        userName = "You";
+                        userRole = "Employer";
+                    }else{
+                        userName = this.state.jobseekersNames.filter((jobseeker) => jobseeker.key == result[j].userName)[0].name;
+                        userRole = "jobseeker";
+                    }
+                    console.log('name:',userName);
+                    console.log('role:',userRole);
+                    this.state.messages.push({ matchID : result[j].matchId, chat : result[j].message , name : userName , role : userRole });
+                }
+            })
+        }
     }
 
     getEmployersEmail = async () => {
@@ -174,26 +200,6 @@ class Chat extends Component {
         }
     }
 
-    getJobseekersEmails = async () => {
-        // console.log('getJobseekersEmails');
-        // console.log('length of job titles:',this.state.jobTitles.length);
-
-        for(var i=0;i<this.state.jobTitles.length;i++){
-            // console.log('job title:',this.state.jobTitles[i].jobKey);
-            await fetch(`https://q35g00j27k.execute-api.ap-southeast-2.amazonaws.com/prod/?jobKey=` + this.state.jobTitles[i].jobKey )
-                .then((res) => res.json())
-                .then((result) => {
-                    // console.log('Result:',result[0].userEmail);
-                    // console.log('length of result:',result.length);
-                    for(var j=0;j<result.length;j++){
-                        // console.log(result[j].userEmail);
-                        this.state.jobseekersEmails.push({ key : this.state.jobTitles[i].jobKey, lastUpdate : "1d" , email : result[j].userEmail });
-                        this.state.jobSeekersEmailsList.push(result[j].userEmail);
-                    }
-                })
-        }
-    }
-
     getEmployersNames = async () => {
         console.log('getEmployersNames');
         for(var i=0;i<this.state.employersEmails.length;i++){
@@ -208,23 +214,6 @@ class Chat extends Component {
         }
     }
 
-    getJobseekersNames = async () => {
-        console.log('getJobseekersNames');
-
-        // console.log('length of jobseekers email list:',this.state.jobSeekersEmailsList.length);
-        for(var i=0;i<this.state.jobSeekersEmailsList.length;i++){
-            // console.log(this.state.jobSeekersEmailsList[i]);
-            await fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` + this.state.jobSeekersEmailsList[i] )
-                .then((res) => res.json())
-                .then((result) => {
-                    if(typeof result.Item !== 'undefined'){
-                        // console.log('user Name:',result.Item.userFirstName);
-                        this.state.jobseekersNames.push({ key : this.state.jobSeekersEmailsList[i] , name : result.Item.userFirstName });
-                    }
-                })
-        }
-    }
-
     chooseEmployer = (employer) => {
         console.log("Choose Employer");
 
@@ -233,17 +222,6 @@ class Chat extends Component {
 
         this.setState({ chosenUser : this.state.employersNames.filter((em) => em.key == 
             (this.state.employersEmails.filter((emp) => emp.key == employer.key)[0].email))[0].name});
-    }
-
-    chooseJobseeker = (jobseeker) => {
-        console.log("Choose Jobseeker");
-
-        console.log(jobseeker);
-
-        console.log("name:",this.state.jobseekersNames.filter((js) => js.key == 
-        (this.state.jobseekersEmails.filter((jsr) => jsr.key == jobseeker.key)[0].email))[0].name);
-
-        this.setState({ chosenUser : this.state.jobseekersNames.filter((js) => js.key == jobseeker.email)[0].name});
     }
 
     handleSearchChange = (event) => {
@@ -295,6 +273,51 @@ class Chat extends Component {
                     this.setState({ jobTitles: this.state.jobTitles.concat({jobTitle: result[i].jobTitle, jobKey: result[i].jobKey}) });
                 },
             )
+    }
+
+    getJobseekersEmails = async () => {
+        for(var i=0;i<this.state.jobTitles.length;i++){
+            await fetch(`https://q35g00j27k.execute-api.ap-southeast-2.amazonaws.com/prod/?jobKey=` + this.state.jobTitles[i].jobKey )
+                .then((res) => res.json())
+                .then((result) => {
+                    for(var j=0;j<result.length;j++){
+                        this.state.jobseekersEmails.push({ key : this.state.jobTitles[i].jobKey, lastUpdate : "1d" , email : result[j].userEmail });
+                        this.state.jobSeekersEmailsList.push(result[j].userEmail);
+                    }
+                })
+        }
+    }
+
+    getJobseekersNames = async () => {
+        for(var i=0;i<this.state.jobSeekersEmailsList.length;i++){
+            await fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` + this.state.jobSeekersEmailsList[i] )
+                .then((res) => res.json())
+                .then((result) => {
+                    if(typeof result.Item !== 'undefined'){
+                        this.state.jobseekersNames.push({ key : this.state.jobSeekersEmailsList[i] , name : result.Item.userFirstName });
+                    }
+                })
+        }
+    }
+
+    chooseJobseeker = (jobseeker) => {
+        console.log("Choose Jobseeker");
+
+        // console.log(jobseeker);
+
+        //set current match ID
+        // console.log('length',this.state.matchIDs.length);
+        // console.log(this.state.matchIDs[0].jobKey);
+        // console.log(this.state.matchIDs.filter((match) => match.jobKey == jobseeker.key).filter((ID) => ID.email == jobseeker.email)[0]);
+        this.setState({ currentMatchID : this.state.matchIDs.filter((match) => match.jobKey == jobseeker.key).filter((ID) => ID.email == jobseeker.email)[0].matchID })
+
+        // console.log("name:",this.state.jobseekersNames.filter((js) => js.key == 
+        // (this.state.jobseekersEmails.filter((jsr) => jsr.key == jobseeker.key)[0].email))[0].name);
+
+        // this.getMatchID(jobseeker);
+        // this.getMessages();
+
+        this.setState({ chosenUser : this.state.jobseekersNames.filter((js) => js.key == jobseeker.email)[0].name});
     }
 
     render(){
@@ -414,19 +437,23 @@ class Chat extends Component {
                                 {/* Messages */}
                                 <Grid.Row className="row chat-box">
                                     <ul className="message-list">
-                                        {this.state.messages.map(message => {
+                                        {this.state.loading == false ? 
+                                        this.state.currentMatchID !== "" ? 
+                                        this.state.messages.filter((m) => m.matchID == this.state.currentMatchID).map(message => {
                                             return(
-                                                <li key={message.id} className={"message-" + message.senderRole}>
+                                                <li key={message.id} className={"message-" + message.role}>
                                                     <div>
-                                                        {message.senderID}
+                                                        {message.name}
                                                     </div>
                                                     <div>
-                                                        {message.text}
+                                                        {message.chat}
                                                     </div>
                                                     <div className="divider">empty</div>
                                                 </li>
                                             )
-                                        })}
+                                        })
+                                         : console.log('waiting...')
+                                         : <div>Loading...</div>}
                                     </ul>      
                                 </Grid.Row>
                                 {/* Input */}
