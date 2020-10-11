@@ -2,14 +2,18 @@
 
 import * as React from "react";
 
-import { Container, Grid, Card, Form, Header, Dimmer, Icon } from "tabler-react";
+import { Container, Card, Dimmer, Icon } from "tabler-react";
 import { Button } from "semantic-ui-react";
 import axios from "axios";
+
+import NotificationSystem from 'react-notification-system';
 
 var jobseekers = [];
 var num = 0;
 
 class JobCandidates extends React.Component {
+  notificationSystem = React.createRef();
+
   constructor(props) {
     super(props);
 
@@ -154,61 +158,80 @@ class JobCandidates extends React.Component {
     });
   };
 
-  acceptCandidate = (event) => {
+  acceptCandidate = () => {
     if (this.state.initialised && this.state.skillsFiltered && this.state.skillsSet){
-      let newNum = num + 1;
 
-      // If Employer likes candidate then add them to their matches database here
+      // Post the match to the databsae
+      try {
+        const params = {
+          userEmail:  jobseekers[num].userEmail,
+          jobKey: "testJobCandidatesPage",
+          matchId: "testMatchIdJobCandidatesPage"
+        };
+        axios.post(
+          "https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/",
+          params
+        );
 
-      if (newNum >= jobseekers.length) {
+        this.likeNotification()
+      } catch (err) {
+        console.log(`An error has occurred: ${err}`);
+      };
+
+      // Increment the current index and check if there are still more candidates to show
+      num++
+      if (num >= jobseekers.length) {
         console.log("no more candidates");
-        num++;
         // CAN ADD IN SOME LOGIC FOR WHAT TO DO WHEN THERE'S NO MORE CANDIDATES (REMOVE INFO AND DISPLAY A MESSAGE, POPUP, ALERT, ETC.)
         alert("No more candidates available at this time");
       } else {
-        num++;
         this.setState({
-          currentCandidate: jobseekers[newNum],
-        }
-        )
-        try {
-          const params = {
-            userEmail:  jobseekers[num].userEmail,
-            jobKey: "testJobCandidatesPage",
-            matchId: "testMatchIdJobCandidatesPage"
-          };
-          axios.post(
-            "https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/",
-            params
-          );
-        } catch (err) {
-          console.log(`An error has occurred: ${err}`);
-        };
+          currentCandidate: jobseekers[num],
+        })
       }
     }
   };
 
   rejectCandidate = () => {
     if (this.state.initialised && this.state.skillsFiltered && this.state.skillsSet){
-      let newNum = num + 1;
+      num++
 
-      if (newNum >= jobseekers.length) {
+      this.passNotification()
+
+      if (num >= jobseekers.length) {
         console.log("no more candidates");
-        num++;
         // CAN ADD IN SOME LOGIC FOR WHAT TO DO WHEN THERE'S NO MORE CANDIDATES (REMOVE INFO AND DISPLAY A MESSAGE, POPUP, ALERT, ETC.)
         alert("No more candidates available at this time");
       } else {
-        num++;
         this.setState({
-          currentCandidate: jobseekers[newNum],
+          currentCandidate: jobseekers[num],
         });
       }
     }
   };
 
+  likeNotification = () => {
+    const notification = this.notificationSystem.current;
+    notification.addNotification({
+      message: 'You matched with ' + this.state.currentCandidate.userFirstName + '. Head to the chat page to start a conversation with them!',
+      level: 'success',
+      position: 'br'
+    });
+  };
+
+  passNotification = () => {
+    const notification = this.notificationSystem.current;
+    notification.addNotification({
+      message: 'You passed ' + this.state.currentCandidate.userFirstName + '. They won\'t be shown to you again for this job profile.',
+      level: 'error',
+      position: 'br'
+    });
+  };
+
   render() {
     return (
       <Container>
+        <NotificationSystem ref={this.notificationSystem}/>
         {
             this.state.initialised && this.state.skillsFiltered && this.state.skillsSet ?
 
