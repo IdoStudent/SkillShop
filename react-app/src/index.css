@@ -494,6 +494,74 @@ body {
   margin-left: -10px;
 }
 
+.likeButton {
+  background: none !important;
+  color: #26cb64 !important;
+  font-weight: lighter !important;
+}
+
+.passButton {
+  background: none !important;
+  color: #cb2626 !important;
+  font-weight: lighter !important;
+}
+
+.infoLabel {
+  float: left;
+  border-right-style: solid;
+  border-width: 1px;
+  border-color:#efefef;
+  width: 15%;
+  padding: 10px;
+  min-height: 75px;
+  font-weight: bold;
+}
+
+.info {
+  height: 100%;
+  float: left;
+  width: 80%;
+  padding: 10px;
+  min-height: 75px;
+  padding-left: 2rem;
+}
+
+.infoRow:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.buttonwidth {
+  margin-right: 0;
+  font-size: 20px !important;
+  height: 75px;
+  width: 100%;
+}
+
+.buttonBox {
+  float: left;
+  width: 49%;
+  margin-top: 20px;
+  border-top-style: solid;
+  border-width: 1px;
+  border-color: #efefef;
+}
+
+.buttonBorder {
+  border-right-style: solid;
+  border-width: 1px;
+  border-color: #efefef;
+}
+
+.zeroMargin {
+  margin: 0;
+}
+
+.margin1 {
+  margin-bottom: 40px;
+}
+
 /* MISC */
 
 .formLabelLeft {
@@ -935,60 +1003,4 @@ body {
   border-radius: 10em;
   width: 100px;
   margin-left: 4%;
-}
-
-/* Job Candidates Screen */
-
-.infoLabel {
-  float: left;
-  border-right-style: solid;
-  border-width: 2px;
-  border-color: #b8b8b8;
-  width: 20%;
-  padding: 10px;
-  min-height: 75px;
-
-}
-.info {
-  height: 100%;
-  float: left;
-  width: 80%;
-  padding: 10px;
-  min-height: 75px;
-}
-
-.infoRow:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-.buttonwidth {
-  margin-right: 0;
-  font-size: 20px !important;
-  height: 75px;
-  width: 100%;
-}
-
-.buttonBox {
-  float: left;
-  width: 49%;
-  margin-top: 20px;
-  border-top-style: solid;
-  border-width: 2px;
-  border-color: #b8b8b8;
-}
-
-.buttonBorder {
-  border-right-style: solid;
-  border-width: 2px;
-  border-color: #b8b8b8;
-}
-
-.zeroMargin {
-  margin: 0;
-}
-
-.margin1 {
-  margin-bottom: 40px;
 }

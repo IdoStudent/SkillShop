@@ -262,7 +262,7 @@ class JobCandidates extends React.Component {
 
             <div className="buttonBox buttonBorder">
                 <Button
-                  className="buttonwidth cancelButton"
+                  className="buttonwidth passButton"
                   onClick={this.rejectCandidate}
                 >
                 <Icon prefix="fa" name="times" />
@@ -271,7 +271,7 @@ class JobCandidates extends React.Component {
               </div>
               <div className="buttonBox">
                 <Button
-                  className="buttonwidth acceptButton"
+                  className="buttonwidth likeButton"
                   onClick={this.acceptCandidate}
                 >
                 <Icon prefix="fa" name="check" />
