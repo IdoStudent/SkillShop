@@ -11,6 +11,7 @@ import JobNewModal from "../components/JobNewModal.react";
 import JobCandidates from "../components/JobCandidates.react";
 
 import NotificationSystem from 'react-notification-system';
+import { container } from "aws-amplify";
 
 const uuidv4 = require("uuid/v4")
 
@@ -32,31 +33,35 @@ class Candidates extends React.Component {
       // Select value defines what option is currently selected, based on the array of data. We can get information about the current selection by indexing the array and accessing the value we want
       // For example, if the first job profile in the list is selected, our value will be 0 (index 0). If we want to get the industry of this job profile, we can do so by typing: {this.state.data[this.state.selectValue].industry}
       selectValue: 0,
+
+      initialised: false,
     };
   }
 
- async getJobProfiles(){
+  getJobProfiles(){
     let email = Auth.user.attributes.email
     fetch('https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=' + email)
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
-        // Create a temporary array to hold our individual items (job profiles)
-        let items = [];
-        for (var i = 0; i < result.length; i++) {
-          items.push(result[i]);
-        }
 
-        // Once we've iterated through the whole list, copy the value of our temporary array to our state array
-        this.setState(
-          {
-            data: items,
-          },
-          () => {
-            // Once the state has updated, create our dropdown list items
-            this.createSelectItems();
+          // Create a temporary array to hold our individual items (job profiles)
+          let items = [];
+
+          for (var i = 0; i < result.length; i++) {
+            items.push(result[i]);
           }
-        );
+
+          // Once we've iterated through the whole list, copy the value of our temporary array to our state array
+          this.setState(
+            {
+              data: items,
+            },
+            () => {
+              // Once the state has updated, create our dropdown list items
+              this.createSelectItems();
+            }
+          );
+
       });
   }
 
@@ -267,13 +272,13 @@ class Candidates extends React.Component {
                 </div>
 
                 {/* Candidate Info */}
-                <Container className="card" name="candidateInfo">
+                <Container className="card">
                   <Card.Body>
                     {
                       this.state.data.length > 0 ?
                       ( <JobCandidates /> )
                       :
-                      ( <p> You don't have any existing job profiles. Create one to start finding candidates! </p> )
+                      ( <p className="noProfiles"> You don't have any existing job profiles. Create one to start finding candidates! </p> )
                     }
 
                   </Card.Body>

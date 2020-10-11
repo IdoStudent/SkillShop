@@ -564,14 +564,19 @@ body {
 
 #candidatesLoader p {
   margin-top: 4rem;
-}
-
-#candidatesLoader .card-body {
   text-align: center;
 }
 
 #candidatesLoader .dimmer {
   margin-top: 1rem;
+}
+
+.noProfiles {
+  text-align: center;
+}
+
+.noCandidates {
+  text-align: center; 
 }
 
 /* MISC */

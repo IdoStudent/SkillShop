@@ -34,6 +34,7 @@ class JobCandidates extends React.Component {
         userSkills: " ",
         userState: " ",
       },
+      noCandidates: false,
     };
   }
 
@@ -188,9 +189,7 @@ class JobCandidates extends React.Component {
       // Increment the current index and check if there are still more candidates to show
       num++;
       if (num >= jobseekers.length) {
-        console.log("no more candidates");
-        // CAN ADD IN SOME LOGIC FOR WHAT TO DO WHEN THERE'S NO MORE CANDIDATES (REMOVE INFO AND DISPLAY A MESSAGE, POPUP, ALERT, ETC.)
-        alert("No more candidates available at this time");
+        this.setState({noCandidates: true})
       } else {
         this.setState({
           currentCandidate: jobseekers[num],
@@ -210,9 +209,7 @@ class JobCandidates extends React.Component {
       this.passNotification();
 
       if (num >= jobseekers.length) {
-        console.log("no more candidates");
-        // CAN ADD IN SOME LOGIC FOR WHAT TO DO WHEN THERE'S NO MORE CANDIDATES (REMOVE INFO AND DISPLAY A MESSAGE, POPUP, ALERT, ETC.)
-        alert("No more candidates available at this time");
+        this.setState({noCandidates: true})
       } else {
         this.setState({
           currentCandidate: jobseekers[num],
@@ -251,7 +248,8 @@ class JobCandidates extends React.Component {
         <NotificationSystem ref={this.notificationSystem} />
         {this.state.initialised &&
         this.state.skillsFiltered &&
-        this.state.skillsSet ? (
+        this.state.skillsSet &&
+        this.state.noCandidates === false ? (
           <div>
             <div className="margin1">
               <h1 className="zeroMargin">
@@ -322,6 +320,9 @@ class JobCandidates extends React.Component {
               </Button>
             </div>
           </div>
+        ) : this.state.noCandidates ? (
+          <p className="noCandidates"> There are no more suitable candidates to show for the selected job profile. If you have filters on, you can try removing some in order to view a broader range of candidates. Otherwise,
+          you can check back another time when additional candidates are found for your chosen filters.</p>
         ) : (
           <div id="candidatesLoader">
             <Card.Body>
