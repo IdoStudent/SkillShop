@@ -10,9 +10,13 @@ import JobFiltersModal from "../components/JobFiltersModal.react";
 import JobNewModal from "../components/JobNewModal.react";
 import JobCandidates from "../components/JobCandidates.react";
 
+import NotificationSystem from 'react-notification-system';
+
 const uuidv4 = require("uuid/v4")
 
 class Candidates extends React.Component {
+  notificationSystem = React.createRef();
+
   constructor(props) {
     super(props);
 
@@ -36,6 +40,7 @@ class Candidates extends React.Component {
       openFilter: false,
     };
   }
+
   getEmailApi() {
     return Auth.currentAuthenticatedUser().then((user) => {
       const { attributes = {} } = user;
@@ -202,22 +207,20 @@ class Candidates extends React.Component {
         "https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod",
         params
       );
+
+      this.addSuccessNotification()
     } catch (err) {
       console.log(`An error has occurred: ${err}`);
     }
   };
 
-  createNewProfile = (newInfo, email) => {
-    // This can be done in a few ways but I think the best way (in terms of reliability) would be to first send the data to the database, and then just force a reload of this component so it does a new API call and collects the newly created data
-    // I think if we append the data to the state directly it leaves too many possibilities for a mistmatch between what is on the front-end and what's on the database
-    // It's doable both ways though so doesn't really matter
-
+  createNewProfile = (newInfo) => {
     // Generate a unique id
     let jobKey = uuidv4()
         // Get current profile information
     try {
       const params = {
-        userEmail: this.state.email,
+        userEmail: Auth.user.attributes.email,
         jobKey: jobKey,
         jobTitle: newInfo[0],
         jobLocation: newInfo[1],
@@ -237,10 +240,21 @@ class Candidates extends React.Component {
     this.setState({ openNew: false });
   };
 
+  addSuccessNotification = () => {
+    const notification = this.notificationSystem.current;
+    notification.addNotification({
+      message: 'The information for ' + this.state.data[this.state.selectValue].jobTitle + ' was successfully updated',
+      level: 'success',
+      position: 'br'
+    });
+  };
+
   render() {
     return (
       <SiteWrapper>
+        <NotificationSystem ref={this.notificationSystem}/>
         <div className="my-3 my-md-5">
+        <div className="spacer" />
           <Container>
             <Grid.Row>
               <Grid.Col lg={12}>
