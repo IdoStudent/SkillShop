@@ -82,19 +82,23 @@ class Chat extends Component {
             await this.getMatches();
             await this.getEmployersEmail();
             await this.getEmployersNames();
+            await this.getSeekMatchID();
+            await this.getSeekMessages();
         }
         else if(this.state.userType == 'employer'){
             await this.getJobTitles();
             await this.getJobseekersEmails();
             await this.getJobseekersNames();
-            await this.getMatchID();
-            await this.getMessages();
+            await this.getEmpMatchID();
+            await this.getEmpMessages();
             this.setState({ loading : false });
         }
 
         //finish loading
         this.setState({ loading : false });
     }
+
+    /* GENERAL */
 
     // get user type from user table
     async getUserType() {
@@ -110,45 +114,78 @@ class Chat extends Component {
                     });
                 },
             )
-      }
+    }   
+
+    /* JOBSEEKER */
 
     // get all matches with userEmail from matches table (jobseeker)
     async getMatches() {
+        console.log('get matches');
         const email =  Auth.user.attributes.email
         await fetch(
             `https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` + email )
             .then((res) => res.json())
             .then((result) => {
                 for (var i = 0; i < result.length; i++){
+                    console.log('user email:',result[i].userEmail);
                     this.state.jobKeys.push({ key : result[i].jobKey , lastUpdate : "1d" , email : result[i].userEmail });
                 }
             })
     }
 
-    getMatchID = async () => {
-        // console.log('getMatchID');
+    getEmployersEmail = async () => {
+        // console.log('getEmployersEmail');
+        // console.log('jobKeys length:',this.state.jobKeys.length);
+        for(var i=0;i<this.state.jobKeys.length;i++){
+            // console.log('jobKey',this.state.jobKeys[i]);
 
-        // console.log('jobseekers email',jobseeker.email);
-        // console.log('jobseekers key',jobseeker.key);
+            await fetch(`https://s38llqiaed.execute-api.ap-southeast-2.amazonaws.com/prod/?jobKey=` + this.state.jobKeys[i].key )
+                .then((res) => res.json())
+                .then((result) => {
+                    // console.log('key',this.state.jobKeys[i].key);
+                    // console.log('Result:',result[0].userEmail);
+                    this.state.employersEmails.push({ key : this.state.jobKeys[i].key , email : result[0].userEmail });
+                })
+        }
 
-        // console.log(`https://ra45wkav0m.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` + jobseeker.email + `idoyaron90@gmail.com&jobKey=` + jobseeker.key);
+        // console.log('length of employers',this.state.employersEmails.length);
+        // for(var i=0;i<this.state.employersEmails.length;i++){
+        //     console.log('employer Email:',this.state.employersEmails[i]);
+        // }
+    }
 
-        for(var i=0;i<this.state.jobseekersEmails.length;i++){
-            // console.log(this.state.jobseekersEmails[i]);
+    getEmployersNames = async () => {
+        // console.log('getEmployersNames');
+        for(var i=0;i<this.state.employersEmails.length;i++){
+            await fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` + this.state.employersEmails[i].email )
+                .then((res) => res.json())
+                .then((result) => {
+                    if(typeof result.Item !== 'undefined'){
+                        // console.log('user Name:',result.Item.userFirstName);
+                        this.state.employersNames.push({ key : this.state.employersEmails[i].email , name : result.Item.userFirstName });
+                    }
+                })
+        }
+    }
+
+    getSeekMatchID = async () => {
+        console.log('get jobseeker match ids');
+
+        for(var i=0;i<this.state.jobKeys.length;i++){
             await fetch(
-                `https://ra45wkav0m.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` + this.state.jobseekersEmails[i].email 
-                + `&jobKey=` + this.state.jobseekersEmails[i].key)
+                `https://ra45wkav0m.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` + this.state.jobKeys[i].email 
+                + `&jobKey=` + this.state.jobKeys[i].key)
                 .then((res) => res.json())
                 .then((result) => {
                     // console.log('result:',result[0].matchId);
-                    this.state.matchIDs.push({ jobKey : this.state.jobseekersEmails[i].key, email : this.state.jobseekersEmails[i].email , matchID : result[0].matchId });
+                    this.state.matchIDs.push({ jobKey : this.state.jobKeys[i].key, email : this.state.jobKeys[i].email , matchID : result[0].matchId });
                 })
-        }    
+        }   
     }
 
     // get messages depending on matchId 
-    getMessages = async () => {
-        // console.log('get messages');
+    getSeekMessages = async () => {
+        console.log('get messages');
 
         for(var i=0;i<this.state.matchIDs.length;i++){
             // console.log(this.state.matchIDs[i]);
@@ -167,10 +204,10 @@ class Chat extends Component {
                     var userRole = ""
                     if(result[j].userName == Auth.user.attributes.email){
                         userName = "You";
-                        userRole = "Employer";
-                    }else{
-                        userName = this.state.jobseekersNames.filter((jobseeker) => jobseeker.key == result[j].userName)[0].name;
                         userRole = "jobseeker";
+                    }else{
+                        userName = this.state.employersNames.filter((emp) => emp.key == result[j].userName)[0].name;
+                        userRole = "Employer";
                     }
                     console.log('name:',userName);
                     console.log('role:',userRole);
@@ -180,87 +217,22 @@ class Chat extends Component {
         }
     }
 
-    getEmployersEmail = async () => {
-        console.log('getEmployersEmail');
-        console.log('jobKeys length:',this.state.jobKeys.length);
-        for(var i=0;i<this.state.jobKeys.length;i++){
-            console.log('jobKey',this.state.jobKeys[i]);
-
-            await fetch(`https://s38llqiaed.execute-api.ap-southeast-2.amazonaws.com/prod/?jobKey=` + this.state.jobKeys[i].key )
-                .then((res) => res.json())
-                .then((result) => {
-                    console.log('Result:',result[0].userEmail);
-                    this.state.employersEmails.push({ key : this.state.jobKeys[i].key , email : result[0].userEmail });
-                })
-        }
-
-        console.log('length of employers',this.state.employersEmails.length);
-        for(var i=0;i<this.state.employersEmails.length;i++){
-            console.log('employer Email:',this.state.employersEmails[i]);
-        }
-    }
-
-    getEmployersNames = async () => {
-        console.log('getEmployersNames');
-        for(var i=0;i<this.state.employersEmails.length;i++){
-            await fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` + this.state.employersEmails[i].email )
-                .then((res) => res.json())
-                .then((result) => {
-                    if(typeof result.Item !== 'undefined'){
-                        console.log('user Name:',result.Item.userFirstName);
-                        this.state.employersNames.push({ key : this.state.employersEmails[i].email , name : result.Item.userFirstName });
-                    }
-                })
-        }
-    }
-
     chooseEmployer = (employer) => {
         console.log("Choose Employer");
+        console.log(employer);
 
-        console.log("name:",this.state.employersNames.filter((em) => em.key == 
-        (this.state.employersEmails.filter((emp) => emp.key == employer.key)[0].email))[0].name);
+        // console.log("name:",this.state.employersNames.filter((em) => em.key == 
+        // (this.state.employersEmails.filter((emp) => emp.key == employer.key)[0].email))[0].name);
+
+        //set current match id
+        this.setState({ currentMatchID : this.state.matchIDs.filter((match) => match.jobKey == employer.key).filter((ID) => ID.email == employer.email)[0].matchID })
+        // console.log('current match id', this.state.currentMatchID);
 
         this.setState({ chosenUser : this.state.employersNames.filter((em) => em.key == 
             (this.state.employersEmails.filter((emp) => emp.key == employer.key)[0].email))[0].name});
     }
 
-    handleSearchChange = (event) => {
-        this.setState({search: event.target.value});
-    }
-
-    //get match id with jobkey
-    handleDropDownMenu = (event) => {
-        this.setState({ currentPosition: event.target.value });
-        this.setState({ chosenUser : "" });
-        console.log('current position:',this.state.currentPosition);
-    }
-
-    handleMessageChange = (event) => {
-        this.setState({message: event.target.value});
-    }
-    
-    handleMessageSubmit = async (event) => {
-        
-        var date = new Date();
-        var time = date.getTime();
-
-        try {
-            const params = {
-              matchId:  "abcdefghi",
-              messageTime: time,
-              message: this.state.message,
-              userName: Auth.user.attributes.email
-            };
-            await axios.post(
-              "https://rxo4bx6gwa.execute-api.ap-southeast-2.amazonaws.com/prod",
-              params
-            );
-          } catch (err) {
-            console.log(`An error has occurred: ${err}`);
-          }
-
-          this.setState({message: ""});
-    };
+    /* EMPLOYER */
 
     getJobTitles = async (event) => {
         // console.log('get job titles');
@@ -300,6 +272,61 @@ class Chat extends Component {
         }
     }
 
+    getEmpMatchID = async () => {
+        // console.log('getMatchID');
+
+        // console.log('jobseekers email',jobseeker.email);
+        // console.log('jobseekers key',jobseeker.key);
+
+        // console.log(`https://ra45wkav0m.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` + jobseeker.email + `idoyaron90@gmail.com&jobKey=` + jobseeker.key);
+
+        for(var i=0;i<this.state.jobseekersEmails.length;i++){
+            // console.log(this.state.jobseekersEmails[i]);
+            await fetch(
+                `https://ra45wkav0m.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` + this.state.jobseekersEmails[i].email 
+                + `&jobKey=` + this.state.jobseekersEmails[i].key)
+                .then((res) => res.json())
+                .then((result) => {
+                    // console.log('result:',result[0].matchId);
+                    this.state.matchIDs.push({ jobKey : this.state.jobseekersEmails[i].key, email : this.state.jobseekersEmails[i].email , matchID : result[0].matchId });
+                })
+        }    
+    }
+
+    // get messages depending on matchId 
+    getEmpMessages = async () => {
+        // console.log('get messages');
+
+        for(var i=0;i<this.state.matchIDs.length;i++){
+            // console.log(this.state.matchIDs[i]);
+            await fetch(`https://rxo4bx6gwa.execute-api.ap-southeast-2.amazonaws.com/prod/?matchId=` + this.state.matchIDs[i].matchID)
+            .then((res) => res.json())
+            .then((result) => {
+                // console.log(result);
+                // this.state.messages.push({ matchID : this.state.matchIDs[i].matchID, chat : result });
+                for (var j=0;j<result.length;j++){
+                    console.log(result[j]);
+                    console.log(result[j].userName);
+                    console.log(Auth.user.attributes.email);
+
+                    //get name and role
+                    var userName = ""
+                    var userRole = ""
+                    if(result[j].userName == Auth.user.attributes.email){
+                        userName = "You";
+                        userRole = "Employer";
+                    }else{
+                        userName = this.state.jobseekersNames.filter((jobseeker) => jobseeker.key == result[j].userName)[0].name;
+                        userRole = "jobseeker";
+                    }
+                    console.log('name:',userName);
+                    console.log('role:',userRole);
+                    this.state.messages.push({ matchID : result[j].matchId, chat : result[j].message , name : userName , role : userRole });
+                }
+            })
+        }
+    }
+
     chooseJobseeker = (jobseeker) => {
         console.log("Choose Jobseeker");
 
@@ -319,6 +346,48 @@ class Chat extends Component {
 
         this.setState({ chosenUser : this.state.jobseekersNames.filter((js) => js.key == jobseeker.email)[0].name});
     }
+
+    /* HANDLERS */
+
+    handleSearchChange = (event) => {
+        this.setState({search: event.target.value});
+    }
+
+    //get match id with jobkey
+    handleDropDownMenu = (event) => {
+        this.setState({ currentPosition: event.target.value });
+        this.setState({ chosenUser : "" });
+        console.log('current position:',this.state.currentPosition);
+    }
+
+    handleMessageSubmit = async (event) => {
+        
+        var date = new Date();
+        var time = date.getTime();
+
+        try {
+            const params = {
+              matchId:  "abcdefghi",
+              messageTime: time,
+              message: this.state.message,
+              userName: Auth.user.attributes.email
+            };
+            await axios.post(
+              "https://rxo4bx6gwa.execute-api.ap-southeast-2.amazonaws.com/prod",
+              params
+            );
+          } catch (err) {
+            console.log(`An error has occurred: ${err}`);
+          }
+
+          this.setState({message: ""});
+    };
+
+    handleMessageChange = (event) => {
+        this.setState({message: event.target.value});
+    }
+
+    /* DISPLAY */
 
     render(){
         return(
