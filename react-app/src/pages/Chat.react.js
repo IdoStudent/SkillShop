@@ -4,54 +4,10 @@ import SiteWrapper from "../SiteWrapper.react";
 import Auth from "@aws-amplify/auth";
 import axios from "axios";
 
-const DUMMY_DATA = [
-    {
-        senderID: "Employer's Name",
-        senderRole: "Employer",
-        text: "Hello, how are you?"
-    },
-    {
-        senderID: "You",
-        senderRole: "jobseeker",
-        text: "I'm good, thank you!"
-    },
-    {
-        senderID: "Employer's Name",
-        senderRole: "Employer",
-        text: "I viewed your resume and I was deeply impressed."
-    },
-    {
-        senderID: "You",
-        senderRole: "jobseeker",
-        text: "That's great to read!"
-    },
-    {
-        senderID: "Employer's Name",
-        senderRole: "Employer",
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    },
-    {
-        senderID: "You",
-        senderRole: "jobseeker",
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    },
-    {
-        senderID: "Employer's Name",
-        senderRole: "Employer",
-        text: "You're hired!"
-    },
-    {
-        senderID: "You",
-        senderRole: "jobseeker",
-        text: "You will not regret this, sir."
-    }
-]
-
 class Chat extends Component {
     constructor(){
         super()
         this.state = {
-            // change to DUMMY_DATA for fake result
             messages: [],
             message: "",
             jobTitles: [],
@@ -224,12 +180,34 @@ class Chat extends Component {
         // console.log("name:",this.state.employersNames.filter((em) => em.key == 
         // (this.state.employersEmails.filter((emp) => emp.key == employer.key)[0].email))[0].name);
 
+        //set current position
+        this.setState({ currentPosition : employer.key});
+
         //set current match id
         this.setState({ currentMatchID : this.state.matchIDs.filter((match) => match.jobKey == employer.key).filter((ID) => ID.email == employer.email)[0].matchID })
         // console.log('current match id', this.state.currentMatchID);
 
         this.setState({ chosenUser : this.state.employersNames.filter((em) => em.key == 
             (this.state.employersEmails.filter((emp) => emp.key == employer.key)[0].email))[0].name});
+    }
+
+    updateSeekMessages = async () => {
+        var date = new Date();
+        var time = date.getTime();
+
+        try {
+            const params = {
+              jobKey: this.state.currentPosition,
+              userEmail: Auth.user.attributes.email,
+              lastUpdated: time
+            };
+            await axios.post(
+              "https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/",
+              params
+            );
+        } catch (err) {
+            console.log(`An error has occurred: ${err}`);
+        }
     }
 
     /* EMPLOYER */
@@ -367,6 +345,25 @@ class Chat extends Component {
 
         var date = new Date();
         var time = date.getTime();
+
+        console.log('test time');
+        var someTime = 1602399758180;
+        var timeDifference = time-someTime;
+        console.log('current time:',time);
+        console.log('difference in time:',timeDifference);
+        var inSeconds = timeDifference / 1000;
+        console.log('in seconds:',inSeconds);
+        var inMinutes = inSeconds / 60;
+        console.log('in minutes:',inMinutes);
+        var inHours = inMinutes / 60;
+        console.log('in hours:',inHours);
+        var inDays = inHours / 24;
+        console.log('in days:',inDays);
+
+        //update matches
+        console.log('jobkey',this.state.currentPosition);
+        await this.updateSeekMessages();
+        
 
         // console.log('time:',time);
         if(this.state.currentMatchID !== ""){
@@ -512,12 +509,8 @@ class Chat extends Component {
                                     
                                 </ul>
                             </Grid.Col>))        
-                            : console.log("huh?")) : 
-                            (<Grid.Col className="col-3 list">
-                                <ul className="emp-list">
-                                    loading...
-                                </ul>
-                            </Grid.Col>)  }
+                            : console.log("waiting...")) : 
+                            <div className="alert">loading...</div>}
                             {/* Chat */}
                             <Grid.Col className="col-9">
                                 {/* Messages */}
@@ -534,14 +527,11 @@ class Chat extends Component {
                                                     <div>
                                                         {message.chat}
                                                     </div>
-                                                    {/* <br></br> */}
-                                                    {/* <div className="divider">empty</div> */}
-                                                    {/* <div className="divider">empty</div> */}
                                                 </li>
                                             )
                                         })
                                          : console.log('waiting...')
-                                         : <div>Loading...</div>}
+                                         : console.log('loading...')}
                                     </ul>      
                                 </Grid.Row>
                                 {/* Input */}

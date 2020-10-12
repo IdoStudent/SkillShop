@@ -626,6 +626,14 @@ body {
   overflow: hidden;
 }
 
+.alert {
+  /* position: absolute;
+  top:0px;
+  left:0px;
+  background-color: red;
+  height:40px; */
+}
+
 /* search */
 
 .search {
