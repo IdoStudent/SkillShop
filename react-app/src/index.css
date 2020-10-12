@@ -616,22 +616,13 @@ body {
 
 /* CHAT */
 
-.my-body {
-  margin-top: 100px;
-  overflow: hidden;
-  height: 100%;
-}
-
 .test {
   overflow: hidden;
 }
 
-.alert {
-  /* position: absolute;
-  top:0px;
-  left:0px;
-  background-color: red;
-  height:40px; */
+.my-body {
+  margin-top: 100px;
+  /* height: 50%; */
 }
 
 /* search */
