@@ -10,6 +10,8 @@ import axios from "axios";
 
 import NotificationSystem from "react-notification-system";
 
+const uuidv4 = require("uuid/v4")
+
 var jobseekers = [];
 var currentCandidatesSkills = [];
 var education = [];
@@ -255,6 +257,10 @@ class JobCandidates extends React.Component {
 
 
   acceptCandidate = () => {
+
+    // Generate a unique id
+    let matchId = uuidv4()
+
     if (
       this.state.initialised &&
       this.state.skillsFiltered &&
@@ -265,8 +271,8 @@ class JobCandidates extends React.Component {
       try {
         const params = {
           userEmail: jobseekers[num].userEmail,
-          jobKey: "testJobCandidatesPage",
-          matchId: "testMatchIdJobCandidatesPage",
+          jobKey: this.props.jobkey,
+          matchId: matchId,
         };
         axios.post(
           "https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/",
@@ -303,7 +309,6 @@ class JobCandidates extends React.Component {
       this.state.experienceSet
     ) {
       num++;
-
       this.passNotification();
 
       if (num >= jobseekers.length) {

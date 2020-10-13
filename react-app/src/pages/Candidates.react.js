@@ -181,7 +181,7 @@ class Candidates extends React.Component {
         jobIndustry: newInfo[2],
         jobAbout: newInfo[3],
       };
-      
+
       axios.post(
         "https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod",
         params
@@ -287,7 +287,7 @@ class Candidates extends React.Component {
                   <Card.Body>
                     {
                       this.state.data.length > 0 ?
-                      ( <JobCandidates key={this.state.candidatesKey} /> )
+                      ( <JobCandidates key={this.state.candidatesKey} jobKey={this.state.data[this.state.selectValue].jobKey}/> )
                       :
                       ( <p className="noProfiles"> You don't have any existing job profiles. Create one to start finding candidates! </p> )
                     }

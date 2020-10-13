@@ -507,6 +507,7 @@ body {
 }
 
 .infoLabel {
+  flex: 1;
   float: left;
   border-right-style: solid;
   border-width: 1px;
@@ -522,20 +523,22 @@ body {
   float: left;
   width: 80%;
   padding: 10px;
-  min-height: 75px;
+  height: inherit;
   padding-left: 2rem;
 }
 
 .infoExperienceEducation {
-  height: 100%;
+  flex: 1;
+  height: auto;
   float: left;
   width: 70%;
   padding: 10px;
-  min-height: 75px;
+  height: inherit;
   padding-left: 2rem;
 }
 
 .infoRow:after {
+  display: flex;
   content: "";
   display: table;
   clear: both;
@@ -573,7 +576,7 @@ body {
 
 .margin2 {
   margin-bottom: 2px;
-  margin-top:20px;
+  padding-top: 20px;
 }
 
 #candidatesLoader p {
