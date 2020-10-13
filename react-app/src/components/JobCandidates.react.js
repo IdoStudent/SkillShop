@@ -252,6 +252,8 @@ class JobCandidates extends React.Component {
     });
   };
 
+
+
   acceptCandidate = () => {
     if (
       this.state.initialised &&
@@ -392,6 +394,7 @@ class JobCandidates extends React.Component {
               <div className="infoLabel">
                 <span>EXPERIENCE</span>
               </div>
+
               <div className="infoExperienceEducation">
                 <p><strong>{this.state.currentCandidate.userExperience.userJobTitle}</strong></p>
                 <span>{this.state.currentCandidate.userExperience.userJobDescription}</span>
@@ -400,12 +403,14 @@ class JobCandidates extends React.Component {
                 <p className="margin2">{this.state.currentCandidate.userExperience.userJobStartDate + "-" + this.state.currentCandidate.userExperience.userJobEndDate}</p>
                 <p className="zeroMargin">{this.state.currentCandidate.userExperience.userJobLocation}</p>
               </div>
+
             </div>
 
             <div className="infoRow">
               <div className="infoLabel">
                 <span>EDUCATION</span>
               </div>
+
               <div className="infoExperienceEducation">
                 <p><strong>{this.state.currentCandidate.userEducation.userEducationTitle}</strong></p>
                 <span>{this.state.currentCandidate.userEducation.userEducationDescription}</span>
@@ -414,6 +419,7 @@ class JobCandidates extends React.Component {
                 <p className="margin2">{this.state.currentCandidate.userEducation.userEducationStartDate + "-" + this.state.currentCandidate.userEducation.userEducationEndDate}</p>
                 <p className="zeroMargin">{this.state.currentCandidate.userEducation.userEducationLocation}</p>
               </div>
+
             </div>
 
             <div className="buttonBox buttonBorder">
