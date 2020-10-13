@@ -665,19 +665,21 @@ body {
   overflow: hidden;
 }
 
+#chatLoader .dimmer {
+  padding: 30px;
+}
+
+#chatLoader {
+  text-align: center;
+  padding-bottom: 10px;
+}
+
 /* search */
 
 .search {
   border-bottom: 1px solid rgb(210, 217, 241);
   background-color: white;
   padding: 10px;
-}
-
-.input-text-search {
-  width: 100%;
-  font-size: 14px;
-  margin-top: 10px;
-  border: 1px solid rgb(210, 217, 241);
 }
 
 /* drop-down menu */
@@ -697,7 +699,7 @@ body {
 .title-text {
   text-align: center;
   font-size: 20px;
-  margin-top: 10px;
+  margin-top: 1.2rem;
   font-weight: 900;
 }
 
@@ -713,6 +715,7 @@ body {
   padding: 0;
   margin-left: -11px;
   margin-right: -10px;
+  overflow: auto;
 }
 
 .button-text {
@@ -728,7 +731,10 @@ body {
   padding: 0;
   text-align: left;
   background-color: transparent;
-  border: 1px solid rgb(210, 217, 241);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid rgb(210, 217, 241);
 }
 
 .my-button-list:focus {
@@ -750,6 +756,8 @@ body {
   background-color: white;
   border-bottom: 1px solid rgb(210, 217, 241);
   border-left: 1px solid rgb(210, 217, 241);
+  overflow: auto;
+  flex-direction: column-reverse;
 }
 
 .message-list {

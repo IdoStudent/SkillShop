@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Grid, Header, Form } from "tabler-react";
+import { Container, Grid, Header, Form, Dimmer, Card } from "tabler-react";
 import { Button, Icon } from "semantic-ui-react";
 import SiteWrapper from "../SiteWrapper.react";
 import Auth from "@aws-amplify/auth";
@@ -26,7 +26,7 @@ class Chat extends Component {
             jobseekersNames: [],
             currentMatchID: "",
             matchIDs: [],
-            Loading: true
+            loading: true
         }
     }
 
@@ -430,230 +430,244 @@ class Chat extends Component {
           <div className="spacer" />
           <Header.H1 className="pageHeading">Your Matches</Header.H1>
           <div className="my-body">
+              {this.state.loading ? (          
+        
             <Container className="card">
-              {/* Header */}
-              <Grid.Row className="row">
-                {/* JobSeeker Search */}
-                {this.state.userType == "jobseeker" && (
-                  <Grid.Col className="col-3 search">
-                    <input
-                      className="input-text-search"
-                      type="text"
-                      placeholder="Search"
-                      value={this.state.search}
-                      onChange={this.handleSearchChange}
-                    />
-                  </Grid.Col>
-                )}
-                {/* Employer drop down menu */}
-                {this.state.userType == "employer" && (
-                  <Grid.Col className="col-3 search">
-                    <Form.Select
-                      id="profile"
-                      onChange={this.handleDropDownMenu}
-                    >
-                      {this.state.jobTitles.map((jobTitle) => {
+                <div id="chatLoader">
+              <Dimmer active loader />
+              <p> Loading your matches and chat... </p>
+              </div>
+            </Container>
+         ) : 
+          
+          (<Container className="card">
+          {/* Header */}
+          <Grid.Row className="row">
+            {/* JobSeeker Search */}
+            {this.state.userType == "jobseeker" && (
+              <Grid.Col className="col-3 search">
+                <Form.Input
+                  className="input-text-search"
+                  type="text"
+                  placeholder="Search..."
+                  position="append"
+                  icon="search"
+                  value={this.state.search}
+                  onChange={this.handleSearchChange}
+                />
+              </Grid.Col>
+            )}
+            {/* Employer drop down menu */}
+            {this.state.userType == "employer" && (
+              <Grid.Col className="col-3 search">
+                <Form.Select
+                  id="profile"
+                  onChange={this.handleDropDownMenu}
+                >
+                  {this.state.jobTitles.map((jobTitle) => {
+                    return (
+                      <option value={jobTitle.jobKey}>
+                        {jobTitle.jobTitle}
+                      </option>
+                    );
+                  })}
+                </Form.Select>
+              </Grid.Col>
+            )}
+            {/* Title */}
+            <Grid.Col className="col-9 title">
+              <div className="title-text">{this.state.chosenUser}</div>
+            </Grid.Col>
+          </Grid.Row>
+          {/* Body */}
+          <Grid.Row className="row">
+            {/* List */}
+            {this.state.search == "" &&
+              this.state.userType == "jobseeker" && (
+                <Grid.Col className="col-3 list">
+                  <ul className="emp-list">
+                    {this.state.jobKeys.map((employer) => {
+                      return (
+                        <li key={employer.id} className="emp-item">
+                          <button
+                            className="my-button-list"
+                            onClick={() => this.chooseEmployer(employer)}
+                          >
+                            <div className="last-update">
+                              {employer.lastUpdate}
+                            </div>
+                            {this.state.loading == false ? (
+                              <div className="button-text">
+                                {
+                                  this.state.employersNames.filter(
+                                    (em) =>
+                                      em.key ==
+                                      this.state.employersEmails.filter(
+                                        (emp) => emp.key == employer.key
+                                      )[0].email
+                                  )[0].name
+                                }
+                              </div>
+                            ) : (
+                              "Loading..."
+                            )}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </Grid.Col>
+              )}
+            {/* list post search */}
+            {this.state.search != "" &&
+              this.state.userType == "jobseeker" && (
+                <Grid.Col className="col-3 list">
+                  <ul className="emp-list">
+                    {this.state.jobKeys
+                      .filter(
+                        (k) =>
+                          this.state.employersNames
+                            .filter(
+                              (em) =>
+                                em.key ==
+                                this.state.employersEmails.filter(
+                                  (emp) => emp.key == k.key
+                                )[0].email
+                            )[0]
+                            .name.toLowerCase()
+                            .indexOf(this.state.search.toLowerCase()) > -1
+                      )
+                      .map((employer) => {
                         return (
-                          <option value={jobTitle.jobKey}>
-                            {jobTitle.jobTitle}
-                          </option>
+                          <li key={employer.id} className="emp-item">
+                            <button
+                              className="my-button-list"
+                              onClick={() => this.chooseEmployer(employer)}
+                            >
+                              <div className="last-update">
+                                {employer.lastUpdate}
+                              </div>
+                              {this.state.loading == false ? (
+                                <div className="button-text">
+                                  {
+                                    this.state.employersNames.filter(
+                                      (em) =>
+                                        em.key ==
+                                        this.state.employersEmails.filter(
+                                          (emp) => emp.key == employer.key
+                                        )[0].email
+                                    )[0].name
+                                  }
+                                </div>
+                              ) : (
+                                "Loading..."
+                              )}
+                            </button>
+                          </li>
                         );
                       })}
-                    </Form.Select>
-                  </Grid.Col>
-                )}
-                {/* Title */}
-                <Grid.Col className="col-9 title">
-                  <div className="title-text">{this.state.chosenUser}</div>
+                  </ul>
                 </Grid.Col>
-              </Grid.Row>
-              {/* Body */}
-              <Grid.Row className="row">
-                {/* List */}
-                {this.state.search == "" &&
-                  this.state.userType == "jobseeker" && (
-                    <Grid.Col className="col-3 list">
-                      <ul className="emp-list">
-                        {this.state.jobKeys.map((employer) => {
+              )}
+            {/* employer side list */}
+            {this.state.loading == false ? (
+              this.state.userType == "employer" ? (
+                this.state.currentPosition !== "" ? (
+                  <Grid.Col className="col-3 list">
+                    <ul className="emp-list">
+                      {this.state.jobseekersEmails
+                        .filter(
+                          (jse) => jse.key == this.state.currentPosition
+                        )
+                        .map((jobseeker) => {
                           return (
-                            <li key={employer.id} className="emp-item">
+                            <li key={jobseeker.id} className="emp-item">
                               <button
                                 className="my-button-list"
-                                onClick={() => this.chooseEmployer(employer)}
+                                onClick={() =>
+                                  this.chooseJobseeker(jobseeker)
+                                }
                               >
                                 <div className="last-update">
-                                  {employer.lastUpdate}
+                                  {jobseeker.lastUpdate}
                                 </div>
-                                {this.state.loading == false ? (
-                                  <div className="button-text">
-                                    {
-                                      this.state.employersNames.filter(
-                                        (em) =>
-                                          em.key ==
-                                          this.state.employersEmails.filter(
-                                            (emp) => emp.key == employer.key
-                                          )[0].email
-                                      )[0].name
-                                    }
-                                  </div>
-                                ) : (
-                                  "Loading..."
-                                )}
+                                <div className="button-text">
+                                  {
+                                    this.state.jobseekersNames.filter(
+                                      (jsn) => jsn.key == jobseeker.email
+                                    )[0].name
+                                  }
+                                </div>
                               </button>
                             </li>
                           );
                         })}
-                      </ul>
-                    </Grid.Col>
-                  )}
-                {/* list post search */}
-                {this.state.search != "" &&
-                  this.state.userType == "jobseeker" && (
-                    <Grid.Col className="col-3 list">
-                      <ul className="emp-list">
-                        {this.state.jobKeys
+                    </ul>
+                  </Grid.Col>
+                ) : (
+                  <Grid.Col className="col-3 list">
+                    <ul className="emp-list" />
+                  </Grid.Col>
+                )
+              ) : (
+                console.log("waiting...")
+              )
+            ) : (
+              <div className="alert">loading...</div>
+            )}
+            {/* Chat */}
+            <Grid.Col className="col-9">
+              {/* Messages */}
+              <Grid.Row className="row chat-box">
+                <ul className="message-list">
+                  {this.state.loading == false
+                    ? this.state.currentMatchID !== ""
+                      ? this.state.messages
                           .filter(
-                            (k) =>
-                              this.state.employersNames
-                                .filter(
-                                  (em) =>
-                                    em.key ==
-                                    this.state.employersEmails.filter(
-                                      (emp) => emp.key == k.key
-                                    )[0].email
-                                )[0]
-                                .name.toLowerCase()
-                                .indexOf(this.state.search.toLowerCase()) > -1
+                            (m) => m.matchID == this.state.currentMatchID
                           )
-                          .map((employer) => {
+                          .map((message) => {
                             return (
-                              <li key={employer.id} className="emp-item">
-                                <button
-                                  className="my-button-list"
-                                  onClick={() => this.chooseEmployer(employer)}
-                                >
-                                  <div className="last-update">
-                                    {employer.lastUpdate}
-                                  </div>
-                                  {this.state.loading == false ? (
-                                    <div className="button-text">
-                                      {
-                                        this.state.employersNames.filter(
-                                          (em) =>
-                                            em.key ==
-                                            this.state.employersEmails.filter(
-                                              (emp) => emp.key == employer.key
-                                            )[0].email
-                                        )[0].name
-                                      }
-                                    </div>
-                                  ) : (
-                                    "Loading..."
-                                  )}
-                                </button>
+                              <li
+                                key={message.id}
+                                className={"message-" + message.role}
+                              >
+                                <div>{message.name}</div>
+                                <div>{message.chat}</div>
                               </li>
                             );
-                          })}
-                      </ul>
-                    </Grid.Col>
-                  )}
-                {/* employer side list */}
-                {this.state.loading == false ? (
-                  this.state.userType == "employer" ? (
-                    this.state.currentPosition !== "" ? (
-                      <Grid.Col className="col-3 list">
-                        <ul className="emp-list">
-                          {this.state.jobseekersEmails
-                            .filter(
-                              (jse) => jse.key == this.state.currentPosition
-                            )
-                            .map((jobseeker) => {
-                              return (
-                                <li key={jobseeker.id} className="emp-item">
-                                  <button
-                                    className="my-button-list"
-                                    onClick={() =>
-                                      this.chooseJobseeker(jobseeker)
-                                    }
-                                  >
-                                    <div className="last-update">
-                                      {jobseeker.lastUpdate}
-                                    </div>
-                                    <div className="button-text">
-                                      {
-                                        this.state.jobseekersNames.filter(
-                                          (jsn) => jsn.key == jobseeker.email
-                                        )[0].name
-                                      }
-                                    </div>
-                                  </button>
-                                </li>
-                              );
-                            })}
-                        </ul>
-                      </Grid.Col>
-                    ) : (
-                      <Grid.Col className="col-3 list">
-                        <ul className="emp-list" />
-                      </Grid.Col>
-                    )
-                  ) : (
-                    console.log("waiting...")
-                  )
-                ) : (
-                  <div className="alert">loading...</div>
-                )}
-                {/* Chat */}
-                <Grid.Col className="col-9">
-                  {/* Messages */}
-                  <Grid.Row className="row chat-box">
-                    <ul className="message-list">
-                      {this.state.loading == false
-                        ? this.state.currentMatchID !== ""
-                          ? this.state.messages
-                              .filter(
-                                (m) => m.matchID == this.state.currentMatchID
-                              )
-                              .map((message) => {
-                                return (
-                                  <li
-                                    key={message.id}
-                                    className={"message-" + message.role}
-                                  >
-                                    <div>{message.name}</div>
-                                    <div>{message.chat}</div>
-                                  </li>
-                                );
-                              })
-                          : console.log("waiting...")
-                        : console.log("loading...")}
-                    </ul>
-                  </Grid.Row>
-                  {/* Input */}
-                  <Grid.Row className="row text-box" id="textBox">
-                    <Grid.Col className="col-9 col-sm-10 col-md-10 col-lg-11">
-                      <Form.Textarea
-                        className="input-text"
-                        type="text"
-                        placeholder="Type message here..."
-                        name="message"
-                        value={this.state.message}
-                        onChange={this.handleMessageChange}
-                      />
-                    </Grid.Col>
-                    <Grid.Col className="col-3 col-sm-2 col-md-2 col-lg-1">
-                      <Button
-                        className="acceptButton sendButton"
-                        circular
-                        onClick={this.handleMessageSubmit}
-                      >
-                          <Icon name="send" />
-                      </Button>
-                    </Grid.Col>
-                  </Grid.Row>
+                          })
+                      : console.log("waiting...")
+                    : console.log("loading...")}
+                </ul>
+              </Grid.Row>
+              {/* Input */}
+              <Grid.Row className="row text-box" id="textBox">
+                <Grid.Col className="col-9 col-sm-10 col-md-10 col-lg-11">
+                  <Form.Textarea
+                    className="input-text"
+                    type="text"
+                    placeholder="Type message here..."
+                    name="message"
+                    value={this.state.message}
+                    onChange={this.handleMessageChange}
+                  />
+                </Grid.Col>
+                <Grid.Col className="col-3 col-sm-2 col-md-2 col-lg-1">
+                  <Button
+                    className="acceptButton sendButton"
+                    circular
+                    onClick={this.handleMessageSubmit}
+                  >
+                      <Icon name="send" />
+                  </Button>
                 </Grid.Col>
               </Grid.Row>
-            </Container>
+            </Grid.Col>
+          </Grid.Row>
+        </Container>)
+          }
+            
           </div>
         </SiteWrapper>
       </div>
