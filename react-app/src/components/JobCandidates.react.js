@@ -288,7 +288,7 @@ class JobCandidates extends React.Component {
           currentCandidatesSkills: jobseekers[num].userSkills,
           currentCandidatesExperience: jobseekers[num].userExperience,
           currentCandidatesEducation: jobseekers[num].userEducation,
-        });
+        }, () => console.log(this.state.currentCandidatesExperience),);
       }
     }
 
@@ -345,20 +345,13 @@ class JobCandidates extends React.Component {
   };
 
   render() {
-    return (
-      <Container>
+    return <Container>
         <NotificationSystem ref={this.notificationSystem} />
-        {this.state.initialised &&
-        this.state.skillsFiltered &&
-        this.state.skillsSet &&
-        this.state.experienceSet &&
-        this.state.noCandidates === false ? (
-          <div>
+        {this.state.initialised && this.state.skillsFiltered && this.state.skillsSet && this.state.experienceSet && this.state.noCandidates === false ? <div>
             <div className="margin1">
               <h1 className="zeroMargin">
                 <p>
-                  {this.state.currentCandidate.userFirstName}{" "}
-                  {this.state.currentCandidate.userLastName}
+                  {this.state.currentCandidate.userFirstName} {this.state.currentCandidate.userLastName}
                 </p>
               </h1>
               <Icon prefix="fa" name="map-marker" />
@@ -380,13 +373,11 @@ class JobCandidates extends React.Component {
                 <span>TOP SKILLS</span>
               </div>
               <div className="info">
-                {
-                  this.state.currentCandidatesSkills.map(skill => (
-                    <div className="padding">
-                      <span className="boxPadding skillBox">{skill}</span>
-                    </div>
-                  ))
-                  }
+                {this.state.currentCandidatesSkills.map((skill) => (
+                  <div className="padding">
+                    <span className="boxPadding skillBox">{skill}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -394,15 +385,22 @@ class JobCandidates extends React.Component {
               <div className="infoLabel">
                 <span>EXPERIENCE</span>
               </div>
-
-              <div className="infoExperienceEducation">
-                <p><strong>{this.state.currentCandidate.userExperience.userJobTitle}</strong></p>
-                <span>{this.state.currentCandidate.userExperience.userJobDescription}</span>
-              </div>
-              <div className="dateAndLocation">
-                <p className="margin2">{this.state.currentCandidate.userExperience.userJobStartDate + "-" + this.state.currentCandidate.userExperience.userJobEndDate}</p>
-                <p className="zeroMargin">{this.state.currentCandidate.userExperience.userJobLocation}</p>
-              </div>
+              {this.state.currentCandidate.userExperience.map((d) => {
+                return <div>
+                    <div className="infoExperienceEducation">
+                      <p>
+                        <strong>{d.userJobTitle}</strong>
+                      </p>
+                      <span>{d.userJobDescription}</span>
+                    </div>
+                    <div className="dateAndLocation">
+                      <p className="margin2">
+                        {d.userJobStartDate + "-" + d.userJobEndDate}
+                      </p>
+                      <p className="zeroMargin">{d.userJobLocation}</p>
+                    </div>
+                  </div>;
+              })}
 
             </div>
 
@@ -410,52 +408,52 @@ class JobCandidates extends React.Component {
               <div className="infoLabel">
                 <span>EDUCATION</span>
               </div>
-
-              <div className="infoExperienceEducation">
-                <p><strong>{this.state.currentCandidate.userEducation.userEducationTitle}</strong></p>
-                <span>{this.state.currentCandidate.userEducation.userEducationDescription}</span>
-              </div>
-              <div className="dateAndLocation">
-                <p className="margin2">{this.state.currentCandidate.userEducation.userEducationStartDate + "-" + this.state.currentCandidate.userEducation.userEducationEndDate}</p>
-                <p className="zeroMargin">{this.state.currentCandidate.userEducation.userEducationLocation}</p>
-              </div>
-
+              {this.state.currentCandidate.userEducation.map((d) => {
+                return <div>
+                    <div className="infoExperienceEducation">
+                      <p>
+                        <strong>{d.userEducationTitle}</strong>
+                      </p>
+                      <span>{d.userEducationDescription}</span>
+                    </div>
+                    <div className="dateAndLocation">
+                      <p className="margin2">
+                        {d.userEducationStartDate + "-" + d.userEducationEndDate}
+                      </p>
+                      <p className="zeroMargin">{d.userEducationLocation}</p>
+                    </div>
+                  </div>;
+              })}
             </div>
 
             <div className="buttonBox buttonBorder">
-              <Button
-                className="buttonwidth passButton"
-                onClick={this.rejectCandidate}
-              >
+              <Button className="buttonwidth passButton" onClick={this.rejectCandidate}>
                 <Icon prefix="fa" name="times" />
                 {""} Pass
                 {""}
               </Button>
             </div>
             <div className="buttonBox">
-              <Button
-                className="buttonwidth likeButton"
-                onClick={this.acceptCandidate}
-              >
+              <Button className="buttonwidth likeButton" onClick={this.acceptCandidate}>
                 <Icon prefix="fa" name="check" />
                 {""} Like
                 {""}
               </Button>
             </div>
-          </div>
-        ) : this.state.noCandidates ? (
-          <p className="noCandidates"> There are no more suitable candidates to show for the selected job profile. If you have filters on, you can try removing some in order to view a broader range of candidates. Otherwise,
-          you can check back another time when additional candidates are found for your chosen filters.</p>
-        ) : (
-          <div id="candidatesLoader">
+          </div> : this.state.noCandidates ? <p className="noCandidates">
+            {" "}
+            There are no more suitable candidates to show for the selected
+            job profile. If you have filters on, you can try removing some
+            in order to view a broader range of candidates. Otherwise, you
+            can check back another time when additional candidates are found
+            for your chosen filters.
+          </p> : <div id="candidatesLoader">
             <Card.Body>
               <Dimmer active loader />
               <p> Fetching Candidates... </p>
             </Card.Body>
-          </div>
-        )}
-      </Container>
-    );
+          </div>}
+      </Container>;
   }
 }
 
