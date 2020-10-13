@@ -33,12 +33,14 @@ class SiteWrapper extends React.Component {
   }
 
   getUserData = (email) => {
+    console.log(email)
     fetch(
       `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
         email
     )
       .then((res) => res.json())
       .then((result) => {
+        console.log(result)
         // If length is undefined, that means for some reason it's not returning data at all, so dont try and access fields that dont exist
         if (result.Item !== undefined) {
           let name = result.Item.userFirstName;
@@ -70,6 +72,7 @@ class SiteWrapper extends React.Component {
   async signOut() {
     try {
       await Auth.signOut();
+      localStorage.clear();
       this.setState({ redirect: true });
 
       console.log(Auth.user);

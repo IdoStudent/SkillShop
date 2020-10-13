@@ -56,24 +56,13 @@ class GeneralInformation extends React.Component {
       phoneErrorMsg: "",
     };
   }
-  // GET email for getSecondApi
-  getEmailApi() {
-    return Auth.currentAuthenticatedUser().then((user) => {
-      const { attributes = {} } = user;
-      let email =  attributes['email']
-      return email
-    })}
-  // GET email for form
-  getFirstApi() {
-    return Auth.currentAuthenticatedUser().then((user) => {
-      this.setState({
-        email: user.attributes.email,
-        formemail: user.attributes.email,
-      });
-    });
-  }
+
   // GET user data
-  async getSecondApi(email) {
+  async getUserData() {
+    let email = Auth.user.attributes.email
+
+    this.setState({email: Auth.user.attributes.email})
+
     fetch(
       `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
         email )
@@ -89,7 +78,7 @@ class GeneralInformation extends React.Component {
             postcode: result.Item.userPostcode,
             state: result.Item.userState,
             about: result.Item.userAbout,
-            //phone: result.Item.userPhone,
+            phone: result.Item.userPhoneNumber,
 
             formfirstname: result.Item.userFirstName,
             formmiddlename: result.Item.userMiddleName,
@@ -97,20 +86,15 @@ class GeneralInformation extends React.Component {
             formcity: result.Item.userCity,
             formpostcode: result.Item.userPostcode,
             formstate: result.Item.userState,
-            formabout: result.Item.userAbout,      
-            //formphone: result.Item.userPhone,
+            formabout: result.Item.userAbout,  
+            formphone: result.Item.userPhoneNumber    
           });
           console.log() },
       )
   }
-  // pass before mount
-  BeforeDidMount() {
-    this.getEmailApi().then((email) => this.getSecondApi(email));
-  }
 
   componentDidMount() {
-    this.BeforeDidMount();
-    this.getFirstApi();
+    this.getUserData()
   }
 
   handleChange = (input) => (event) => {
@@ -129,7 +113,6 @@ class GeneralInformation extends React.Component {
         surname: prevState.formsurname,
         city: prevState.formcity,
         postcode: prevState.formpostcode,
-        email: this.state.formemail,
         state: prevState.formstate,
         about: prevState.formabout,
         phone: prevState.formphone,
@@ -138,7 +121,7 @@ class GeneralInformation extends React.Component {
 
       try {
         const params = {
-          userEmail: this.state.formemail,
+          userEmail: Auth.user.attributes.email,
           userFirstName: this.state.formfirstname,
           userMiddleName: this.state.formmiddlename,
           userLastName: this.state.formsurname,
@@ -146,7 +129,7 @@ class GeneralInformation extends React.Component {
           userPostCode: this.state.formpostcode,
           userState: this.state.formstate,
           userAbout: this.state.formabout,
-          userType: "jobseeker",
+          userType: Auth.user.attributes['custom:role'],
           userPhoneNumber: this.state.formphone
         };
 
@@ -154,7 +137,6 @@ class GeneralInformation extends React.Component {
           "https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata",
           params
         );
-        console.log(`EMAIL:  ` + this.state.formemail);
       } catch (err) {
         console.log(`An error has occurred: ${err}`);
       }
