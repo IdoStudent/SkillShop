@@ -23,12 +23,9 @@ class UploadDocument extends React.Component {
 
   constructor(props) {
     super(props);
-    this.removeItem = this.removeItem.bind(this);
 
     this.state = { files: [] };
   }
-
-  
 
   handleChangeStatus = ({ meta, file }, status) => {
     console.log(status, meta, file);
@@ -68,6 +65,8 @@ class UploadDocument extends React.Component {
     let tmpArray = [...this.state.files]
     tmpArray.splice(index, 1)
     this.setState({files: tmpArray})
+
+    this.addRemoveNotification()
   }
 
   addSuccessNotification = () => {
@@ -75,6 +74,15 @@ class UploadDocument extends React.Component {
     notification.addNotification({
       message: "Document uploaded succesfully",
       level: "success",
+      position: "br",
+    });
+  };
+
+  addRemoveNotification = () => {
+    const notification = this.notificationSystem.current;
+    notification.addNotification({
+      message: "Document removed",
+      level: "info",
       position: "br",
     });
   };
