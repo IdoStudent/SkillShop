@@ -780,18 +780,6 @@ body {
   border: 1px solid rgb(210, 217, 241);
 }
 
-.my-button {
-  height: 60%;
-  width: 100%;
-  overflow: hidden;
-  background-color: #3e8e41;
-  border: none;
-  color: white;
-  border-radius: 12px;
-  transition-duration: 0.4s;
-  margin-top: 10px;
-}
-
 .my-button:hover {
   background-color: #4caf50;
 }
@@ -800,6 +788,16 @@ body {
   background-color: #4caf50;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
+}
+
+.sendButton {
+  margin-top: 50% !important;
+  color: white !important;
+  width: 100% !important;
+}
+
+.sendButton .icon {
+  color: #838383 !important;
 }
 
 /* SITE WRAPPER - STRUCTURE */
