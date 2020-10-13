@@ -620,6 +620,15 @@ body {
   overflow: hidden;
 }
 
+#chatLoader .dimmer {
+  padding: 30px;
+}
+
+#chatLoader {
+  text-align: center;
+  padding-bottom: 10px;
+}
+
 /* search */
 
 .search {
