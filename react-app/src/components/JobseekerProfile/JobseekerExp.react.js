@@ -438,7 +438,7 @@ class JobseekerExp extends React.Component {
    }
  
    
-  sendData = (email) => {
+  sendData = async (email) => {
     const data = [
       this.state.title,
       this.state.institution,
@@ -459,7 +459,7 @@ class JobseekerExp extends React.Component {
         userJobLocation: this.state.location,
         userJobDescription: this.state.desc,
       };
-      axios.post(
+      await axios.post(
         "https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/jobexperience/",
         params
       );

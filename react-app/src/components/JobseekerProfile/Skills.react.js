@@ -3,11 +3,16 @@ import axios from "axios";
 import { Form, Card, Grid } from "tabler-react";
 import { Button, Icon } from "semantic-ui-react";
 import Auth from "@aws-amplify/auth";
+
+import NotificationSystem from "react-notification-system";
+
 var selectedSkills = [];
 
 var dbSkills = [];
 
 class Skills extends React.Component {
+  notificationSystem = React.createRef();
+
   constructor(props) {
     super(props);
 
@@ -109,14 +114,26 @@ getFirstApi() {
         "https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/skills",
         params
       );
+
+      this.addSuccessNotification()
     } catch (err) {
       console.log(`An error has occurred: ${err}`);
     }
   };
 
+  addSuccessNotification = () => {
+    const notification = this.notificationSystem.current;
+    notification.addNotification({
+      message: "Skills updated successfully",
+      level: "success",
+      position: "br",
+    });
+  };
+
   render() {
     return (
       <div className="card" name="skills" id="skills">
+        <NotificationSystem ref={this.notificationSystem} />
         <Card.Body>
           <Card.Title>Top skills</Card.Title>
           <Grid.Row>
