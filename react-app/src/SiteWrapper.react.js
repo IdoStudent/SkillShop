@@ -47,9 +47,9 @@ class SiteWrapper extends React.Component {
 
           this.setState({ userFirstName: name });
         } else {
-          /*this.props.history.push({
+          this.props.history.push({
             pathname: "/profilesetup",
-          });*/
+          });
         }
       });
   };
@@ -72,6 +72,7 @@ class SiteWrapper extends React.Component {
   async signOut() {
     try {
       await Auth.signOut();
+      localStorage.clear();
       this.setState({ redirect: true });
 
       console.log(Auth.user);
