@@ -33,21 +33,23 @@ class SiteWrapper extends React.Component {
   }
 
   getUserData = (email) => {
+    console.log(email)
     fetch(
       `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
         email
     )
       .then((res) => res.json())
       .then((result) => {
+        console.log(result)
         // If length is undefined, that means for some reason it's not returning data at all, so dont try and access fields that dont exist
         if (result.Item !== undefined) {
           let name = result.Item.userFirstName;
 
           this.setState({ userFirstName: name });
         } else {
-          this.props.history.push({
+          /*this.props.history.push({
             pathname: "/profilesetup",
-          });
+          });*/
         }
       });
   };
@@ -136,9 +138,8 @@ class SiteWrapper extends React.Component {
                 name={this.state.userFirstName}
                 options={[
                   { icon: "user", value: "Profile", to: "/myprofile" },
-                  { icon: "settings", value: "Settings", to: "/settings" },
                   "divider",
-                  "help",
+                  { icon: "info", value: "About SkillShop", to: "/about" },
                   {
                     icon: "log-out",
                     value: "Logout",
@@ -151,34 +152,16 @@ class SiteWrapper extends React.Component {
             <div className="verticalDivider" />
 
             <div className="notifications">
-              <NavLink exact to="/chat">
-                <Notification.Tray unread={true}>
+                <Notification.Tray unread={false}>
                   <Notification
                     message={
                       <React.Fragment>
-                        You have a new match with <strong>Envato</strong>!
+                        <i>You have no new notifications</i>
                       </React.Fragment>
                     }
-                    time="10 minutes ago"
                   />
-                  <Notification
-                    message={
-                      <React.Fragment>
-                        You have <strong>2</strong> unread messages.
-                      </React.Fragment>
-                    }
-                    time="1 hour ago"
-                  />
-                  <Notification
-                    message={
-                      <React.Fragment>
-                        You have a new match with <strong>Deloitte</strong>!
-                      </React.Fragment>
-                    }
-                    time="24 hours ago"
-                  />
+              
                 </Notification.Tray>
-              </NavLink>
             </div>
           </div>
         </div>

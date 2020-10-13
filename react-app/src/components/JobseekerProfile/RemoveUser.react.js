@@ -16,6 +16,7 @@ class RemoveUser extends React.Component {
         postcode: "",
         state: "",
         about: "",
+        userJobStartDate: [],
   
         // States for editable form
         formfirstname: "",
@@ -30,43 +31,31 @@ class RemoveUser extends React.Component {
         open: false,
       };
     }
-
-    getEmailApi() {
-      return Auth.currentAuthenticatedUser().then((user) => {
-         const { attributes = {} } = user;
-         let email =  attributes['email']
-         return email
-       })}
-     // GET email for form
-    getFirstApi() {
-      return Auth.currentAuthenticatedUser().then((user) => {
-         this.setState({email: user.attributes.email, formemail: user.attributes.email})
-       });
+    // get Job date iterate through each education date        
+    async getJobDate() {
+     await fetch(`https://wrdafek0o6.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` + 'email')
+        .then((res) => res.json())
+        .then((result) => {
+          for (var i = 0; i < result.length; i++) {
+            this.setState({
+              userJobStartDate: result[i].userJobStartDate});
+            }}
+        )
     }
-    // GET user data 
-     async getSecondApi(email) {
-       fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/delete?userEmail=` +email)
-         .then(res => res.json())
-         .then(
-           (result) => {
-             this.setState({
-         
-             });
-             } ,
-         )
-     }
-     // pass before mount
-     BeforDidMount() { 
-      this.getEmailApi().then(email => this.handleSubmit(email)); }
-   
-     componentDidMount() {
-       this.BeforDidMount();
-       this.getFirstApi();  
-     }
+    // get Edu date iterate through each education date 
+  // fetch(`https://wrdafek0o6.execute-api.ap-southeast-2.amazonaws.com/prod/getedudate?userEmail=` + email)
+
+    // iterate through each job with email and date and delete
+  //  fetch(`https://wrdafek0o6.execute-api.ap-southeast-2.amazonaws.com/prod/deletejob?userEmail=`+ email + `&userJobStartDate=` + userJobStartDate)
+
+    //  iterate through each job with email and date and delete
+  //  fetch('https://wrdafek0o6.execute-api.ap-southeast-2.amazonaws.com/prod/deleteedu?userEmail=gitigol723@hapremx.com&userEducationStartDate=031018')
+
+    // Delete Users with userEmail
+   // fetch(`https://q32xq9hoif.execute-api.ap-southeast-2.amazonaws.com/prod/delete?userEmail=` + email) 
 
     handleSubmit = (event, email) => {
-      fetch(`https://q32xq9hoif.execute-api.ap-southeast-2.amazonaws.com/prod/delete?userEmail=` +this.state.email)      
-       // body: JSON.stringify({records: id, record, album, artist, date, imageUrl}) - user email
+          
       this.setState((prevState) => ({
         open: false,
       }));
