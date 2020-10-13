@@ -42,6 +42,9 @@ class Login extends Component {
         if (role == "employer") {
           console.log('route to employer profile');
           this.props.history.push("/candidates");
+          localStorage.setItem('softSkillsFilter', JSON.stringify([ ]))
+          localStorage.setItem('hardSkillsFilter', JSON.stringify([ ]))
+          localStorage.setItem('techSkillsFilter', JSON.stringify([ ]))
         } else if (role == "jobseeker") {
           console.log('route to jobseeker profile');
           this.props.history.push("/myprofile");
