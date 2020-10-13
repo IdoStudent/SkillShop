@@ -195,6 +195,12 @@ class Candidates extends React.Component {
     this.setState({ openNew: false });
   };
 
+  acceptChangesFilters = () => {
+    this.setState(prevState => ({
+      candidatesKey: prevState.candidatesKey + 1
+    }));
+  }
+
   addSuccessNotification = () => {
     const notification = this.notificationSystem.current;
     notification.addNotification({
@@ -281,7 +287,7 @@ class Candidates extends React.Component {
                   <Card.Body>
                     {
                       this.state.data.length > 0 ?
-                      ( <JobCandidates /> )
+                      ( <JobCandidates key={this.state.candidatesKey} /> )
                       :
                       ( <p className="noProfiles"> You don't have any existing job profiles. Create one to start finding candidates! </p> )
                     }
@@ -304,6 +310,7 @@ class Candidates extends React.Component {
             <JobFiltersModal
               closeModal={this.closeModalFilter}
               data={this.state.data[this.state.selectValue]}
+              acceptChanges={this.acceptChangesFilters}
             />
           ) : null}
 

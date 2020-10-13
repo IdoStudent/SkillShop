@@ -221,7 +221,7 @@ class JobCandidates extends React.Component {
           });
 
       } else {
-        alert("No matches for this search");
+        this.setState({noCandidates: true})
       }
     } else {
       // IF INITIALISED IS FALSE, RECHECK IN 250ms OTHERWISE OUR DATA WILL BE UNDEFINED

@@ -96,6 +96,8 @@ class JobFiltersModal extends React.Component {
     localStorage.setItem("techSkillsFilter", JSON.stringify(techSkillsSelected));
 
     this.props.closeModal();
+
+    this.props.acceptChanges();
   };
 
   handleChange = (input) => (event) => {
