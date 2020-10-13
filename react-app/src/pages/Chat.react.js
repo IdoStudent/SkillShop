@@ -616,6 +616,7 @@ class Chat extends Component {
                   id="profile"
                   onChange={this.handleDropDownMenu}
                 >
+                  <option value="" disabled selected hidden>Select a job profile</option>
                   {this.state.jobTitles.map((jobTitle) => {
                     return (
                       <option value={jobTitle.jobKey}>
