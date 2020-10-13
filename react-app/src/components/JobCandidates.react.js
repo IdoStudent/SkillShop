@@ -370,10 +370,10 @@ class JobCandidates extends React.Component {
             </div>
 
             <div className="infoRow">
-              <div className="infoLabel">
+              <div className="infoLabel aboutLabel">
                 <span>ABOUT</span>
               </div>
-              <div className="info">
+              <div className="info aboutInfo">
                 <span>{this.state.currentCandidate.userAbout}</span>
               </div>
             </div>
@@ -392,12 +392,12 @@ class JobCandidates extends React.Component {
             </div>
 
             <div className="infoRow">
-              <div className="infoLabel">
+              <div className="infoLabel experienceLabel">
                 <span>EXPERIENCE</span>
               </div>
               {this.state.currentCandidate.userExperience.map((d) => {
-                return <div>
-                    <div className="infoExperienceEducation">
+                return <div className="experienceContainer">
+                    <div className="infoExperience">
                       <p>
                         <strong>{d.userJobTitle}</strong>
                       </p>
@@ -405,7 +405,7 @@ class JobCandidates extends React.Component {
                     </div>
                     <div className="dateAndLocation">
                       <p className="margin2">
-                        {d.userJobStartDate + "-" + d.userJobEndDate}
+                        {d.userJobStartDate + " - " + d.userJobEndDate}
                       </p>
                       <p className="zeroMargin">{d.userJobLocation}</p>
                     </div>
@@ -415,12 +415,12 @@ class JobCandidates extends React.Component {
             </div>
 
             <div className="infoRow">
-              <div className="infoLabel">
+              <div className="infoLabel educationLabel">
                 <span>EDUCATION</span>
               </div>
               {this.state.currentCandidate.userEducation.map((d) => {
                 return <div>
-                    <div className="infoExperienceEducation">
+                    <div className="infoEducation">
                       <p>
                         <strong>{d.userEducationTitle}</strong>
                       </p>
@@ -428,7 +428,7 @@ class JobCandidates extends React.Component {
                     </div>
                     <div className="dateAndLocation">
                       <p className="margin2">
-                        {d.userEducationStartDate + "-" + d.userEducationEndDate}
+                        {d.userEducationStartDate + " - " + d.userEducationEndDate}
                       </p>
                       <p className="zeroMargin">{d.userEducationLocation}</p>
                     </div>

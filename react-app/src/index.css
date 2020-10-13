@@ -516,6 +516,7 @@ body {
   padding: 10px;
   min-height: 75px;
   font-weight: bold;
+  margin-bottom: 1rem;
 }
 
 .info {
@@ -527,7 +528,7 @@ body {
   padding-left: 2rem;
 }
 
-.infoExperienceEducation {
+.infoExperience, .infoEducation {
   flex: 1;
   height: auto;
   float: left;
@@ -535,6 +536,18 @@ body {
   padding: 10px;
   height: inherit;
   padding-left: 2rem;
+}
+
+.educationLabel, .experienceLabel {
+  height: 15rem;
+}
+
+.aboutLabel {
+  height: 10rem;
+}
+
+.aboutInfo {
+  padding-top: 0px;
 }
 
 .infoRow:after {
@@ -577,6 +590,7 @@ body {
 .margin2 {
   margin-bottom: 2px;
   padding-top: 20px;
+  width: max-content;
 }
 
 #candidatesLoader p {
