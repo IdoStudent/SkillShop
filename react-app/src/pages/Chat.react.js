@@ -6,9 +6,6 @@ import Auth from "@aws-amplify/auth";
 import axios from "axios";
 
 function compare(a,b){
-    console.log('compare');
-    console.log(a.lastUpdate);
-    console.log(b.lastUpdate);
 
     //split numbers and letters
     var pattern1 = /[0-9]/g;
@@ -94,11 +91,6 @@ function compare(a,b){
             }
         }
     }
-    // if (a.num > b.num) {
-    //     comparison = 1;
-    // } else if (a.num < b.num) {
-    //     comparison = -1;
-    // }
     return comparison;
 }
 
@@ -146,7 +138,6 @@ class Chat extends Component {
             await this.getJobseekersNames();
             await this.getEmpMatchID();
             await this.getEmpMessages();
-            // await this.sortList();
             this.setState({ loading : false });
         }
 
@@ -170,14 +161,6 @@ class Chat extends Component {
                     });
                 },
             )
-    }
-
-    async sortList(){
-        console.log('sort list');
-        var list = [{name:"ido",num:300},{name:"will",num:100},{name:"nick",num:200}];
-        console.log(list);
-        list.sort(compare);
-        console.log(list);
     }
 
     /* JOBSEEKER */
@@ -239,8 +222,7 @@ class Chat extends Component {
                 .then((result) => {
                     // console.log('key',this.state.jobKeys[i].key);
                     // console.log('Result:',result[0].userEmail);
-                    this.state.employersEmails.push({ key : this.state.jobKeys[i].key , email : result[0].userName });
-                    
+                    this.state.employersEmails.push({ key : this.state.jobKeys[i].key , email : result[0].userEmail });
                 })
         }
 
@@ -252,10 +234,12 @@ class Chat extends Component {
 
     getEmployersNames = async () => {
         // console.log('getEmployersNames');
+        // console.log(this.state.employersEmails);
         for(var i=0;i<this.state.employersEmails.length;i++){
             await fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` + this.state.employersEmails[i].email )
                 .then((res) => res.json())
                 .then((result) => {
+                    // console.log(result);
                     if(typeof result.Item !== 'undefined'){
                         // console.log('user Name:',result.Item.userFirstName);
                         this.state.employersNames.push({ key : this.state.employersEmails[i].email , name : result.Item.userFirstName });
@@ -290,6 +274,7 @@ class Chat extends Component {
             .then((result) => {
                 // console.log(result);
                 // this.state.messages.push({ matchID : this.state.matchIDs[i].matchID, chat : result });
+                // console.log(this.state.employersNames);
                 for (var j=0;j<result.length;j++){
                     // console.log(result[j]);
                     // console.log(result[j].userName);
