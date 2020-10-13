@@ -17,6 +17,8 @@ class RemoveUser extends React.Component {
         state: "",
         about: "",
         userJobStartDate: [],
+        userEducationStartDate: "",
+        userEducationStartDate1: "",
   
         // States for editable form
         formfirstname: "",
@@ -31,31 +33,65 @@ class RemoveUser extends React.Component {
         open: false,
       };
     }
-    // get Job date iterate through each education date        
+    // get Job date iterate through each education date and add it to an array       
     async getJobDate() {
-     await fetch(`https://wrdafek0o6.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` + 'email')
+      let email = Auth.user.attributes.email
+     await fetch(`https://wrdafek0o6.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` + email)
         .then((res) => res.json())
         .then((result) => {
+          if (result.Item !== undefined)
+          console.log(result[0].userJobStartDate + "<-- jobstartDate1")
           for (var i = 0; i < result.length; i++) {
             this.setState({
-              userJobStartDate: result[i].userJobStartDate});
+              userJobStartDate: result[i].userJobStartDate,
+            });
             }}
         )
     }
-    // get Edu date iterate through each education date 
-  // fetch(`https://wrdafek0o6.execute-api.ap-southeast-2.amazonaws.com/prod/getedudate?userEmail=` + email)
+    // get Edu date iterate through each education date and add it to an array
+    async getEduDate(){
+    let email = Auth.user.attributes.email
+      await fetch(`https://wrdafek0o6.execute-api.ap-southeast-2.amazonaws.com/prod/getedudate?userEmail=` + email)
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.Item !== undefined)
+        for (var i = 0; i < result.length; i++) {
+          this.setState({
+            userEducationStartDate: result[i].userEducationStartDate,
+          });
+          }}
+      )
+  }
+    // iterate through each job with email and date and delete from jobexperiance table
+     deleteJob = async () => {
+       console.log(this.state.userEducationStartDate0 + "job0")
+       let email = Auth.user.attributes.email
+       for(var i=0;i<this.state.userJobStartDate.length;i++){
+             fetch(`https://wrdafek0o6.execute-api.ap-southeast-2.amazonaws.com/prod/deletejob?userEmail=` + email + `&userJobStartDate=` + this.state.userJobStartDate)   
+        }}
+    //  iterate through each edu with email and date and delete from educationexperiance table 
+     deleteEdu = async () => {
+        let email = Auth.user.attributes.email
+        console.log(this.state.userEducationStartDate + `userEducationStartDate`)
+        for(var i=0;i<this.state.userEducationStartDate.length;i++){
+              fetch(`https://wrdafek0o6.execute-api.ap-southeast-2.amazonaws.com/prod/deleteedu?userEmail=` + email + `&userEducationStartDate=` + this.state.userEducationStartDate)
+         }}
+    // Delete from user table
+     deleteUser = async () => {
+       let email = Auth.user.attributes.email
+       fetch(`https://q32xq9hoif.execute-api.ap-southeast-2.amazonaws.com/prod/delete?userEmail=` + email)
+    }
 
-    // iterate through each job with email and date and delete
-  //  fetch(`https://wrdafek0o6.execute-api.ap-southeast-2.amazonaws.com/prod/deletejob?userEmail=`+ email + `&userJobStartDate=` + userJobStartDate)
-
-    //  iterate through each job with email and date and delete
-  //  fetch('https://wrdafek0o6.execute-api.ap-southeast-2.amazonaws.com/prod/deleteedu?userEmail=gitigol723@hapremx.com&userEducationStartDate=031018')
-
-    // Delete Users with userEmail
-   // fetch(`https://q32xq9hoif.execute-api.ap-southeast-2.amazonaws.com/prod/delete?userEmail=` + email) 
-
-    handleSubmit = (event, email) => {
-          
+    async componentDidMount(){
+    await this.getJobDate();
+    await this.getEduDate(); 
+    }
+ 
+     handleSubmit = () => {
+      this.deleteJob();
+      this.deleteEdu();
+      this.deleteUser();
+      window.location.reload()
       this.setState((prevState) => ({
         open: false,
       }));
