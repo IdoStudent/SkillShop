@@ -83,9 +83,14 @@ class UploadDocument extends React.Component {
   };
 
   removeItem = (index) => {
+    let userEmail = Auth.user.attributes.email
     let tmpArray = [...this.state.files];
     tmpArray.splice(index, 1);
     this.setState({ files: tmpArray });
+
+    fetch(
+      "https://6r644cc680.execute-api.ap-southeast-2.amazonaws.com/prod/getlocation/deletedoc?userEmail=" + userEmail + "&documentLocation=" + this.state.files[index].documentLocation
+    )
 
     this.addRemoveNotification();
   };
