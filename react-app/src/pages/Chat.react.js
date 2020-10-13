@@ -239,7 +239,8 @@ class Chat extends Component {
                 .then((result) => {
                     // console.log('key',this.state.jobKeys[i].key);
                     // console.log('Result:',result[0].userEmail);
-                    this.state.employersEmails.push({ key : this.state.jobKeys[i].key , email : result[0].userEmail });
+                    this.state.employersEmails.push({ key : this.state.jobKeys[i].key , email : result[0].userName });
+                    
                 })
         }
 

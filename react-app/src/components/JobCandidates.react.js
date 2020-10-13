@@ -153,9 +153,7 @@ class JobCandidates extends React.Component {
 
   async getJobExperience() {
     // ITERATE THROUGH THE LENGTH OF THE ARRAY, LOOKING UP EACH USERS Job Experience LISTED IN THE DATABASE
-    console.log(jobseekers.length);
     for (var i = 0; i < jobseekers.length; i++) {
-      // NEED TO USE ASYNC/AWAIT OTHERWISE LOOP WILL JUST BREAK
       await fetch(
         `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/jobexperience?userEmail=${
           jobseekers[i].userEmail
@@ -166,10 +164,11 @@ class JobCandidates extends React.Component {
           // IF RESULT.LENGTH == 0 IT MEANS THE USER HAS NO JOBEXPERIENCE INFORMATION IN THE DATABASE SO WE WILL GET AN ERROR IF WE TRY TO ACCESS IT
           if (result.length > 0) {
             for (var j=0; j<result.length; j++){
-              jobseekers[i].userExperience = result[j];
+              jobseekers[i].userExperience[j] = result[j];
             }
           }
         });
+
     }
     this.setState({
       experienceSet: true,
@@ -178,7 +177,6 @@ class JobCandidates extends React.Component {
 
   async getEducation() {
     // ITERATE THROUGH THE LENGTH OF THE ARRAY, LOOKING UP EACH USERS Job Experience LISTED IN THE DATABASE
-    console.log(jobseekers.length);
     for (var i = 0; i < jobseekers.length; i++) {
       // NEED TO USE ASYNC/AWAIT OTHERWISE LOOP WILL JUST BREAK
       await fetch(
@@ -190,8 +188,8 @@ class JobCandidates extends React.Component {
         .then((result) => {
           // IF RESULT.LENGTH == 0 IT MEANS THE USER HAS NO JOBEXPERIENCE INFORMATION IN THE DATABASE SO WE WILL GET AN ERROR IF WE TRY TO ACCESS IT
           if (result.length > 0) {
-            for (var j=0; j<result.length; j++){
-              jobseekers[i].userEducation = result[j];
+            for (var j=0; j< result.length; j++){
+              jobseekers[i].userEducation[j] = result[j];
             }
           }
         });
@@ -291,6 +289,8 @@ class JobCandidates extends React.Component {
         });
       }
     }
+
+    console.log(jobseekers[num])
   };
 
   rejectCandidate = () => {
