@@ -84,7 +84,38 @@ class Chat extends Component {
             .then((result) => {
                 for (var i = 0; i < result.length; i++){
                     console.log('user email:',result[i].userEmail);
-                    this.state.jobKeys.push({ key : result[i].jobKey , lastUpdate : "1d" , email : result[i].userEmail });
+
+                    //get last updated
+                    var timeFrame = "s";
+                    var date = new Date();
+                    var time = date.getTime();
+                    var timeDifference = time-result[i].lastUpdated;
+                    var lastUpdated = timeDifference / 1000; //to seconds
+                    if(lastUpdated > 60){
+                        lastUpdated = lastUpdated / 60; //to minutes
+                        timeFrame = "m";
+                        if(lastUpdated > 60){
+                            lastUpdated = lastUpdated / 60; //to hours
+                            timeFrame = "h";
+                            if(lastUpdated > 24){
+                                lastUpdated = lastUpdated / 24; //to days
+                                timeFrame = "d";
+                                if(lastUpdated > 7){
+                                    lastUpdated = lastUpdated / 7; //to weeks
+                                    timeFrame = "w";
+                                    if(lastUpdated > 52){
+                                        lastUpdated = lastUpdated / 52; //to years
+                                        timeFrame = "y";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    lastUpdated = Math.round(lastUpdated);
+                    lastUpdated = lastUpdated + timeFrame;
+                    console.log('lastUpdate:',lastUpdated);
+
+                    this.state.jobKeys.push({ key : result[i].jobKey , lastUpdate : lastUpdated , email : result[i].userEmail });
                 }
             })
     }
@@ -199,6 +230,7 @@ class Chat extends Component {
             const params = {
               jobKey: this.state.currentPosition,
               userEmail: Auth.user.attributes.email,
+              matchId: this.state.currentMatchID,
               lastUpdated: time
             };
             await axios.post(
@@ -342,26 +374,13 @@ class Chat extends Component {
         
         // console.log('handle message submit');
         // console.log(this.state.message);
-
         var date = new Date();
         var time = date.getTime();
-
-        console.log('test time');
-        var someTime = 1602399758180;
-        var timeDifference = time-someTime;
-        console.log('current time:',time);
-        console.log('difference in time:',timeDifference);
-        var inSeconds = timeDifference / 1000;
-        console.log('in seconds:',inSeconds);
-        var inMinutes = inSeconds / 60;
-        console.log('in minutes:',inMinutes);
-        var inHours = inMinutes / 60;
-        console.log('in hours:',inHours);
-        var inDays = inHours / 24;
-        console.log('in days:',inDays);
+        
 
         //update matches
         console.log('jobkey',this.state.currentPosition);
+        console.log('current matchID',this.state.currentMatchID);
         await this.updateSeekMatches();
         
 
