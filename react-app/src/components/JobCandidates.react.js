@@ -17,6 +17,8 @@ var currentCandidatesSkills = [];
 var education = [];
 var num = 0;
 
+var currentJobKey;
+
 class JobCandidates extends React.Component {
   notificationSystem = React.createRef();
 
@@ -68,6 +70,7 @@ class JobCandidates extends React.Component {
 
   componentDidMount() {
     this.configureCandidates();
+    currentJobKey = this.props.jobKey
   }
 
   configureCandidates() {
@@ -268,10 +271,12 @@ class JobCandidates extends React.Component {
       this.state.experienceSet
     ) {
       // Post the match to the databsae
+
+      console.log('CURRENT JOBKEY: ', currentJobKey, 'JOBSEEKER EMAIL: ', jobseekers[num].userEmail, 'MATCHID: ', matchId)
       try {
         const params = {
           userEmail: jobseekers[num].userEmail,
-          jobKey: this.props.jobkey,
+          jobKey: currentJobKey,
           matchId: matchId,
         };
         axios.post(

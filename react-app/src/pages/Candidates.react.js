@@ -35,6 +35,8 @@ class Candidates extends React.Component {
       selectValue: 0,
 
       initialised: false,
+
+      candidatesKey: 0
     };
   }
 
@@ -112,9 +114,14 @@ class Candidates extends React.Component {
   }
 
   handleSelect = (event) => {
+    let tmpNum = this.state.candidatesKey + 1
+
     this.setState({
       selectValue: event.target.value,
-    });
+      candidatesKey: tmpNum
+    }, () => { console.log( this.state.data[this.state.selectValue].jobKey, this.state.candidatesKey )});
+
+    
 
     // Reset the filters in local storage (because they're only applicable for the job profile that was selected when they were added to storage)
     localStorage.setItem('softSkillsFilter', JSON.stringify([ ]))
