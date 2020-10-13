@@ -13,6 +13,7 @@ import {
 import { Form, Grid } from "tabler-react";
 
 class JobseekerEdu extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
