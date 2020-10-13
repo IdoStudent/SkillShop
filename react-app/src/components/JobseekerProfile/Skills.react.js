@@ -40,7 +40,7 @@ getFirstApi() {
       .then((result) => {
 
         // We can just do a straight copy of the array we received into our var array
-        //dbSkills = result.Item.userSkills;
+        dbSkills = result.Item.userSkills;
 
         // After the skills are added into the array from the API, we set the state based on the given values
         this.initialiseState();

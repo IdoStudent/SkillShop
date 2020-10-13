@@ -526,6 +526,15 @@ body {
   padding-left: 2rem;
 }
 
+.infoExperienceEducation {
+  height: 100%;
+  float: left;
+  width: 70%;
+  padding: 10px;
+  min-height: 75px;
+  padding-left: 2rem;
+}
+
 .infoRow:after {
   content: "";
   display: table;
@@ -562,6 +571,11 @@ body {
   margin-bottom: 40px;
 }
 
+.margin2 {
+  margin-bottom: 2px;
+  margin-top:20px;
+}
+
 #candidatesLoader p {
   margin-top: 4rem;
   text-align: center;
@@ -576,7 +590,38 @@ body {
 }
 
 .noCandidates {
-  text-align: center; 
+  text-align: center;
+}
+
+
+.skillBox {
+  border-style: solid;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: grey;
+}
+
+.padding {
+  display: inline-block;
+  margin: 5px;
+  margin-right: 0px;
+  margin-left: 0px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.boxPadding {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.dateAndLocation {
+  width: 10%;
+  float: left;
 }
 
 /* MISC */
@@ -620,24 +665,21 @@ body {
   overflow: hidden;
 }
 
-.my-body {
-  margin-top: 100px;
-  /* height: 50%; */
+#chatLoader .dimmer {
+  padding: 30px;
+}
+
+#chatLoader {
+  text-align: center;
+  padding-bottom: 10px;
 }
 
 /* search */
 
 .search {
-  border: 1px solid rgb(210, 217, 241);
-  height: 40px;
+  border-bottom: 1px solid rgb(210, 217, 241);
   background-color: white;
-}
-
-.input-text-search {
-  width: 100%;
-  font-size: 14px;
-  margin-top: 10px;
-  border: 1px solid rgb(210, 217, 241);
+  padding: 10px;
 }
 
 /* drop-down menu */
@@ -650,15 +692,14 @@ body {
 /* title */
 
 .title {
-  border: 1px solid rgb(210, 217, 241);
-  height: 40px;
-  background-color: white;
+  border-bottom: 1px solid rgb(210, 217, 241);
+  border-left: 1px solid rgb(210, 217, 241);
 }
 
 .title-text {
   text-align: center;
   font-size: 20px;
-  margin-top: 10px;
+  margin-top: 1.2rem;
   font-weight: 900;
 }
 
@@ -666,11 +707,7 @@ body {
 
 .list {
   height: 520px;
-  border-bottom: 1px solid rgb(210, 217, 241);
-  border-left: 1px solid rgb(210, 217, 241);
   white-space: nowrap;
-  overflow: scroll;
-  scrollbar-width: none;
 }
 
 .emp-list {
@@ -678,9 +715,7 @@ body {
   padding: 0;
   margin-left: -11px;
   margin-right: -10px;
-}
-
-.emp-item {
+  overflow: auto;
 }
 
 .button-text {
@@ -696,7 +731,10 @@ body {
   padding: 0;
   text-align: left;
   background-color: transparent;
-  border: 1px solid rgb(210, 217, 241);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid rgb(210, 217, 241);
 }
 
 .my-button-list:focus {
@@ -715,12 +753,11 @@ body {
 
 .chat-box {
   height: 470px;
-  border-top: 1px solid rgb(210, 217, 241);
-  border-right: 1px solid rgb(210, 217, 241);
-  border-bottom: 1px solid rgb(210, 217, 241);
   background-color: white;
-  overflow: scroll;
-  scrollbar-width: none;
+  border-bottom: 1px solid rgb(210, 217, 241);
+  border-left: 1px solid rgb(210, 217, 241);
+  overflow: auto;
+  flex-direction: column-reverse;
 }
 
 .message-list {
@@ -784,9 +821,9 @@ body {
 /* input */
 
 .text-box {
-  height: 50px;
+  padding: 0px 10px 10px 10px;
+  border-left: 1px solid rgb(210, 217, 241);
   background-color: white;
-  border: 1px solid rgb(210, 217, 241);
 }
 
 .input-text {
@@ -794,18 +831,6 @@ body {
   font-size: 14px;
   margin-top: 14px;
   border: 1px solid rgb(210, 217, 241);
-}
-
-.my-button {
-  height: 60%;
-  width: 100%;
-  overflow: hidden;
-  background-color: #3e8e41;
-  border: none;
-  color: white;
-  border-radius: 12px;
-  transition-duration: 0.4s;
-  margin-top: 10px;
 }
 
 .my-button:hover {
@@ -816,6 +841,16 @@ body {
   background-color: #4caf50;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
+}
+
+.sendButton {
+  margin-top: 50% !important;
+  color: white !important;
+  width: 100% !important;
+}
+
+.sendButton .icon {
+  color: #838383 !important;
 }
 
 /* SITE WRAPPER - STRUCTURE */
@@ -1032,4 +1067,13 @@ body {
   border-radius: 10em;
   width: 100px;
   margin-left: 4%;
+}
+
+.filePreview span {
+  margin-left: 3rem;
+}
+
+.filePreview .ui.icon.button {
+  margin-top: -5px !important;
+  margin-right: 2rem;
 }

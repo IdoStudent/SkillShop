@@ -1,8 +1,98 @@
 import React, { Component } from "react";
-import { Container, Grid } from "tabler-react";
+import { Container, Grid, Header, Form, Dimmer, Card } from "tabler-react";
+import { Button, Icon } from "semantic-ui-react";
 import SiteWrapper from "../SiteWrapper.react";
 import Auth from "@aws-amplify/auth";
 import axios from "axios";
+
+function compare(a,b){
+
+    //split numbers and letters
+    var pattern1 = /[0-9]/g;
+    var pattern2 = /[a-zA-Z]/g;
+    var lettersA = a.lastUpdate.match(pattern2);
+    var numbersA = a.lastUpdate.match(pattern1);
+    var lettersB = b.lastUpdate.match(pattern2);
+    var numbersB = b.lastUpdate.match(pattern1);
+
+
+    let comparison = 0;
+    if(lettersA == "y"){
+        if(lettersB == "w" || lettersB == "d" || lettersB == "h" || lettersB == "m" || lettersB == "s"){
+            comparison = 1;
+        }else{
+            if(numbersA > numbersB){
+                comparison = 1;
+            }else{
+                comparison = -1;
+            }
+        }
+    }
+    if(lettersA == "w"){
+        if(lettersB == "d" || lettersB == "h" || lettersB == "m" || lettersB == "s"){
+            comparison = 1;
+        }else if(lettersB == "y"){
+            comparison = -1;
+        }else{
+            if(numbersA > numbersB){
+                comparison = 1;
+            }else{
+                comparison = -1;
+            }
+        }
+    }
+    if(lettersA == "d"){
+        if(lettersB == "h" || lettersB == "m" || lettersB == "s"){
+            comparison = 1;
+        }else if(lettersB == "y" || lettersB == "w"){
+            comparison = -1;
+        }else{
+            if(numbersA > numbersB){
+                comparison = 1;
+            }else{
+                comparison = -1;
+            }
+        }
+    }
+    if(lettersA == "h"){
+        if(lettersB == "m" || lettersB == "s"){
+            comparison = 1;
+        }else if(lettersB == "y" || lettersB == "w" || lettersB == "d"){
+            comparison = -1;
+        }else{
+            if(numbersA > numbersB){
+                comparison = 1;
+            }else{
+                comparison = -1;
+            }
+        }
+    }
+    if(lettersA == "m"){
+        if(lettersB == "s"){
+            comparison = 1;
+        }else if(lettersB == "y" || lettersB == "w" || lettersB == "d" || lettersB == "h"){
+            comparison = -1;
+        }else{
+            if(numbersA > numbersB){
+                comparison = 1;
+            }else{
+                comparison = -1;
+            }
+        }
+    }
+    if(lettersA == "s"){
+        if(lettersB == "w" || lettersB == "d" || lettersB == "h" || lettersB == "m" || lettersB == "y"){
+            comparison = -1;
+        }else{
+            if(numbersA > numbersB){
+                comparison = 1;
+            }else{
+                comparison = -1;
+            }
+        }
+    }
+    return comparison;
+}
 
 class Chat extends Component {
     constructor(){
@@ -13,6 +103,7 @@ class Chat extends Component {
             jobTitles: [],
             currentPosition: "",
             chosenUser: "",
+            chosenUserEmail: "",
             userType: "",
             jobKeys: [],
             employersList: [],
@@ -25,7 +116,7 @@ class Chat extends Component {
             jobseekersNames: [],
             currentMatchID: "",
             matchIDs: [],
-            Loading: true
+            loading: true
         }
     }
 
@@ -70,20 +161,20 @@ class Chat extends Component {
                     });
                 },
             )
-    }   
+    }
 
     /* JOBSEEKER */
 
     // get all matches with userEmail from matches table (jobseeker)
     async getMatches() {
-        console.log('get matches');
+        // console.log('get matches');
         const email =  Auth.user.attributes.email
         await fetch(
             `https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` + email )
             .then((res) => res.json())
             .then((result) => {
                 for (var i = 0; i < result.length; i++){
-                    console.log('user email:',result[i].userEmail);
+                    // console.log('user email:',result[i].userEmail);
 
                     //get last updated
                     var timeFrame = "s";
@@ -113,7 +204,7 @@ class Chat extends Component {
                     }
                     lastUpdated = Math.round(lastUpdated);
                     lastUpdated = lastUpdated + timeFrame;
-                    console.log('lastUpdate:',lastUpdated);
+                    // console.log('lastUpdate:',lastUpdated);
 
                     this.state.jobKeys.push({ key : result[i].jobKey , lastUpdate : lastUpdated , email : result[i].userEmail });
                 }
@@ -143,10 +234,12 @@ class Chat extends Component {
 
     getEmployersNames = async () => {
         // console.log('getEmployersNames');
+        // console.log(this.state.employersEmails);
         for(var i=0;i<this.state.employersEmails.length;i++){
             await fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` + this.state.employersEmails[i].email )
                 .then((res) => res.json())
                 .then((result) => {
+                    // console.log(result);
                     if(typeof result.Item !== 'undefined'){
                         // console.log('user Name:',result.Item.userFirstName);
                         this.state.employersNames.push({ key : this.state.employersEmails[i].email , name : result.Item.userFirstName });
@@ -156,7 +249,7 @@ class Chat extends Component {
     }
 
     getSeekMatchID = async () => {
-        console.log('get jobseeker match ids');
+        // console.log('get jobseeker match ids');
 
         for(var i=0;i<this.state.jobKeys.length;i++){
             await fetch(
@@ -172,7 +265,7 @@ class Chat extends Component {
 
     // get messages depending on matchId 
     getSeekMessages = async () => {
-        console.log('get messages');
+        // console.log('get messages');
 
         for(var i=0;i<this.state.matchIDs.length;i++){
             // console.log(this.state.matchIDs[i]);
@@ -181,10 +274,11 @@ class Chat extends Component {
             .then((result) => {
                 // console.log(result);
                 // this.state.messages.push({ matchID : this.state.matchIDs[i].matchID, chat : result });
+                // console.log(this.state.employersNames);
                 for (var j=0;j<result.length;j++){
-                    console.log(result[j]);
-                    console.log(result[j].userName);
-                    console.log(Auth.user.attributes.email);
+                    // console.log(result[j]);
+                    // console.log(result[j].userName);
+                    // console.log(Auth.user.attributes.email);
 
                     //get name and role
                     var userName = ""
@@ -196,8 +290,8 @@ class Chat extends Component {
                         userName = this.state.employersNames.filter((emp) => emp.key == result[j].userName)[0].name;
                         userRole = "Employer";
                     }
-                    console.log('name:',userName);
-                    console.log('role:',userRole);
+                    // console.log('name:',userName);
+                    // console.log('role:',userRole);
                     this.state.messages.push({ matchID : result[j].matchId, chat : result[j].message , name : userName , role : userRole });
                 }
             })
@@ -205,8 +299,8 @@ class Chat extends Component {
     }
 
     chooseEmployer = (employer) => {
-        console.log("Choose Employer");
-        console.log(employer);
+        // console.log("Choose Employer");
+        // console.log(employer);
 
         // console.log("name:",this.state.employersNames.filter((em) => em.key == 
         // (this.state.employersEmails.filter((emp) => emp.key == employer.key)[0].email))[0].name);
@@ -263,7 +357,40 @@ class Chat extends Component {
                 .then((res) => res.json())
                 .then((result) => {
                     for(var j=0;j<result.length;j++){
-                        this.state.jobseekersEmails.push({ key : this.state.jobTitles[i].jobKey, lastUpdate : "1d" , email : result[j].userEmail });
+
+                        console.log('lastUpdated:',result[j]);
+
+                        //get last updated
+                        var timeFrame = "s";
+                        var date = new Date();
+                        var time = date.getTime();
+                        var timeDifference = time-result[j].lastUpdated;
+                        var lastUpdated = timeDifference / 1000; //to seconds
+                        if(lastUpdated > 60){
+                            lastUpdated = lastUpdated / 60; //to minutes
+                            timeFrame = "m";
+                            if(lastUpdated > 60){
+                                lastUpdated = lastUpdated / 60; //to hours
+                                timeFrame = "h";
+                                if(lastUpdated > 24){
+                                    lastUpdated = lastUpdated / 24; //to days
+                                    timeFrame = "d";
+                                    if(lastUpdated > 7){
+                                        lastUpdated = lastUpdated / 7; //to weeks
+                                        timeFrame = "w";
+                                        if(lastUpdated > 52){
+                                            lastUpdated = lastUpdated / 52; //to years
+                                            timeFrame = "y";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        lastUpdated = Math.round(lastUpdated);
+                        lastUpdated = lastUpdated + timeFrame;
+                        // console.log('lastUpdate:',lastUpdated);
+
+                        this.state.jobseekersEmails.push({ key : this.state.jobTitles[i].jobKey, lastUpdate : lastUpdated , email : result[j].userEmail });
                         this.state.jobSeekersEmailsList.push(result[j].userEmail);
                     }
                 })
@@ -315,9 +442,9 @@ class Chat extends Component {
                 // console.log(result);
                 // this.state.messages.push({ matchID : this.state.matchIDs[i].matchID, chat : result });
                 for (var j=0;j<result.length;j++){
-                    console.log(result[j]);
-                    console.log(result[j].userName);
-                    console.log(Auth.user.attributes.email);
+                    // console.log(result[j]);
+                    // console.log(result[j].userName);
+                    // console.log(Auth.user.attributes.email);
 
                     //get name and role
                     var userName = ""
@@ -329,8 +456,8 @@ class Chat extends Component {
                         userName = this.state.jobseekersNames.filter((jobseeker) => jobseeker.key == result[j].userName)[0].name;
                         userRole = "jobseeker";
                     }
-                    console.log('name:',userName);
-                    console.log('role:',userRole);
+                    // console.log('name:',userName);
+                    // console.log('role:',userRole);
                     this.state.messages.push({ matchID : result[j].matchId, chat : result[j].message , name : userName , role : userRole });
                 }
             })
@@ -338,9 +465,11 @@ class Chat extends Component {
     }
 
     chooseJobseeker = (jobseeker) => {
-        console.log("Choose Jobseeker");
+        // console.log("Choose Jobseeker");
 
         // console.log(jobseeker);
+        // console.log('currentPosition:',this.state.currentPosition);
+        this.setState({chosenUserEmail : jobseeker.email});
 
         //set current match ID
         // console.log('length',this.state.matchIDs.length);
@@ -355,6 +484,28 @@ class Chat extends Component {
         // this.getMessages();
 
         this.setState({ chosenUser : this.state.jobseekersNames.filter((js) => js.key == jobseeker.email)[0].name});
+    }
+
+    updateEmpMatches = async () => {
+        console.log('update employer matches');
+
+        var date = new Date();
+        var time = date.getTime();
+
+        try {
+            const params = {
+              jobKey: this.state.currentPosition,
+              userEmail: this.state.chosenUserEmail,
+              matchId: this.state.currentMatchID,
+              lastUpdated: time
+            };
+            await axios.post(
+              "https://ddar54uzr6.execute-api.ap-southeast-2.amazonaws.com/prod/",
+              params
+            );
+        } catch (err) {
+            console.log(`An error has occurred: ${err}`);
+        }
     }
 
     /* HANDLERS */
@@ -377,16 +528,18 @@ class Chat extends Component {
         var date = new Date();
         var time = date.getTime();
         
-
         //update matches
-        console.log('jobkey',this.state.currentPosition);
-        console.log('current matchID',this.state.currentMatchID);
-        await this.updateSeekMatches();
-        
+        // console.log('jobkey',this.state.currentPosition);
+        // console.log('current matchID',this.state.currentMatchID);
+        if(this.state.userType == "jobseeker"){
+            await this.updateSeekMatches();
+        }else{
+            await this.updateEmpMatches();
+        }
 
         // console.log('time:',time);
         if(this.state.currentMatchID !== ""){
-            console.log('there exists a current match id');
+            // console.log('there exists a current match id');
             try {
                 const params = {
                   matchId:  this.state.currentMatchID,
@@ -402,7 +555,7 @@ class Chat extends Component {
                 console.log(`An error has occurred: ${err}`);
             }
         }else{
-            console.log('there does NOT exist a current match id');
+            // console.log('there does NOT exist a current match id');
         }
 
         this.setState({message: ""});
@@ -422,157 +575,256 @@ class Chat extends Component {
 
     /* DISPLAY */
 
-    render(){
-        return(
-            <div className="test">
-                <SiteWrapper>
-                    <div className="my-body">
-                        <Container className="container">
-                            {/* Header */}
-                            <Grid.Row className="row">
-                                {/* JobSeeker Search */}
-                                {this.state.userType=="jobseeker" && 
-                                    <Grid.Col className="col-3 search">
-                                        <input className="input-text-search" type="text" placeholder="Search" value={this.state.search} 
-                                            onChange={this.handleSearchChange}></input>
-                                    </Grid.Col>
+  render() {
+    return (
+      <div className="test">
+        <SiteWrapper>
+          <div className="spacer" />
+          <Header.H1 className="pageHeading">Your Matches</Header.H1>
+          <div className="my-body">
+              {this.state.loading ? (          
+        
+            <Container className="card">
+                <div id="chatLoader">
+              <Dimmer active loader />
+              <p> Loading your matches and chat... </p>
+              </div>
+            </Container>
+         ) : 
+          
+          (<Container className="card">
+          {/* Header */}
+          <Grid.Row className="row">
+            {/* JobSeeker Search */}
+            {this.state.userType == "jobseeker" && (
+              <Grid.Col className="col-3 search">
+                <Form.Input
+                  className="input-text-search"
+                  type="text"
+                  placeholder="Search..."
+                  position="append"
+                  icon="search"
+                  value={this.state.search}
+                  onChange={this.handleSearchChange}
+                />
+              </Grid.Col>
+            )}
+            {/* Employer drop down menu */}
+            {this.state.userType == "employer" && (
+              <Grid.Col className="col-3 search">
+                <Form.Select
+                  id="profile"
+                  onChange={this.handleDropDownMenu}
+                >
+                  {this.state.jobTitles.map((jobTitle) => {
+                    return (
+                      <option value={jobTitle.jobKey}>
+                        {jobTitle.jobTitle}
+                      </option>
+                    );
+                  })}
+                </Form.Select>
+              </Grid.Col>
+            )}
+            {/* Title */}
+            <Grid.Col className="col-9 title">
+              <div className="title-text">{this.state.chosenUser}</div>
+            </Grid.Col>
+          </Grid.Row>
+          {/* Body */}
+          <Grid.Row className="row">
+            {/* List */}
+            {this.state.search == "" &&
+              this.state.userType == "jobseeker" && (
+                <Grid.Col className="col-3 list">
+                  <ul className="emp-list">
+                    {this.state.jobKeys.sort(compare).map((employer) => {
+                      return (
+                        <li key={employer.id} className="emp-item">
+                          <button
+                            className="my-button-list"
+                            onClick={() => this.chooseEmployer(employer)}
+                          >
+                            <div className="last-update">
+                              {employer.lastUpdate}
+                            </div>
+                            {this.state.loading == false ? (
+                              <div className="button-text">
+                                {
+                                  this.state.employersNames.filter(
+                                    (em) =>
+                                      em.key ==
+                                      this.state.employersEmails.filter(
+                                        (emp) => emp.key == employer.key
+                                      )[0].email
+                                  )[0].name
                                 }
-                                {/* Employer drop down menu */}
-                                {this.state.userType=="employer" && 
-                                    <Grid.Col className="col-3 search">
-                                        <div>
-                                            <form>
-                                                <select className="dropdown" onChange={this.handleDropDownMenu}>
-                                                    <option disabled selected value> -- select a position -- </option>
-                                                    {this.state.jobTitles.map(jobTitle => {
-                                                        return(
-                                                            <option value={jobTitle.jobKey}>{jobTitle.jobTitle}</option>
-                                                        )
-                                                    })}
-                                                </select>
-                                            </form>
-                                        </div>        
-                                    </Grid.Col>
+                              </div>
+                            ) : (
+                              "Loading..."
+                            )}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </Grid.Col>
+              )}
+            {/* list post search */}
+            {this.state.search != "" &&
+              this.state.userType == "jobseeker" && (
+                <Grid.Col className="col-3 list">
+                  <ul className="emp-list">
+                    {this.state.jobKeys
+                      .filter(
+                        (k) =>
+                          this.state.employersNames
+                            .filter(
+                              (em) =>
+                                em.key ==
+                                this.state.employersEmails.filter(
+                                  (emp) => emp.key == k.key
+                                )[0].email
+                            )[0]
+                            .name.toLowerCase()
+                            .indexOf(this.state.search.toLowerCase()) > -1
+                      )
+                      .sort(compare).map((employer) => {
+                        return (
+                          <li key={employer.id} className="emp-item">
+                            <button
+                              className="my-button-list"
+                              onClick={() => this.chooseEmployer(employer)}
+                            >
+                              <div className="last-update">
+                                {employer.lastUpdate}
+                              </div>
+                              {this.state.loading == false ? (
+                                <div className="button-text">
+                                  {
+                                    this.state.employersNames.filter(
+                                      (em) =>
+                                        em.key ==
+                                        this.state.employersEmails.filter(
+                                          (emp) => emp.key == employer.key
+                                        )[0].email
+                                    )[0].name
+                                  }
+                                </div>
+                              ) : (
+                                "Loading..."
+                              )}
+                            </button>
+                          </li>
+                        );
+                      })}
+                  </ul>
+                </Grid.Col>
+              )}
+            {/* employer side list */}
+            {this.state.loading == false ? (
+              this.state.userType == "employer" ? (
+                this.state.currentPosition !== "" ? (
+                  <Grid.Col className="col-3 list">
+                    <ul className="emp-list">
+                      {this.state.jobseekersEmails
+                        .filter(
+                          (jse) => jse.key == this.state.currentPosition
+                        )
+                        .sort(compare).map((jobseeker) => {
+                          return (
+                            <li key={jobseeker.id} className="emp-item">
+                              <button
+                                className="my-button-list"
+                                onClick={() =>
+                                  this.chooseJobseeker(jobseeker)
                                 }
-                                {/* Title */}
-                                <Grid.Col className="col-9 title">
-                                    <div className="title-text">{this.state.chosenUser}</div>
-                                </Grid.Col>
-                            </Grid.Row>
-                            {/* Body */}
-                            <Grid.Row className="row">
-                                {/* List */}
-                                {this.state.search=="" && this.state.userType=="jobseeker" &&
-                                    <Grid.Col className="col-3 list">
-                                        <ul className="emp-list">
-                                            {this.state.jobKeys.map(employer => {
-                                                return(
-                                                    <li key={employer.id} className="emp-item">
-                                                        <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
-                                                            <div className="last-update">{employer.lastUpdate}</div>
-                                                            {this.state.loading == false ? <div className="button-text">
-                                                                {this.state.employersNames.filter((em) => em.key == 
-                                                                (this.state.employersEmails.filter((emp) => emp.key == employer.key)[0].email))[0].name}
-                                                            </div> : 'Loading...'}
-                                                        </button>
-                                                    </li>
-                                                )
-                                            })}
-                                        </ul>
-                                    </Grid.Col>
-                                }
-                                {/* list post search */}
-                                {this.state.search!="" && this.state.userType=="jobseeker" &&
-                                    <Grid.Col className="col-3 list">
-                                        <ul className="emp-list">
-                                            {this.state.jobKeys.filter(k => this.state.employersNames.filter((em) => em.key ==
-                                            (this.state.employersEmails.filter((emp) => emp.key == k.key)[0].email))[0].name.toLowerCase()
-                                            .indexOf(this.state.search.toLowerCase()) > -1).map(employer => {
-                                                return(
-                                                    <li key={employer.id} className="emp-item">
-                                                        <button className="my-button-list" onClick={() => this.chooseEmployer(employer)}>
-                                                            <div className="last-update">{employer.lastUpdate}</div>
-                                                            {this.state.loading == false ? <div className="button-text">
-                                                                {this.state.employersNames.filter((em) => em.key == 
-                                                                (this.state.employersEmails.filter((emp) => emp.key == employer.key)[0].email))[0].name}
-                                                            </div> : 'Loading...'}
-                                                        </button>
-                                                    </li>
-                                                )
-                                            })}
-                                        </ul>
-                                    </Grid.Col>
-                                }
-                                {/* employer side list */}
-                                {this.state.loading == false ? (this.state.userType=="employer" ? (this.state.currentPosition !== "" ? 
-                                    (<Grid.Col className="col-3 list">
-                                        <ul className="emp-list">
-                                            {this.state.jobseekersEmails.filter((jse) => jse.key == this.state.currentPosition)
-                                            .map(jobseeker => {
-                                                    return(
-                                                        <li key={jobseeker.id} className="emp-item">
-                                                            <button className="my-button-list" onClick={() => this.chooseJobseeker(jobseeker)}>
-                                                                <div className="last-update">{jobseeker.lastUpdate}</div>
-                                                                <div className="button-text">{
-                                                                    this.state.jobseekersNames.filter((jsn) => jsn.key == jobseeker.email)[0].name
-                                                                }</div>
-                                                            </button>
-                                                        </li>
-                                                    )
-                                                })
-                                            }
-                                        </ul>
-                                    </Grid.Col>)
-                                :
-                                (<Grid.Col className="col-3 list">
-                                    <ul className="emp-list">
-                                        
-                                    </ul>
-                                </Grid.Col>))        
-                                : console.log("waiting...")) : 
-                                <div className="alert">loading...</div>}
-                                {/* Chat */}
-                                <Grid.Col className="col-9">
-                                    {/* Messages */}
-                                    <Grid.Row className="row chat-box">
-                                        <ul className="message-list">
-                                            {this.state.loading == false ? 
-                                            this.state.currentMatchID !== "" ? 
-                                            this.state.messages.filter((m) => m.matchID == this.state.currentMatchID).map(message => {
-                                                return(
-                                                    <li key={message.id} className={"message-" + message.role}>
-                                                        <div>
-                                                            {message.name}
-                                                        </div>
-                                                        <div>
-                                                            {message.chat}
-                                                        </div>
-                                                    </li>
-                                                )
-                                            })
-                                            : console.log('waiting...')
-                                            : console.log('loading...')}
-                                        </ul>      
-                                    </Grid.Row>
-                                    {/* Input */}
-                                    <Grid.Row className="row text-box">
-                                            <Grid.Col className="col-9 col-sm-10 col-md-10 col-lg-11">
-                                                <input className="input-text" type="text" placeholder="Type message here..." name="message" value={this.state.message} onChange={this.handleMessageChange}></input>
-                                            </Grid.Col>
-                                            <Grid.Col className="col-3 col-sm-2 col-md-2 col-lg-1">
-                                                <button className="my-button fa fa-send-o" onClick={this.handleMessageSubmit}></button>
-                                            </Grid.Col>
-                                    </Grid.Row>   
-                                </Grid.Col>
-                            </Grid.Row>
-                                        
-                        </Container>
-                    </div>
-                </SiteWrapper>
-            </div>
+                              >
+                                <div className="last-update">
+                                  {jobseeker.lastUpdate}
+                                </div>
+                                <div className="button-text">
+                                  {
+                                    this.state.jobseekersNames.filter(
+                                      (jsn) => jsn.key == jobseeker.email
+                                    )[0].name
+                                  }
+                                </div>
+                              </button>
+                            </li>
+                          );
+                        })}
+                    </ul>
+                  </Grid.Col>
+                ) : (
+                  <Grid.Col className="col-3 list">
+                    <ul className="emp-list" />
+                  </Grid.Col>
+                )
+              ) : (
+                console.log("waiting...")
+              )
+            ) : (
+              <div className="alert">loading...</div>
+            )}
+            {/* Chat */}
+            <Grid.Col className="col-9">
+              {/* Messages */}
+              <Grid.Row className="row chat-box">
+                <ul className="message-list">
+                  {this.state.loading == false
+                    ? this.state.currentMatchID !== ""
+                      ? this.state.messages
+                          .filter(
+                            (m) => m.matchID == this.state.currentMatchID
+                          )
+                          .map((message) => {
+                            return (
+                              <li
+                                key={message.id}
+                                className={"message-" + message.role}
+                              >
+                                <div>{message.name}</div>
+                                <div>{message.chat}</div>
+                              </li>
+                            );
+                          })
+                      : console.log("waiting...")
+                    : console.log("loading...")}
+                </ul>
+              </Grid.Row>
+              {/* Input */}
+              <Grid.Row className="row text-box" id="textBox">
+                <Grid.Col className="col-9 col-sm-10 col-md-10 col-lg-11">
+                  <Form.Textarea
+                    className="input-text"
+                    type="text"
+                    placeholder="Type message here..."
+                    name="message"
+                    value={this.state.message}
+                    onChange={this.handleMessageChange}
+                  />
+                </Grid.Col>
+                <Grid.Col className="col-3 col-sm-2 col-md-2 col-lg-1">
+                  <Button
+                    className="acceptButton sendButton"
+                    circular
+                    onClick={this.handleMessageSubmit}
+                  >
+                      <Icon name="send" />
+                  </Button>
+                </Grid.Col>
+              </Grid.Row>
+            </Grid.Col>
+          </Grid.Row>
+        </Container>)
+          }
             
-        )
-    }
+          </div>
+        </SiteWrapper>
+      </div>
+    );
+  }
 }
 
 export default Chat;

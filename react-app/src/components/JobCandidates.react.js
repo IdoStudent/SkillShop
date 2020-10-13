@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+import ReactDOM from 'react-dom';
+
 import { Container, Card, Dimmer, Icon } from "tabler-react";
 import { Button } from "semantic-ui-react";
 import axios from "axios";
@@ -9,6 +11,8 @@ import axios from "axios";
 import NotificationSystem from "react-notification-system";
 
 var jobseekers = [];
+var currentCandidatesSkills = [];
+var education = [];
 var num = 0;
 
 class JobCandidates extends React.Component {
@@ -20,8 +24,13 @@ class JobCandidates extends React.Component {
     this.state = {
       initialised: false,
       skillsSet: false,
+      experienceSet: false,
+      educationSet: false,
       skillsFiltered: false,
       filters: ["Flexibility", "Teamwork"],
+      currentCandidatesSkills: [""],
+      currentCandidatesExperience: [""],
+      currentCandidatesEducation: [""],
       currentCandidate: {
         userAbout: " ",
         userCity: " ",
@@ -32,6 +41,23 @@ class JobCandidates extends React.Component {
         userPhoneNumber: " ",
         userPostcode: " ",
         userSkills: " ",
+        userExperience: [{
+          userEmail: "",
+          userJobDescription: "",
+          userJobEndDate: "",
+          userJobLocation: "",
+          userJobStartDate: "",
+          userJobTitle: "",
+        }],
+        userEducation: [{
+          userEducationEndDate: "",
+          userEmail: "",
+          userEducationDescription: "",
+          userEducationInstitution: "",
+          userEducationTitle: "",
+          userEducationStartDate: "",
+          userEducationLocation: "",
+        }],
         userState: " ",
       },
       noCandidates: false,
@@ -71,11 +97,15 @@ class JobCandidates extends React.Component {
         // ADD A NEW PROPERTY TO ALL OBJECTS IN THE ARRAY (userSkills)
         jobseekers.forEach(function(element) {
           element.userSkills = [" "];
+          element.userExperience = [" "];
+          element.userEducation = [" "];
         });
 
         // (STILL IN THE LOOP)
         // FOR EACH JOBSEEKER IN OUR ARRAY, QUERY THE DATABSAE FOR THEIR SKILLS AND ADD THAT TO THEIR OBJECT IN THE JOBSEEKERS ARRAY
         this.getSkills();
+        this.getJobExperience();
+        this.getEducation();
         console.log(jobseekers);
       });
 
@@ -121,18 +151,77 @@ class JobCandidates extends React.Component {
     });
   }
 
+  async getJobExperience() {
+    // ITERATE THROUGH THE LENGTH OF THE ARRAY, LOOKING UP EACH USERS Job Experience LISTED IN THE DATABASE
+    for (var i = 0; i < jobseekers.length; i++) {
+      await fetch(
+        `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/jobexperience?userEmail=${
+          jobseekers[i].userEmail
+        }`
+      )
+        .then((res) => res.json())
+        .then((result) => {
+          // IF RESULT.LENGTH == 0 IT MEANS THE USER HAS NO JOBEXPERIENCE INFORMATION IN THE DATABASE SO WE WILL GET AN ERROR IF WE TRY TO ACCESS IT
+          if (result.length > 0) {
+            for (var j=0; j<result.length; j++){
+              jobseekers[i].userExperience[j] = result[j];
+            }
+          }
+        });
+
+    }
+    this.setState({
+      experienceSet: true,
+    });
+  }
+
+  async getEducation() {
+    // ITERATE THROUGH THE LENGTH OF THE ARRAY, LOOKING UP EACH USERS Job Experience LISTED IN THE DATABASE
+    for (var i = 0; i < jobseekers.length; i++) {
+      // NEED TO USE ASYNC/AWAIT OTHERWISE LOOP WILL JUST BREAK
+      await fetch(
+        `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/education?userEmail=${
+          jobseekers[i].userEmail
+        }`
+      )
+        .then((res) => res.json())
+        .then((result) => {
+          // IF RESULT.LENGTH == 0 IT MEANS THE USER HAS NO JOBEXPERIENCE INFORMATION IN THE DATABASE SO WE WILL GET AN ERROR IF WE TRY TO ACCESS IT
+          if (result.length > 0) {
+            for (var j=0; j< result.length; j++){
+              jobseekers[i].userEducation[j] = result[j];
+            }
+          }
+        });
+    }
+
+    this.setState({
+      educationSet: true,
+    });
+  }
+
   setCandidate = () => {
     // CHECK IF INITIALISED IS TRUE (MEANING THE END OF getSkills() HAS BEEN REACHED AND ALL THE DATA IS SET)
     if (
       this.state.initialised &&
       this.state.skillsFiltered &&
-      this.state.skillsSet
+      this.state.skillsSet &&
+      this.state.experienceSet &&
+      this.state.educationSet
     ) {
       if (jobseekers[num] != null) {
         // SET OUR STATE currentCandidate TO THE FIRST INDEX OF OUR FILTERED JOBSEEKERS ARRAY
-        this.setState({ currentCandidate: jobseekers[num] });
+        this.setState({
+          currentCandidate: jobseekers[num],
+          });
+        this.setState({
+          currentCandidatesSkills: this.state.currentCandidate.userSkills,
+          currentCandidatesExperience: this.state.currentCandidate.userExperience,
+          currentCandidatesEducation: this.state.currentCandidate.userEducation,
+          });
+
       } else {
-        alert("No matches for this search");
+        this.setState({noCandidates: true})
       }
     } else {
       // IF INITIALISED IS FALSE, RECHECK IN 250ms OTHERWISE OUR DATA WILL BE UNDEFINED
@@ -144,7 +233,7 @@ class JobCandidates extends React.Component {
     // WHEN FILTERING, LOOK THROUGH THE JOBSEEKER ARRAY FOR MATCHES. ANYTHING THAT DOESN'T MATCH, YOU CAN REMOVE FROM THE ARRAY USING 'jobseekers.splice(INDEX, 1)'
     // SPLICE SYNTAX IS: splice(position in array, amount of elements to remove)
     // CHECK IF INITIALISED
-    if (this.state.initialised && this.state.skillsSet) {
+    if (this.state.initialised && this.state.skillsSet && this.state.experienceSet) {
       for (var i = 0; i < jobseekers.length; i++) {
         if (
           !this.state.filters.every((r) => jobseekers[i].userSkills.includes(r))
@@ -163,11 +252,14 @@ class JobCandidates extends React.Component {
     });
   };
 
+
+
   acceptCandidate = () => {
     if (
       this.state.initialised &&
       this.state.skillsFiltered &&
-      this.state.skillsSet
+      this.state.skillsSet &&
+      this.state.experienceSet
     ) {
       // Post the match to the databsae
       try {
@@ -193,16 +285,22 @@ class JobCandidates extends React.Component {
       } else {
         this.setState({
           currentCandidate: jobseekers[num],
-        });
+          currentCandidatesSkills: jobseekers[num].userSkills,
+          currentCandidatesExperience: jobseekers[num].userExperience,
+          currentCandidatesEducation: jobseekers[num].userEducation,
+        }, () => console.log(this.state.currentCandidatesExperience),);
       }
     }
+
+    console.log(jobseekers[num])
   };
 
   rejectCandidate = () => {
     if (
       this.state.initialised &&
       this.state.skillsFiltered &&
-      this.state.skillsSet
+      this.state.skillsSet &&
+      this.state.experienceSet
     ) {
       num++;
 
@@ -213,7 +311,11 @@ class JobCandidates extends React.Component {
       } else {
         this.setState({
           currentCandidate: jobseekers[num],
+          currentCandidatesSkills: jobseekers[num].userSkills,
+          currentCandidatesExperience: jobseekers[num].userExperience,
+          currentCandidatesEducation: jobseekers[num].userEducation,
         });
+
       }
     }
   };
@@ -243,19 +345,13 @@ class JobCandidates extends React.Component {
   };
 
   render() {
-    return (
-      <Container>
+    return <Container>
         <NotificationSystem ref={this.notificationSystem} />
-        {this.state.initialised &&
-        this.state.skillsFiltered &&
-        this.state.skillsSet &&
-        this.state.noCandidates === false ? (
-          <div>
+        {this.state.initialised && this.state.skillsFiltered && this.state.skillsSet && this.state.experienceSet && this.state.noCandidates === false ? <div>
             <div className="margin1">
               <h1 className="zeroMargin">
                 <p>
-                  {this.state.currentCandidate.userFirstName}{" "}
-                  {this.state.currentCandidate.userLastName}
+                  {this.state.currentCandidate.userFirstName} {this.state.currentCandidate.userLastName}
                 </p>
               </h1>
               <Icon prefix="fa" name="map-marker" />
@@ -277,62 +373,87 @@ class JobCandidates extends React.Component {
                 <span>TOP SKILLS</span>
               </div>
               <div className="info">
-                <p>{this.state.currentCandidate.userSkills}</p>
+                {this.state.currentCandidatesSkills.map((skill) => (
+                  <div className="padding">
+                    <span className="boxPadding skillBox">{skill}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
             <div className="infoRow">
               <div className="infoLabel">
-                <span>JOB EXPERIENCE</span>
+                <span>EXPERIENCE</span>
               </div>
-              <div className="info">
-                <p />
-              </div>
+              {this.state.currentCandidate.userExperience.map((d) => {
+                return <div>
+                    <div className="infoExperienceEducation">
+                      <p>
+                        <strong>{d.userJobTitle}</strong>
+                      </p>
+                      <span>{d.userJobDescription}</span>
+                    </div>
+                    <div className="dateAndLocation">
+                      <p className="margin2">
+                        {d.userJobStartDate + "-" + d.userJobEndDate}
+                      </p>
+                      <p className="zeroMargin">{d.userJobLocation}</p>
+                    </div>
+                  </div>;
+              })}
+
             </div>
 
             <div className="infoRow">
               <div className="infoLabel">
                 <span>EDUCATION</span>
               </div>
-              <div className="info">
-                <p />
-              </div>
+              {this.state.currentCandidate.userEducation.map((d) => {
+                return <div>
+                    <div className="infoExperienceEducation">
+                      <p>
+                        <strong>{d.userEducationTitle}</strong>
+                      </p>
+                      <span>{d.userEducationDescription}</span>
+                    </div>
+                    <div className="dateAndLocation">
+                      <p className="margin2">
+                        {d.userEducationStartDate + "-" + d.userEducationEndDate}
+                      </p>
+                      <p className="zeroMargin">{d.userEducationLocation}</p>
+                    </div>
+                  </div>;
+              })}
             </div>
 
             <div className="buttonBox buttonBorder">
-              <Button
-                className="buttonwidth passButton"
-                onClick={this.rejectCandidate}
-              >
+              <Button className="buttonwidth passButton" onClick={this.rejectCandidate}>
                 <Icon prefix="fa" name="times" />
                 {""} Pass
                 {""}
               </Button>
             </div>
             <div className="buttonBox">
-              <Button
-                className="buttonwidth likeButton"
-                onClick={this.acceptCandidate}
-              >
+              <Button className="buttonwidth likeButton" onClick={this.acceptCandidate}>
                 <Icon prefix="fa" name="check" />
                 {""} Like
                 {""}
               </Button>
             </div>
-          </div>
-        ) : this.state.noCandidates ? (
-          <p className="noCandidates"> There are no more suitable candidates to show for the selected job profile. If you have filters on, you can try removing some in order to view a broader range of candidates. Otherwise,
-          you can check back another time when additional candidates are found for your chosen filters.</p>
-        ) : (
-          <div id="candidatesLoader">
+          </div> : this.state.noCandidates ? <p className="noCandidates">
+            {" "}
+            There are no more suitable candidates to show for the selected
+            job profile. If you have filters on, you can try removing some
+            in order to view a broader range of candidates. Otherwise, you
+            can check back another time when additional candidates are found
+            for your chosen filters.
+          </p> : <div id="candidatesLoader">
             <Card.Body>
               <Dimmer active loader />
               <p> Fetching Candidates... </p>
             </Card.Body>
-          </div>
-        )}
-      </Container>
-    );
+          </div>}
+      </Container>;
   }
 }
 

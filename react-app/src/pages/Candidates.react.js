@@ -40,6 +40,8 @@ class Candidates extends React.Component {
 
   getJobProfiles(){
     let email = Auth.user.attributes.email
+
+    console.log('GET JOB PROFILES')
     fetch('https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=' + email)
       .then((res) => res.json())
       .then((result) => {
@@ -50,6 +52,8 @@ class Candidates extends React.Component {
           for (var i = 0; i < result.length; i++) {
             items.push(result[i]);
           }
+
+          console.log(items)
 
           // Once we've iterated through the whole list, copy the value of our temporary array to our state array
           this.setState(
@@ -177,18 +181,25 @@ class Candidates extends React.Component {
         jobIndustry: newInfo[2],
         jobAbout: newInfo[3],
       };
+      
       axios.post(
         "https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod",
         params
-      );
+      ).then(() => {
+        this.getJobProfiles()
+      })
     } catch (err) {
       console.log(`An error has occurred: ${err}`);
     }
 
-    console.log(newInfo);
-
     this.setState({ openNew: false });
   };
+
+  acceptChangesFilters = () => {
+    this.setState(prevState => ({
+      candidatesKey: prevState.candidatesKey + 1
+    }));
+  }
 
   addSuccessNotification = () => {
     const notification = this.notificationSystem.current;
@@ -276,7 +287,7 @@ class Candidates extends React.Component {
                   <Card.Body>
                     {
                       this.state.data.length > 0 ?
-                      ( <JobCandidates /> )
+                      ( <JobCandidates key={this.state.candidatesKey} /> )
                       :
                       ( <p className="noProfiles"> You don't have any existing job profiles. Create one to start finding candidates! </p> )
                     }
@@ -299,6 +310,7 @@ class Candidates extends React.Component {
             <JobFiltersModal
               closeModal={this.closeModalFilter}
               data={this.state.data[this.state.selectValue]}
+              acceptChanges={this.acceptChangesFilters}
             />
           ) : null}
 
