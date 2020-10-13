@@ -620,17 +620,12 @@ body {
   overflow: hidden;
 }
 
-.my-body {
-  margin-top: 100px;
-  /* height: 50%; */
-}
-
 /* search */
 
 .search {
-  border: 1px solid rgb(210, 217, 241);
-  height: 40px;
+  border-bottom: 1px solid rgb(210, 217, 241);
   background-color: white;
+  padding: 10px;
 }
 
 .input-text-search {
@@ -650,9 +645,8 @@ body {
 /* title */
 
 .title {
-  border: 1px solid rgb(210, 217, 241);
-  height: 40px;
-  background-color: white;
+  border-bottom: 1px solid rgb(210, 217, 241);
+  border-left: 1px solid rgb(210, 217, 241);
 }
 
 .title-text {
@@ -666,11 +660,7 @@ body {
 
 .list {
   height: 520px;
-  border-bottom: 1px solid rgb(210, 217, 241);
-  border-left: 1px solid rgb(210, 217, 241);
   white-space: nowrap;
-  overflow: scroll;
-  scrollbar-width: none;
 }
 
 .emp-list {
@@ -678,9 +668,6 @@ body {
   padding: 0;
   margin-left: -11px;
   margin-right: -10px;
-}
-
-.emp-item {
 }
 
 .button-text {
@@ -715,12 +702,9 @@ body {
 
 .chat-box {
   height: 470px;
-  border-top: 1px solid rgb(210, 217, 241);
-  border-right: 1px solid rgb(210, 217, 241);
-  border-bottom: 1px solid rgb(210, 217, 241);
   background-color: white;
-  overflow: scroll;
-  scrollbar-width: none;
+  border-bottom: 1px solid rgb(210, 217, 241);
+  border-left: 1px solid rgb(210, 217, 241);
 }
 
 .message-list {
@@ -784,9 +768,9 @@ body {
 /* input */
 
 .text-box {
-  height: 50px;
+  padding: 0px 10px 10px 10px;
+  border-left: 1px solid rgb(210, 217, 241);
   background-color: white;
-  border: 1px solid rgb(210, 217, 241);
 }
 
 .input-text {
@@ -794,18 +778,6 @@ body {
   font-size: 14px;
   margin-top: 14px;
   border: 1px solid rgb(210, 217, 241);
-}
-
-.my-button {
-  height: 60%;
-  width: 100%;
-  overflow: hidden;
-  background-color: #3e8e41;
-  border: none;
-  color: white;
-  border-radius: 12px;
-  transition-duration: 0.4s;
-  margin-top: 10px;
 }
 
 .my-button:hover {
@@ -816,6 +788,16 @@ body {
   background-color: #4caf50;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
+}
+
+.sendButton {
+  margin-top: 50% !important;
+  color: white !important;
+  width: 100% !important;
+}
+
+.sendButton .icon {
+  color: #838383 !important;
 }
 
 /* SITE WRAPPER - STRUCTURE */
