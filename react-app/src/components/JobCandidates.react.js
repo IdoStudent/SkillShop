@@ -29,6 +29,8 @@ class JobCandidates extends React.Component {
       skillsFiltered: false,
       filters: ["Flexibility", "Teamwork"],
       currentCandidatesSkills: [""],
+      currentCandidatesExperience: [""],
+      currentCandidatesEducation: [""],
       currentCandidate: {
         userAbout: " ",
         userCity: " ",
@@ -161,15 +163,13 @@ class JobCandidates extends React.Component {
         .then((result) => {
           // IF RESULT.LENGTH == 0 IT MEANS THE USER HAS NO JOBEXPERIENCE INFORMATION IN THE DATABASE SO WE WILL GET AN ERROR IF WE TRY TO ACCESS IT
           if (result.length > 0) {
-            for (var j=0; j< result.length; j++){
+            for (var j=0; j<result.length; j++){
               jobseekers[i].userExperience[j] = result[j];
             }
-
           }
         });
 
     }
-
     this.setState({
       experienceSet: true,
     });
@@ -206,7 +206,8 @@ class JobCandidates extends React.Component {
       this.state.initialised &&
       this.state.skillsFiltered &&
       this.state.skillsSet &&
-      this.state.experienceSet
+      this.state.experienceSet &&
+      this.state.educationSet
     ) {
       if (jobseekers[num] != null) {
         // SET OUR STATE currentCandidate TO THE FIRST INDEX OF OUR FILTERED JOBSEEKERS ARRAY
@@ -215,6 +216,8 @@ class JobCandidates extends React.Component {
           });
         this.setState({
           currentCandidatesSkills: this.state.currentCandidate.userSkills,
+          currentCandidatesExperience: this.state.currentCandidate.userExperience,
+          currentCandidatesEducation: this.state.currentCandidate.userEducation,
           });
 
       } else {
@@ -281,6 +284,8 @@ class JobCandidates extends React.Component {
         this.setState({
           currentCandidate: jobseekers[num],
           currentCandidatesSkills: jobseekers[num].userSkills,
+          currentCandidatesExperience: jobseekers[num].userExperience,
+          currentCandidatesEducation: jobseekers[num].userEducation,
         });
       }
     }
@@ -305,6 +310,8 @@ class JobCandidates extends React.Component {
         this.setState({
           currentCandidate: jobseekers[num],
           currentCandidatesSkills: jobseekers[num].userSkills,
+          currentCandidatesExperience: jobseekers[num].userExperience,
+          currentCandidatesEducation: jobseekers[num].userEducation,
         });
 
       }
