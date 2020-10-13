@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+import ReactDOM from 'react-dom';
+
 import { Container, Card, Dimmer, Icon } from "tabler-react";
 import { Button } from "semantic-ui-react";
 import axios from "axios";
@@ -9,6 +11,8 @@ import axios from "axios";
 import NotificationSystem from "react-notification-system";
 
 var jobseekers = [];
+var currentCandidatesSkills = [];
+var education = [];
 var num = 0;
 
 class JobCandidates extends React.Component {
@@ -20,8 +24,11 @@ class JobCandidates extends React.Component {
     this.state = {
       initialised: false,
       skillsSet: false,
+      experienceSet: false,
+      educationSet: false,
       skillsFiltered: false,
       filters: ["Flexibility", "Teamwork"],
+      currentCandidatesSkills: [""],
       currentCandidate: {
         userAbout: " ",
         userCity: " ",
@@ -32,6 +39,23 @@ class JobCandidates extends React.Component {
         userPhoneNumber: " ",
         userPostcode: " ",
         userSkills: " ",
+        userExperience: [{
+          userEmail: "",
+          userJobDescription: "",
+          userJobEndDate: "",
+          userJobLocation: "",
+          userJobStartDate: "",
+          userJobTitle: "",
+        }],
+        userEducation: [{
+          userEducationEndDate: "",
+          userEmail: "",
+          userEducationDescription: "",
+          userEducationInstitution: "",
+          userEducationTitle: "",
+          userEducationStartDate: "",
+          userEducationLocation: "",
+        }],
         userState: " ",
       },
       noCandidates: false,
@@ -71,11 +95,15 @@ class JobCandidates extends React.Component {
         // ADD A NEW PROPERTY TO ALL OBJECTS IN THE ARRAY (userSkills)
         jobseekers.forEach(function(element) {
           element.userSkills = [" "];
+          element.userExperience = [" "];
+          element.userEducation = [" "];
         });
 
         // (STILL IN THE LOOP)
         // FOR EACH JOBSEEKER IN OUR ARRAY, QUERY THE DATABSAE FOR THEIR SKILLS AND ADD THAT TO THEIR OBJECT IN THE JOBSEEKERS ARRAY
         this.getSkills();
+        this.getJobExperience();
+        this.getEducation();
         console.log(jobseekers);
       });
 
@@ -121,16 +149,77 @@ class JobCandidates extends React.Component {
     });
   }
 
+  async getJobExperience() {
+    // ITERATE THROUGH THE LENGTH OF THE ARRAY, LOOKING UP EACH USERS Job Experience LISTED IN THE DATABASE
+    console.log(jobseekers.length);
+    for (var i = 0; i < jobseekers.length; i++) {
+      // NEED TO USE ASYNC/AWAIT OTHERWISE LOOP WILL JUST BREAK
+      await fetch(
+        `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/jobexperience?userEmail=${
+          jobseekers[i].userEmail
+        }`
+      )
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result.length + result);
+          // IF RESULT.LENGTH == 0 IT MEANS THE USER HAS NO JOBEXPERIENCE INFORMATION IN THE DATABASE SO WE WILL GET AN ERROR IF WE TRY TO ACCESS IT
+          if (result.length > 0) {
+            for (var i=0; i<result.length; i++){
+              jobseekers[i].userExperience = result[i];
+            }
+          }
+        });
+    }
+
+    this.setState({
+      experienceSet: true,
+    });
+  }
+
+  async getEducation() {
+    // ITERATE THROUGH THE LENGTH OF THE ARRAY, LOOKING UP EACH USERS Job Experience LISTED IN THE DATABASE
+    console.log(jobseekers.length);
+    for (var i = 0; i < jobseekers.length; i++) {
+      // NEED TO USE ASYNC/AWAIT OTHERWISE LOOP WILL JUST BREAK
+      await fetch(
+        `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/education?userEmail=${
+          jobseekers[i].userEmail
+        }`
+      )
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result.length);
+          // IF RESULT.LENGTH == 0 IT MEANS THE USER HAS NO JOBEXPERIENCE INFORMATION IN THE DATABASE SO WE WILL GET AN ERROR IF WE TRY TO ACCESS IT
+          if (result.length > 0) {
+            for (var i=0; i<result.length; i++){
+              jobseekers[i].userEducation = result[i];
+            }
+          }
+        });
+    }
+
+    this.setState({
+      educationSet: true,
+    });
+  }
+
   setCandidate = () => {
     // CHECK IF INITIALISED IS TRUE (MEANING THE END OF getSkills() HAS BEEN REACHED AND ALL THE DATA IS SET)
     if (
       this.state.initialised &&
       this.state.skillsFiltered &&
-      this.state.skillsSet
+      this.state.skillsSet &&
+      this.state.experienceSet
     ) {
       if (jobseekers[num] != null) {
         // SET OUR STATE currentCandidate TO THE FIRST INDEX OF OUR FILTERED JOBSEEKERS ARRAY
-        this.setState({ currentCandidate: jobseekers[num] });
+        this.setState({
+          currentCandidate: jobseekers[num],
+          });
+        this.setState({
+          currentCandidatesSkills: this.state.currentCandidate.userSkills,
+          });
+
       } else {
         alert("No matches for this search");
       }
@@ -144,7 +233,7 @@ class JobCandidates extends React.Component {
     // WHEN FILTERING, LOOK THROUGH THE JOBSEEKER ARRAY FOR MATCHES. ANYTHING THAT DOESN'T MATCH, YOU CAN REMOVE FROM THE ARRAY USING 'jobseekers.splice(INDEX, 1)'
     // SPLICE SYNTAX IS: splice(position in array, amount of elements to remove)
     // CHECK IF INITIALISED
-    if (this.state.initialised && this.state.skillsSet) {
+    if (this.state.initialised && this.state.skillsSet && this.state.experienceSet) {
       for (var i = 0; i < jobseekers.length; i++) {
         if (
           !this.state.filters.every((r) => jobseekers[i].userSkills.includes(r))
@@ -167,7 +256,8 @@ class JobCandidates extends React.Component {
     if (
       this.state.initialised &&
       this.state.skillsFiltered &&
-      this.state.skillsSet
+      this.state.skillsSet &&
+      this.state.experienceSet
     ) {
       // Post the match to the databsae
       try {
@@ -193,6 +283,7 @@ class JobCandidates extends React.Component {
       } else {
         this.setState({
           currentCandidate: jobseekers[num],
+          currentCandidatesSkills: jobseekers[num].userSkills,
         });
       }
     }
@@ -202,7 +293,8 @@ class JobCandidates extends React.Component {
     if (
       this.state.initialised &&
       this.state.skillsFiltered &&
-      this.state.skillsSet
+      this.state.skillsSet &&
+      this.state.experienceSet
     ) {
       num++;
 
@@ -213,7 +305,9 @@ class JobCandidates extends React.Component {
       } else {
         this.setState({
           currentCandidate: jobseekers[num],
+          currentCandidatesSkills: jobseekers[num].userSkills,
         });
+
       }
     }
   };
@@ -249,6 +343,7 @@ class JobCandidates extends React.Component {
         {this.state.initialised &&
         this.state.skillsFiltered &&
         this.state.skillsSet &&
+        this.state.experienceSet &&
         this.state.noCandidates === false ? (
           <div>
             <div className="margin1">
@@ -277,16 +372,27 @@ class JobCandidates extends React.Component {
                 <span>TOP SKILLS</span>
               </div>
               <div className="info">
-                <p>{this.state.currentCandidate.userSkills}</p>
+                {
+                  this.state.currentCandidatesSkills.map(skill => (
+                    <div className="padding">
+                      <span className="boxPadding skillBox">{skill}</span>
+                    </div>
+                  ))
+                  }
               </div>
             </div>
 
             <div className="infoRow">
               <div className="infoLabel">
-                <span>JOB EXPERIENCE</span>
+                <span>EXPERIENCE</span>
               </div>
-              <div className="info">
-                <p />
+              <div className="infoExperienceEducation">
+                <p><strong>{this.state.currentCandidate.userExperience.userJobTitle}</strong></p>
+                <span>{this.state.currentCandidate.userExperience.userJobDescription}</span>
+              </div>
+              <div className="dateAndLocation">
+                <p className="margin2">{this.state.currentCandidate.userExperience.userJobStartDate + "-" + this.state.currentCandidate.userExperience.userJobEndDate}</p>
+                <p className="zeroMargin">{this.state.currentCandidate.userExperience.userJobLocation}</p>
               </div>
             </div>
 
@@ -294,8 +400,13 @@ class JobCandidates extends React.Component {
               <div className="infoLabel">
                 <span>EDUCATION</span>
               </div>
-              <div className="info">
-                <p />
+              <div className="infoExperienceEducation">
+                <p><strong>{this.state.currentCandidate.userEducation.userEducationTitle}</strong></p>
+                <span>{this.state.currentCandidate.userEducation.userEducationDescription}</span>
+              </div>
+              <div className="dateAndLocation">
+                <p className="margin2">{this.state.currentCandidate.userEducation.userEducationStartDate + "-" + this.state.currentCandidate.userEducation.userEducationEndDate}</p>
+                <p className="zeroMargin">{this.state.currentCandidate.userEducation.userEducationLocation}</p>
               </div>
             </div>
 
