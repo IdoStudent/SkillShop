@@ -1068,3 +1068,12 @@ body {
   width: 100px;
   margin-left: 4%;
 }
+
+.filePreview span {
+  margin-left: 3rem;
+}
+
+.filePreview .ui.icon.button {
+  margin-top: -5px !important;
+  margin-right: 2rem;
+}
