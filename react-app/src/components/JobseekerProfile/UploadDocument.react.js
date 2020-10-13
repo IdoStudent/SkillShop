@@ -27,6 +27,32 @@ class UploadDocument extends React.Component {
     this.state = { files: [] };
   }
 
+  async getDocuments() {
+    let email = Auth.user.attributes.email;
+
+    fetch(
+      `https://3dvi80ije9.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=` +
+        email
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        if(result.length > 0) {
+          this.setState(
+            {
+              files: result,
+            },
+            () => console.log(this.state.files)
+          );
+        }
+
+        console.log(result)
+      });
+  }
+
+  componentDidMount = () => {
+    this.getDocuments();
+  }
+
   handleChangeStatus = ({ meta, file }, status) => {
     console.log(status, meta, file);
     S3FileUpload.uploadFile(file, config)
@@ -42,7 +68,7 @@ class UploadDocument extends React.Component {
           params
         );
 
-        console.log(data.location)
+        console.log(data.location);
       })
       .catch((err) => {
         alert(err);
@@ -50,24 +76,23 @@ class UploadDocument extends React.Component {
   };
 
   handleSubmit = (allFiles) => {
-    this.setState(
-      {
-        files: [...this.state.files, allFiles[0]],
-      },
-      () => console.log(this.state.files)
-    );
-
     allFiles.forEach((f) => f.remove());
     this.addSuccessNotification();
+
+    this.getDocuments();
   };
 
   removeItem = (index) => {
-    let tmpArray = [...this.state.files]
-    tmpArray.splice(index, 1)
-    this.setState({files: tmpArray})
+    let tmpArray = [...this.state.files];
+    tmpArray.splice(index, 1);
+    this.setState({ files: tmpArray });
 
-    this.addRemoveNotification()
-  }
+    this.addRemoveNotification();
+  };
+
+  downloadItem = (index) => {
+    window.location.href = this.state.files[index].documentLocation
+  };
 
   addSuccessNotification = () => {
     const notification = this.notificationSystem.current;
@@ -96,19 +121,25 @@ class UploadDocument extends React.Component {
 
           {this.state.files.map((d, i) => {
             return (
+              <Container className="filePreview">
+                <span>{d.documentName}</span>
+                <Button
+                  floated="right"
+                  basic
+                  icon="x"
+                  type="button"
+                  onClick={() => this.removeItem(i)}
+                />
 
-            <Container className="filePreview">
-            <span>{d.file.name}</span>
-            <Button
-                floated="right"
-                basic
-                icon="x"
-                type="button"
-                onClick={ () => this.removeItem(i)}
-              />
-            <Divider />
-            </Container>
-
+<Button
+                  floated="right"
+                  basic
+                  icon="download"
+                  type="button"
+                  onClick={() => this.downloadItem(i)}
+                />
+                <Divider />
+              </Container>
             );
           })}
 
