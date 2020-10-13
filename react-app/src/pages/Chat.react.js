@@ -212,7 +212,7 @@ class Chat extends Component {
     }
 
     getEmployersEmail = async () => {
-        console.log('getEmployersEmail');
+        // console.log('getEmployersEmail');
         // console.log('jobKeys length:',this.state.jobKeys.length);
         for(var i=0;i<this.state.jobKeys.length;i++){
             // console.log('jobKey',this.state.jobKeys[i]);
@@ -221,9 +221,8 @@ class Chat extends Component {
                 .then((res) => res.json())
                 .then((result) => {
                     // console.log('key',this.state.jobKeys[i].key);
-                    console.log('Result:',result[0].userEmail);
+                    // console.log('Result:',result[0].userEmail);
                     this.state.employersEmails.push({ key : this.state.jobKeys[i].key , email : result[0].userEmail });
-                    
                 })
         }
 
@@ -234,15 +233,15 @@ class Chat extends Component {
     }
 
     getEmployersNames = async () => {
-        console.log('getEmployersNames');
-        console.log(this.state.employersEmails);
+        // console.log('getEmployersNames');
+        // console.log(this.state.employersEmails);
         for(var i=0;i<this.state.employersEmails.length;i++){
             await fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` + this.state.employersEmails[i].email )
                 .then((res) => res.json())
                 .then((result) => {
-                    console.log(result);
+                    // console.log(result);
                     if(typeof result.Item !== 'undefined'){
-                        console.log('user Name:',result.Item.userFirstName);
+                        // console.log('user Name:',result.Item.userFirstName);
                         this.state.employersNames.push({ key : this.state.employersEmails[i].email , name : result.Item.userFirstName });
                     }
                 })
@@ -275,10 +274,10 @@ class Chat extends Component {
             .then((result) => {
                 // console.log(result);
                 // this.state.messages.push({ matchID : this.state.matchIDs[i].matchID, chat : result });
-                console.log(this.state.employersNames);
+                // console.log(this.state.employersNames);
                 for (var j=0;j<result.length;j++){
                     // console.log(result[j]);
-                    console.log(result[j].userName);
+                    // console.log(result[j].userName);
                     // console.log(Auth.user.attributes.email);
 
                     //get name and role
