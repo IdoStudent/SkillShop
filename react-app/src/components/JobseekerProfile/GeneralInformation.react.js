@@ -4,11 +4,15 @@ import { Form, Card, Grid } from "tabler-react";
 import { Button, Modal, Icon, Container } from "semantic-ui-react";
 import Auth from "@aws-amplify/auth";
 
+import NotificationSystem from "react-notification-system";
+
 import "../../index.css";
 
 //const config = require('../config.json');
 
 class GeneralInformation extends React.Component {
+  notificationSystem = React.createRef();
+
   constructor(props) {
     super(props);
     this.state = {
@@ -137,6 +141,8 @@ class GeneralInformation extends React.Component {
           "https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata",
           params
         );
+
+        this.addSuccessNotification()
       } catch (err) {
         console.log(`An error has occurred: ${err}`);
       }
@@ -276,6 +282,15 @@ class GeneralInformation extends React.Component {
     this.setState({ open: true });
   };
 
+  addSuccessNotification = () => {
+    const notification = this.notificationSystem.current;
+    notification.addNotification({
+      message: "General Information updated successfully",
+      level: "success",
+      position: "br",
+    });
+  };
+
   render() {
     const {
       firstname,
@@ -299,6 +314,7 @@ class GeneralInformation extends React.Component {
     } = this.state;
 
     return <div className="card" id="generalInfo">
+      <NotificationSystem ref={this.notificationSystem} />
         <Card.Body>
           <Grid.Row>
             <Grid.Col md={7}>
