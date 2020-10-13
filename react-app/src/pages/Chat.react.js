@@ -436,10 +436,12 @@ class Chat extends Component {
                 {/* JobSeeker Search */}
                 {this.state.userType == "jobseeker" && (
                   <Grid.Col className="col-3 search">
-                    <input
+                    <Form.Input
                       className="input-text-search"
                       type="text"
-                      placeholder="Search"
+                      placeholder="Search..."
+                      position="append"
+                      icon="search"
                       value={this.state.search}
                       onChange={this.handleSearchChange}
                     />
