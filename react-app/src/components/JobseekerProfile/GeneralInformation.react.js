@@ -89,6 +89,7 @@ class GeneralInformation extends React.Component {
             postcode: result.Item.userPostcode,
             state: result.Item.userState,
             about: result.Item.userAbout,
+            phone: result.Item.userPhoneNumber,
             //phone: result.Item.userPhone,
 
             formfirstname: result.Item.userFirstName,
@@ -97,7 +98,8 @@ class GeneralInformation extends React.Component {
             formcity: result.Item.userCity,
             formpostcode: result.Item.userPostcode,
             formstate: result.Item.userState,
-            formabout: result.Item.userAbout,      
+            formabout: result.Item.userAbout,  
+            formphone: result.Item.userPhoneNumber    
             //formphone: result.Item.userPhone,
           });
           console.log() },
