@@ -10,10 +10,9 @@ import JobFiltersModal from "../components/JobFiltersModal.react";
 import JobNewModal from "../components/JobNewModal.react";
 import JobCandidates from "../components/JobCandidates.react";
 
-import NotificationSystem from 'react-notification-system';
-import { container } from "aws-amplify";
+import NotificationSystem from "react-notification-system";
 
-const uuidv4 = require("uuid/v4")
+const uuidv4 = require("uuid/v4");
 
 class Candidates extends React.Component {
   notificationSystem = React.createRef();
@@ -36,38 +35,39 @@ class Candidates extends React.Component {
 
       initialised: false,
 
-      candidatesKey: 0
+      candidatesKey: 0,
     };
   }
 
-  getJobProfiles(){
-    let email = Auth.user.attributes.email
+  getJobProfiles() {
+    let email = Auth.user.attributes.email;
 
-    console.log('GET JOB PROFILES')
-    fetch('https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=' + email)
+    console.log("GET JOB PROFILES");
+    fetch(
+      "https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod/?userEmail=" +
+        email
+    )
       .then((res) => res.json())
       .then((result) => {
+        // Create a temporary array to hold our individual items (job profiles)
+        let items = [];
 
-          // Create a temporary array to hold our individual items (job profiles)
-          let items = [];
+        for (var i = 0; i < result.length; i++) {
+          items.push(result[i]);
+        }
 
-          for (var i = 0; i < result.length; i++) {
-            items.push(result[i]);
+        console.log(items);
+
+        // Once we've iterated through the whole list, copy the value of our temporary array to our state array
+        this.setState(
+          {
+            data: items,
+          },
+          () => {
+            // Once the state has updated, create our dropdown list items
+            this.createSelectItems();
           }
-
-          console.log(items)
-
-          // Once we've iterated through the whole list, copy the value of our temporary array to our state array
-          this.setState(
-            {
-              data: items,
-            },
-            () => {
-              // Once the state has updated, create our dropdown list items
-              this.createSelectItems();
-            }
-          );
-
+        );
       });
   }
 
@@ -98,6 +98,7 @@ class Candidates extends React.Component {
     this.setState({ openNew: false });
   };
 
+  // Once we've fetched all the data, we can create our select (dropdown list) items from the data set
   createSelectItems() {
     let items = [];
     for (var i = 0; i < this.state.data.length; i++) {
@@ -114,19 +115,25 @@ class Candidates extends React.Component {
   }
 
   handleSelect = (event) => {
-    let tmpNum = this.state.candidatesKey + 1
+    let tmpNum = this.state.candidatesKey + 1;
 
-    this.setState({
-      selectValue: event.target.value,
-      candidatesKey: tmpNum
-    }, () => { console.log( this.state.data[this.state.selectValue].jobKey, this.state.candidatesKey )});
-
-    
+    this.setState(
+      {
+        selectValue: event.target.value,
+        candidatesKey: tmpNum,
+      },
+      () => {
+        console.log(
+          this.state.data[this.state.selectValue].jobKey,
+          this.state.candidatesKey
+        );
+      }
+    );
 
     // Reset the filters in local storage (because they're only applicable for the job profile that was selected when they were added to storage)
-    localStorage.setItem('softSkillsFilter', JSON.stringify([ ]))
-    localStorage.setItem('hardSkillsFilter', JSON.stringify([ ]))
-    localStorage.setItem('techSkillsFilter', JSON.stringify([ ]))
+    localStorage.setItem("softSkillsFilter", JSON.stringify([]));
+    localStorage.setItem("hardSkillsFilter", JSON.stringify([]));
+    localStorage.setItem("techSkillsFilter", JSON.stringify([]));
   };
 
   acceptChangesInfo = (newInfo) => {
@@ -169,7 +176,7 @@ class Candidates extends React.Component {
         params
       );
 
-      this.addSuccessNotification()
+      this.addSuccessNotification();
     } catch (err) {
       console.log(`An error has occurred: ${err}`);
     }
@@ -177,8 +184,8 @@ class Candidates extends React.Component {
 
   createNewProfile = (newInfo) => {
     // Generate a unique id
-    let jobKey = uuidv4()
-        // Get current profile information
+    let jobKey = uuidv4();
+    // Get current profile information
     try {
       const params = {
         userEmail: Auth.user.attributes.email,
@@ -189,12 +196,14 @@ class Candidates extends React.Component {
         jobAbout: newInfo[3],
       };
 
-      axios.post(
-        "https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod",
-        params
-      ).then(() => {
-        this.getJobProfiles()
-      })
+      axios
+        .post(
+          "https://vsym28sl18.execute-api.ap-southeast-2.amazonaws.com/prod",
+          params
+        )
+        .then(() => {
+          this.getJobProfiles();
+        });
     } catch (err) {
       console.log(`An error has occurred: ${err}`);
     }
@@ -202,27 +211,32 @@ class Candidates extends React.Component {
     this.setState({ openNew: false });
   };
 
+  // Changing the candidates key will remount the component, meaning it allows us to refresh the candidates automatically when the filters are changed, which therefore lets us refilter the candidates.
   acceptChangesFilters = () => {
-    this.setState(prevState => ({
-      candidatesKey: prevState.candidatesKey + 1
+    this.setState((prevState) => ({
+      candidatesKey: prevState.candidatesKey + 1,
     }));
-  }
+  };
 
+  // Notification handler
   addSuccessNotification = () => {
     const notification = this.notificationSystem.current;
     notification.addNotification({
-      message: 'The information for ' + this.state.data[this.state.selectValue].jobTitle + ' was successfully updated',
-      level: 'success',
-      position: 'br'
+      message:
+        "The information for " +
+        this.state.data[this.state.selectValue].jobTitle +
+        " was successfully updated",
+      level: "success",
+      position: "br",
     });
   };
 
   render() {
     return (
       <SiteWrapper>
-        <NotificationSystem ref={this.notificationSystem}/>
+        <NotificationSystem ref={this.notificationSystem} />
         <div className="my-3 my-md-5">
-        <div className="spacer" />
+          <div className="spacer" />
           <Container>
             <Grid.Row>
               <Grid.Col lg={12}>
@@ -230,25 +244,25 @@ class Candidates extends React.Component {
 
                 {/* Job profile selection */}
                 <div id="jobprofile">
-                <Container className="card thin" name="jobProfile">
-                  <Card.Body>
-                    <Grid.Row>
-                      <Grid.Col md={4}>
-                        <Form.Group label="Current Job Profile">
-                          <Form.Select
-                            id="profile"
-                            onChange={this.handleSelect}
-                            value={this.state.selectValue}
-                            disabled={this.state.data.length > 0 ? ( false ) : ( true )}
-                          >
-                            {this.state.selectItems}
-                          </Form.Select>
-                        </Form.Group>
-                      </Grid.Col>
-                      {
-                          this.state.data.length > 0 ? (
-                            <Grid.Col offset={4} md={4}>
-
+                  <Container className="card thin" name="jobProfile">
+                    <Card.Body>
+                      <Grid.Row>
+                        <Grid.Col md={4}>
+                          <Form.Group label="Current Job Profile">
+                            <Form.Select
+                              id="profile"
+                              onChange={this.handleSelect}
+                              value={this.state.selectValue}
+                              disabled={
+                                this.state.data.length > 0 ? false : true
+                              }
+                            >
+                              {this.state.selectItems}
+                            </Form.Select>
+                          </Form.Group>
+                        </Grid.Col>
+                        {this.state.data.length > 0 ? (
+                          <Grid.Col offset={4} md={4}>
                             <Button
                               floated="right"
                               basic
@@ -271,8 +285,8 @@ class Candidates extends React.Component {
                               onClick={this.openModalInfo}
                             />
                           </Grid.Col>
-                          ) : (
-                            <Grid.Col offset={4} md={4}>
+                        ) : (
+                          <Grid.Col offset={4} md={4}>
                             <Button
                               floated="right"
                               basic
@@ -281,24 +295,27 @@ class Candidates extends React.Component {
                               onClick={this.openModalNew}
                             />
                           </Grid.Col>
-                          )
-                        }
-
-                    </Grid.Row>
-                  </Card.Body>
-                </Container>
+                        )}
+                      </Grid.Row>
+                    </Card.Body>
+                  </Container>
                 </div>
 
                 {/* Candidate Info */}
                 <Container className="card">
                   <Card.Body>
-                    {
-                      this.state.data.length > 0 ?
-                      ( <JobCandidates key={this.state.candidatesKey} jobKey={this.state.data[this.state.selectValue].jobKey}/> )
-                      :
-                      ( <p className="noProfiles"> You don't have any existing job profiles. Create one to start finding candidates! </p> )
-                    }
-
+                    {this.state.data.length > 0 ? (
+                      <JobCandidates
+                        key={this.state.candidatesKey}
+                        jobKey={this.state.data[this.state.selectValue].jobKey}
+                      />
+                    ) : (
+                      <p className="noProfiles">
+                        {" "}
+                        You don't have any existing job profiles. Create one to
+                        start finding candidates!{" "}
+                      </p>
+                    )}
                   </Card.Body>
                 </Container>
               </Grid.Col>

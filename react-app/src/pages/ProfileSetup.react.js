@@ -29,7 +29,7 @@ class Login extends Component {
   handleSubmit = async (event) => {
     event.preventDefault();
 
-    let userType = Auth.user.attributes['custom:role']
+    let userType = Auth.user.attributes["custom:role"];
 
     if (this.validateForm()) {
       try {
@@ -51,7 +51,7 @@ class Login extends Component {
           params
         );
 
-        if(userType == "jobseeker") {
+        if (userType == "jobseeker") {
           this.props.history.push({
             pathname: "/myprofile",
           });
@@ -60,7 +60,6 @@ class Login extends Component {
             pathname: "/candidates",
           });
         }
-
       } catch (err) {
         console.log(`An error has occurred: ${err}`);
       }
@@ -140,7 +139,7 @@ class Login extends Component {
       fNameInvalid: false,
       surnameInvalid: false,
       postcodeInvalid: false,
-      stateInvalid: false
+      stateInvalid: false,
     });
   };
 
@@ -149,8 +148,14 @@ class Login extends Component {
       <div className="profileSetup">
         <Container className="wrapper">
           <Header.H3>Welcome!</Header.H3>
-          <p> Since it's your first time here, we need some basic details from you to begin setting up your profile. You'll have to complete the full profile setup in 'My Profile'. Until you've filled out some more basic information about yourself such as a decsription and some experience, you won't appear in candidate searches.
-              </p>
+          <p>
+            {" "}
+            Since it's your first time here, we need some basic details from you
+            to begin setting up your profile. You'll have to complete the full
+            profile setup in 'My Profile'. Until you've filled out some more
+            basic information about yourself such as a decsription and some
+            experience, you won't appear in candidate searches.
+          </p>
           <Container className="card">
             <Form>
               <Grid.Row>
@@ -160,7 +165,7 @@ class Login extends Component {
                       name="firstName"
                       value={this.state.firstName}
                       onChange={this.onInputChange}
-                      invalid={this.state.fNameInvalid} 
+                      invalid={this.state.fNameInvalid}
                       feedback={this.state.fNameErrorMsg}
                     />
                   </Form.Group>
@@ -174,7 +179,7 @@ class Login extends Component {
                       name="surname"
                       value={this.state.surname}
                       onChange={this.onInputChange}
-                      invalid={this.state.surnameInvalid} 
+                      invalid={this.state.surnameInvalid}
                       feedback={this.state.surnameErrorMsg}
                     />
                   </Form.Group>
@@ -188,7 +193,7 @@ class Login extends Component {
                       name="postcode"
                       value={this.state.postcode}
                       onChange={this.onInputChange}
-                      invalid={this.state.postcodeInvalid} 
+                      invalid={this.state.postcodeInvalid}
                       feedback={this.state.postcodeErrorMsg}
                       maxLength={4}
                     />
@@ -201,7 +206,7 @@ class Login extends Component {
                       name="state"
                       value={this.state.state}
                       onChange={this.onInputChange}
-                      invalid={this.state.stateInvalid} 
+                      invalid={this.state.stateInvalid}
                       feedback={this.state.stateErrorMsg}
                     />
                   </Form.Group>

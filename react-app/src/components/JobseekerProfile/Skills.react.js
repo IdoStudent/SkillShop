@@ -18,29 +18,32 @@ class Skills extends React.Component {
 
     this.state = {
       showSaveButton: false,
-      //showCancelButton: false,
     };
   }
- // GET email for getSecondApi
- getEmailApi() {
-  return Auth.currentAuthenticatedUser().then((user) => {
-    const { attributes = {} } = user;
-    let email =  attributes['email']
-    return email
-  })}
-
-// GET email for form
-getFirstApi() {
-  return Auth.currentAuthenticatedUser().then((user) => {
-    this.setState({
-      email: user.attributes.email,
-      formemail: user.attributes.email,
+  // GET email for getSecondApi
+  getEmailApi() {
+    return Auth.currentAuthenticatedUser().then((user) => {
+      const { attributes = {} } = user;
+      let email = attributes["email"];
+      return email;
     });
-  });
-}
+  }
+
+  // GET email for form
+  getFirstApi() {
+    return Auth.currentAuthenticatedUser().then((user) => {
+      this.setState({
+        email: user.attributes.email,
+        formemail: user.attributes.email,
+      });
+    });
+  }
 
   getSecondApi(email) {
-    fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/skills?userEmail=`+email)
+    fetch(
+      `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/skills?userEmail=` +
+        email
+    )
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
@@ -92,24 +95,14 @@ getFirstApi() {
     }
   };
 
-  /*cancelChanges = () => {
-    this.setState({
-      showSaveButton: false,
-      showCancelButton: false,
-    });
-
-    this.initialiseState()
-  };*/
-
   submitChanges = async () => {
     this.setState({
       showSaveButton: false,
-      //showCancelButton: false,
     });
     // ADD LOGIC FOR SUBMITTING TO DATABASE, CAN JUST TAKE THE ENTIRE SELECTEDSKILLS ARRAY AND POST IT
     try {
       const params = {
-        userEmail:  this.state.email,
+        userEmail: this.state.email,
         userSkills: selectedSkills,
       };
       await axios.post(
@@ -117,7 +110,7 @@ getFirstApi() {
         params
       );
 
-      this.addSuccessNotification()
+      this.addSuccessNotification();
     } catch (err) {
       console.log(`An error has occurred: ${err}`);
     }

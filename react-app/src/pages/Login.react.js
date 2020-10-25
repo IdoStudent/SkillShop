@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import { Auth } from "aws-amplify";
-
-// import { Header,Form,Button,Grid,Message } from "semantic-ui-react";
-
 import { Container, Form, Grid, Header } from "tabler-react";
 import { Button, Icon } from "semantic-ui-react";
 
+// Email Regex
 const validEmailRegex = RegExp(
   //eslint-disable-next-line
   /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
@@ -27,30 +25,29 @@ class Login extends Component {
   handleSubmit = async (event) => {
     event.preventDefault();
 
+    // Validate form first before submitting data
     if (this.validateForm()) {
-      // AWS Cognito integration here
       try {
-        this.setState({sendingData: true})
+        this.setState({ sendingData: true });
 
-        await Auth.signIn(
-          this.state.username,
-          this.state.password
-        );
+        // Send the input to cognito to verify
+        await Auth.signIn(this.state.username, this.state.password);
 
         let role = Auth.user.attributes["custom:role"];
 
+        // Based on role, send the user to the homepage
         if (role == "employer") {
-          console.log('route to employer profile');
           this.props.history.push("/candidates");
-          localStorage.setItem('softSkillsFilter', JSON.stringify([ ]))
-          localStorage.setItem('hardSkillsFilter', JSON.stringify([ ]))
-          localStorage.setItem('techSkillsFilter', JSON.stringify([ ]))
+
+          // For employers, we need to add the filters to local storage
+          localStorage.setItem("softSkillsFilter", JSON.stringify([]));
+          localStorage.setItem("hardSkillsFilter", JSON.stringify([]));
+          localStorage.setItem("techSkillsFilter", JSON.stringify([]));
         } else if (role == "jobseeker") {
-          console.log('route to jobseeker profile');
           this.props.history.push("/myprofile");
         }
       } catch (error) {
-        this.setState({sendingData: false})
+        this.setState({ sendingData: false });
         if (error.code === "UserNotConfirmedException") {
           this.setState({
             emailErr: true,
@@ -67,7 +64,7 @@ class Login extends Component {
           });
         }
 
-        console.log(error)
+        console.log(error);
       }
     }
   };
@@ -152,11 +149,19 @@ class Login extends Component {
                         invalid={this.state.passwordErr}
                       />
                     </Form.Group>
-                    <Button animated={!this.state.sendingData} loading={this.state.sendingData} onClick={this.handleSubmit}>
+                    <Button
+                      animated={!this.state.sendingData}
+                      loading={this.state.sendingData}
+                      onClick={this.handleSubmit}
+                    >
                       <Button.Content type="submit" visible>
                         Login
                       </Button.Content>
-                      {(this.state.sendingData === false) ? <Button.Content hidden><Icon name="arrow right" /></Button.Content> : null}
+                      {this.state.sendingData === false ? (
+                        <Button.Content hidden>
+                          <Icon name="arrow right" />
+                        </Button.Content>
+                      ) : null}
                     </Button>
                   </Form>
                 </Grid.Col>

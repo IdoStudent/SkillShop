@@ -158,7 +158,7 @@ class JobseekerExp extends React.Component {
           desc: prevState.formdesc,
           open: false,
           current: prevState.isChecked,
-          email: this.state.email
+          email: this.state.email,
         }),
         () => {
           // Convert the date once state has updated (for front-end display purposes)
@@ -398,57 +398,46 @@ class JobseekerExp extends React.Component {
       });
       validInput = false;
     }
-    
+
     // Return the status of valid input. If any of the above error conditions are met, this will return false
     return validInput;
   };
 
   getEmailApi() {
     return Auth.currentAuthenticatedUser().then((user) => {
-       const { attributes = {} } = user;
-       let email =  attributes['email']
-       return email
-     })}
-   // GET email for form
+      const { attributes = {} } = user;
+      let email = attributes["email"];
+      return email;
+    });
+  }
+  // GET email for form
   getFirstApi() {
     return Auth.currentAuthenticatedUser().then((user) => {
-       this.setState({email: user.attributes.email, formemail: user.attributes.email})
-     });
+      this.setState({
+        email: user.attributes.email,
+        formemail: user.attributes.email,
+      });
+    });
   }
-  // GET user data 
-   async getSecondApi(email) {
-     fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +email)
-       .then(res => res.json())
-       .then(
-         (result) => {
-           this.setState({
-       
-           });
-           } ,
-       )
-   }
-   // pass before mount
-   BeforDidMount() { 
-    this.getEmailApi().then(email => this.sendData(email)); }
- 
-   componentDidMount() {
-     this.BeforDidMount();
-     this.getFirstApi();  
-     this.convertDate();
-   }
- 
-   
-  sendData = async (email) => {
-    const data = [
-      this.state.title,
-      this.state.institution,
-      this.state.location,
-      this.state.startdate,
-      this.state.enddate,
-      this.state.desc,
-      this.state.current,
-    ];
+  // GET user data
+  async getSecondApi(email) {
+    fetch(
+      `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
+        email
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        this.setState({});
+      });
+  }
 
+  componentDidMount() {
+    this.getEmailApi();
+    this.getFirstApi();
+    this.convertDate();
+  }
+
+  sendData = async () => {
     try {
       const params = {
         userEmail: this.state.email,

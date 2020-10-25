@@ -48,9 +48,10 @@ class JobseekerEduContainer extends React.Component {
   getEmailApi() {
     return Auth.currentAuthenticatedUser().then((user) => {
       const { attributes = {} } = user;
-      let email =  attributes['email']
-      return email
-    })}
+      let email = attributes["email"];
+      return email;
+    });
+  }
   // GET email for form
   getFirstApi() {
     return Auth.currentAuthenticatedUser().then((user) => {
@@ -62,7 +63,10 @@ class JobseekerEduContainer extends React.Component {
   }
 
   getSecondApi(email) {
-    fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/education?userEmail=`+email)
+    fetch(
+      `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/education?userEmail=` +
+        email
+    )
       .then((res) => res.json())
       .then((result) => {
         for (var i = 0; i < result.length; i++) {
@@ -133,7 +137,7 @@ class JobseekerEduContainer extends React.Component {
 
   validateForm = () => {
     let title = this.state.formtitle;
-    //let institution = this.state.forminstitution;
+    let institution = this.state.forminstitution;
     let startdate = this.state.formstartdate;
     let enddate = this.state.formenddate;
     let desc = this.state.formdesc;
@@ -189,13 +193,13 @@ class JobseekerEduContainer extends React.Component {
     }
 
     // // institution
-    // if (!institution) {
-    //   this.setState({
-    //     institutionErrorMsg: "Institution cannot be empty",
-    //     institutionInvalid: true,
-    //   });
-    //   validInput = false;
-    // }
+    if (!institution) {
+      this.setState({
+        institutionErrorMsg: "Institution cannot be empty",
+        institutionInvalid: true,
+      });
+      validInput = false;
+    }
 
     /* START DATE BLOCK START */
 

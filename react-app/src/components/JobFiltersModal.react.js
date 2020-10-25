@@ -5,6 +5,7 @@ import * as React from "react";
 import { Container, Button, Dropdown, Modal, Icon } from "semantic-ui-react";
 import { Form, Grid } from "tabler-react";
 
+// Define our dropdown options
 const softSkillsOptions = [
   { key: "communication", text: "Communication", value: "Communication" },
   { key: "teamwork", text: "Teamwork", value: "Teamwork" },
@@ -91,9 +92,18 @@ class JobFiltersModal extends React.Component {
   acceptChanges = () => {
     // Store filters in local storage (they will be reset each time the job profile changes)
     // They need to be converted into a JSON array first as localStorage can only take strings
-    localStorage.setItem("softSkillsFilter", JSON.stringify(softSkillsSelected));
-    localStorage.setItem("hardSkillsFilter", JSON.stringify(hardSkillsSelected));
-    localStorage.setItem("techSkillsFilter", JSON.stringify(techSkillsSelected));
+    localStorage.setItem(
+      "softSkillsFilter",
+      JSON.stringify(softSkillsSelected)
+    );
+    localStorage.setItem(
+      "hardSkillsFilter",
+      JSON.stringify(hardSkillsSelected)
+    );
+    localStorage.setItem(
+      "techSkillsFilter",
+      JSON.stringify(techSkillsSelected)
+    );
 
     this.props.closeModal();
 
@@ -152,8 +162,12 @@ class JobFiltersModal extends React.Component {
                 <Form.Group name="softskills" label="Soft Skills">
                   <Dropdown
                     placeholder="Soft Skills"
-                    fluid multiple selection
-                    defaultValue={JSON.parse(localStorage.getItem("softSkillsFilter"))}
+                    fluid
+                    multiple
+                    selection
+                    defaultValue={JSON.parse(
+                      localStorage.getItem("softSkillsFilter")
+                    )}
                     options={softSkillsOptions}
                     onChange={this.handleSelectSoft}
                   />
@@ -165,8 +179,12 @@ class JobFiltersModal extends React.Component {
                 <Form.Group name="hardskills" label="Hard Skills">
                   <Dropdown
                     placeholder="Hard Skills"
-                    fluid multiple selection
-                    defaultValue={JSON.parse(localStorage.getItem("hardSkillsFilter"))}
+                    fluid
+                    multiple
+                    selection
+                    defaultValue={JSON.parse(
+                      localStorage.getItem("hardSkillsFilter")
+                    )}
                     options={hardSkillsOptions}
                     onChange={this.handleSelectHard}
                   />
@@ -178,8 +196,12 @@ class JobFiltersModal extends React.Component {
                 <Form.Group name="techskills" label="Tech Skills">
                   <Dropdown
                     placeholder="Tech Skills"
-                    fluid multiple selection
-                    defaultValue={JSON.parse(localStorage.getItem("techSkillsFilter"))}
+                    fluid
+                    multiple
+                    selection
+                    defaultValue={JSON.parse(
+                      localStorage.getItem("techSkillsFilter")
+                    )}
                     options={techSkillsOptions}
                     onChange={this.handleSelectTech}
                   />

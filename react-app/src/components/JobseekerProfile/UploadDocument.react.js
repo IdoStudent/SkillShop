@@ -27,6 +27,7 @@ class UploadDocument extends React.Component {
     this.state = { files: [] };
   }
 
+  // Fetch the currently uploaded documents that the current user has
   async getDocuments() {
     let email = Auth.user.attributes.email;
 
@@ -36,7 +37,7 @@ class UploadDocument extends React.Component {
     )
       .then((res) => res.json())
       .then((result) => {
-        if(result.length > 0) {
+        if (result.length > 0) {
           this.setState(
             {
               files: result,
@@ -45,14 +46,15 @@ class UploadDocument extends React.Component {
           );
         }
 
-        console.log(result)
+        console.log(result);
       });
   }
 
   componentDidMount = () => {
     this.getDocuments();
-  }
+  };
 
+  // 'Change' means a file has been selected, it will prepare the upload
   handleChangeStatus = ({ meta, file }, status) => {
     console.log(status, meta, file);
     S3FileUpload.uploadFile(file, config)
@@ -75,30 +77,40 @@ class UploadDocument extends React.Component {
       });
   };
 
+  // Files will be successfully uploaded and then removed from the preview view
   handleSubmit = (allFiles) => {
     allFiles.forEach((f) => f.remove());
+
+    // Add a notification to show success
     this.addSuccessNotification();
 
+    // Fetch the documents again to see the newly uploaded document in the list
     this.getDocuments();
   };
 
+  // Remove the document (Remove button)
   removeItem = (index) => {
-    let userEmail = Auth.user.attributes.email
+    let userEmail = Auth.user.attributes.email;
     let tmpArray = [...this.state.files];
     tmpArray.splice(index, 1);
     this.setState({ files: tmpArray });
 
     fetch(
-      "https://6r644cc680.execute-api.ap-southeast-2.amazonaws.com/prod/getlocation/deletedoc?userEmail=" + userEmail + "&documentLocation=" + this.state.files[index].documentLocation
-    )
+      "https://6r644cc680.execute-api.ap-southeast-2.amazonaws.com/prod/getlocation/deletedoc?userEmail=" +
+        userEmail +
+        "&documentLocation=" +
+        this.state.files[index].documentLocation
+    );
 
     this.addRemoveNotification();
   };
 
+  // Download the document (Download button)
   downloadItem = (index) => {
-    window.location.href = this.state.files[index].documentLocation
+    window.location.href = this.state.files[index].documentLocation;
   };
 
+  // Notification handler
   addSuccessNotification = () => {
     const notification = this.notificationSystem.current;
     notification.addNotification({
@@ -108,6 +120,7 @@ class UploadDocument extends React.Component {
     });
   };
 
+  // Notification handler
   addRemoveNotification = () => {
     const notification = this.notificationSystem.current;
     notification.addNotification({
@@ -136,7 +149,7 @@ class UploadDocument extends React.Component {
                   onClick={() => this.removeItem(i)}
                 />
 
-<Button
+                <Button
                   floated="right"
                   basic
                   icon="download"

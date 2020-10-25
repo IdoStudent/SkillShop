@@ -8,8 +8,6 @@ import NotificationSystem from "react-notification-system";
 
 import "../../index.css";
 
-//const config = require('../config.json');
-
 class GeneralInformation extends React.Component {
   notificationSystem = React.createRef();
 
@@ -108,6 +106,7 @@ class GeneralInformation extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
 
+    // Before submitting, validate form
     if (this.validateForm()) {
 
       this.setState((prevState) => ({
@@ -166,15 +165,19 @@ class GeneralInformation extends React.Component {
       phoneInvalid: false
     });
 
+    // If any invalid input conditions are met, validInput will be set to false
     let validInput = true;
 
+    // First name is empty
     if (!fName) {
       this.setState({
         fNameErrorMsg: "First name cannot be empty",
         fNameInvalid: true,
       });
       validInput = false;
-    } else if (fName.length < 2) {
+    } 
+    // First name is less than 2 characters
+    else if (fName.length < 2) {
       this.setState({
         fNameErrorMsg: "First name needs to be 2 or more characters",
         fNameInvalid: true,

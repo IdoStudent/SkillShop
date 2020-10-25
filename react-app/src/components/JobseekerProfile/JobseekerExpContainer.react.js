@@ -46,9 +46,10 @@ class JobseekerExpContainer extends React.Component {
   getEmailApi() {
     return Auth.currentAuthenticatedUser().then((user) => {
       const { attributes = {} } = user;
-      let email =  attributes['email']
-      return email
-    })}
+      let email = attributes["email"];
+      return email;
+    });
+  }
   // GET email for form
   getFirstApi() {
     return Auth.currentAuthenticatedUser().then((user) => {
@@ -60,7 +61,10 @@ class JobseekerExpContainer extends React.Component {
   }
 
   getSecondApi(email) {
-    fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/jobexperience?userEmail=`+email)
+    fetch(
+      `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata/jobexperience?userEmail=` +
+        email
+    )
       .then((res) => res.json())
       .then((result) => {
         for (var i = 0; i < result.length; i++) {
@@ -68,22 +72,21 @@ class JobseekerExpContainer extends React.Component {
             dataset: this.state.dataset.concat(
               <JobseekerExp key={i} jobinfo={result[i]} />
             ),
-            
           });
         }
       });
   }
 
-    // pass before mount
-    BeforeDidMount() {
-      this.getEmailApi().then((email) => this.getSecondApi(email));
-    }
-  
-    componentDidMount() {
-      this.BeforeDidMount();
-      this.getFirstApi();
-    }
-  
+  // pass before mount
+  BeforeDidMount() {
+    this.getEmailApi().then((email) => this.getSecondApi(email));
+  }
+
+  componentDidMount() {
+    this.BeforeDidMount();
+    this.getFirstApi();
+  }
+
   handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -340,7 +343,7 @@ class JobseekerExpContainer extends React.Component {
 
   cancelForm = () => {
     // If cancelling, reset any fields that have been changed to the original values so that when the modal is re-opened, the old values are shown
-    this.setState((prevState) => ({
+    this.setState({
       formtitle: "",
       formcompany: "",
       formlocation: "",
@@ -353,7 +356,7 @@ class JobseekerExpContainer extends React.Component {
       startMonthInvalid: false,
       endMonthInvalid: false,
       descInvalid: false,
-    }));
+    });
   };
 
   handleChange = (input) => (event) => {

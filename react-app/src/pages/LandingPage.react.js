@@ -3,18 +3,17 @@ import React, { Component } from "react";
 import { Container, Grid, Header, Button } from "tabler-react";
 
 class LandingPage extends Component {
-
   handleJobseekerRegister = () => {
     this.props.history.push({
-        pathname: '/signup',
-        type: 'jobseeker',
+      pathname: "/signup",
+      type: "jobseeker",
     });
   };
 
   handleEmployerRegister = () => {
     this.props.history.push({
-        pathname: '/signup',
-        type: 'employer',
+      pathname: "/signup",
+      type: "employer",
     });
   };
 
@@ -37,21 +36,29 @@ class LandingPage extends Component {
               <Grid.Col md={4}>
                 <Container className="sideButton">
                   <Header.H2>I'm a Jobseeker</Header.H2>
-                  <Button type="button" square onClick={this.handleJobseekerRegister}>
-                      Signup to start getting Matches
-                    </Button>
+                  <Button
+                    type="button"
+                    square
+                    onClick={this.handleJobseekerRegister}
+                  >
+                    Signup to start getting Matches
+                  </Button>
                 </Container>
               </Grid.Col>
               <Grid.Col md={4}>
-                <Container className="middleDivider"></Container>
+                <Container className="middleDivider" />
               </Grid.Col>
               <Grid.Col md={4}>
                 <Container className="sideButton">
                   <Header.H2>I'm an Employer</Header.H2>
-                  
-                  <Button type="button" square onClick={this.handleEmployerRegister}>
-                      Signup to find Candidates
-                    </Button>
+
+                  <Button
+                    type="button"
+                    square
+                    onClick={this.handleEmployerRegister}
+                  >
+                    Signup to find Candidates
+                  </Button>
                 </Container>
               </Grid.Col>
             </Grid.Row>

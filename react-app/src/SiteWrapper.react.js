@@ -6,15 +6,7 @@ import { NavLink, Redirect, withRouter } from "react-router-dom";
 import Auth from "@aws-amplify/auth";
 
 import { AccountDropdown, Icon as IconAlt, Notification } from "tabler-react";
-
 import { Menu, Sidebar, Icon as IconMain } from "semantic-ui-react";
-
-// acc details
-// tkt27786@cuoly.com
-// 12345678
-
-// employer@test.com
-// 12345678
 
 class SiteWrapper extends React.Component {
   constructor(props) {
@@ -33,14 +25,14 @@ class SiteWrapper extends React.Component {
   }
 
   getUserData = (email) => {
-    console.log(email)
+    console.log(email);
     fetch(
       `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
         email
     )
       .then((res) => res.json())
       .then((result) => {
-        console.log(result)
+        console.log(result);
         // If length is undefined, that means for some reason it's not returning data at all, so dont try and access fields that dont exist
         if (result.Item !== undefined) {
           let name = result.Item.userFirstName;
@@ -58,6 +50,7 @@ class SiteWrapper extends React.Component {
     var date = new Date();
     var hour = date.getHours();
 
+    // Work out the current time to determine what message to display
     if (hour < 12) {
       this.setState({ msg: "Good Morning, " });
     } else if (hour >= 12 && hour <= 17) {
@@ -96,7 +89,6 @@ class SiteWrapper extends React.Component {
 
           {/* MENU ITEMS */}
           <div className="menuItems">
-
             {/* If the user is an employer, show the navigation link for the candidates page, otherwise show the navigation link for the profile page */}
             {userType == "employer" ? (
               <NavLink exact activeClassName="active" to="/candidates">
@@ -153,16 +145,15 @@ class SiteWrapper extends React.Component {
             <div className="verticalDivider" />
 
             <div className="notifications">
-                <Notification.Tray unread={false}>
-                  <Notification
-                    message={
-                      <React.Fragment>
-                        <i>You have no new notifications</i>
-                      </React.Fragment>
-                    }
-                  />
-              
-                </Notification.Tray>
+              <Notification.Tray unread={false}>
+                <Notification
+                  message={
+                    <React.Fragment>
+                      <i>You have no new notifications</i>
+                    </React.Fragment>
+                  }
+                />
+              </Notification.Tray>
             </div>
           </div>
         </div>

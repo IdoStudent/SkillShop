@@ -12,7 +12,7 @@ class JobNewModal extends React.Component {
       title: "",
       location: "",
       about: "",
-      industry: "accounting", // set to account because it's the initial value for the dropdown
+      industry: "accounting", // set to accounting because it's the initial value for the dropdown
 
       titleInvalid: false,
       titleErrorMsg: "",

@@ -1,5 +1,5 @@
 // @flow
-import Auth from '@aws-amplify/auth';
+import Auth from "@aws-amplify/auth";
 import * as React from "react";
 import axios from "axios";
 import {
@@ -13,7 +13,6 @@ import {
 import { Form, Grid } from "tabler-react";
 
 class JobseekerEdu extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -156,7 +155,7 @@ class JobseekerEdu extends React.Component {
           desc: prevState.formdesc,
           open: false,
           current: prevState.isChecked,
-          email: this.state.email
+          email: this.state.email,
         }),
         () => {
           // Convert the date once state has updated (for front-end display purposes)
@@ -195,7 +194,7 @@ class JobseekerEdu extends React.Component {
 
   validateForm = () => {
     let title = this.state.formtitle;
-    //let institution = this.state.forminstitution;
+    let institution = this.state.forminstitution;
     let startdate = this.state.formstartdate;
     let enddate = this.state.formenddate;
     let desc = this.state.formdesc;
@@ -250,14 +249,14 @@ class JobseekerEdu extends React.Component {
       validInput = false;
     }
 
-    // // institution
-    // if (!institution) {
-    //   this.setState({
-    //     institutionErrorMsg: "Institution cannot be empty",
-    //     institutionInvalid: true,
-    //   });
-    //   validInput = false;
-    // }
+    // institution
+    if (!institution) {
+      this.setState({
+        institutionErrorMsg: "Institution cannot be empty",
+        institutionInvalid: true,
+      });
+      validInput = false;
+    }
 
     /* START DATE BLOCK START */
 
@@ -404,51 +403,39 @@ class JobseekerEdu extends React.Component {
 
   getEmailApi() {
     return Auth.currentAuthenticatedUser().then((user) => {
-       const { attributes = {} } = user;
-       let email =  attributes['email']
-       return email
-     })}
-   // GET email for form
+      const { attributes = {} } = user;
+      let email = attributes["email"];
+      return email;
+    });
+  }
+  // GET email for form
   getFirstApi() {
     return Auth.currentAuthenticatedUser().then((user) => {
-       this.setState({email: user.attributes.email, formemail: user.attributes.email})
-     });
+      this.setState({
+        email: user.attributes.email,
+        formemail: user.attributes.email,
+      });
+    });
   }
-  // GET user data 
-   async getSecondApi(email) {
-     fetch(`https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +email)
-       .then(res => res.json())
-       .then(
-         (result) => {
-           this.setState({
-       
-           });
-           } ,
-       )
-   }
-   // pass before mount
-   BeforDidMount() { 
-    this.getEmailApi().then(email => this.sendData(email)); }
- 
-   componentDidMount() {
-     this.BeforDidMount();
-     this.getFirstApi();  
-     this.convertDate();
-   }
- 
+  // GET user data
+  async getSecondApi(email) {
+    fetch(
+      `https://ezha2ns0bl.execute-api.ap-southeast-2.amazonaws.com/prod/userdata?userEmail=` +
+        email
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        this.setState({});
+      });
+  }
 
-  sendData = (email) => {
-    const data = [
-      this.state.title,
-      this.state.institution,
-      this.state.location,
-      this.state.startdate,
-      this.state.enddate,
-      this.state.desc,
-  
-    ];
-  
+  componentDidMount() {
+    this.getEmailApi();
+    this.getFirstApi();
+    this.convertDate();
+  }
 
+  sendData = () => {
     //API functionality
     try {
       const params = {

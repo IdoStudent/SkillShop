@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
 
 import { Container, Card, Dimmer, Icon } from "tabler-react";
 import { Button } from "semantic-ui-react";
@@ -10,13 +10,15 @@ import axios from "axios";
 
 import NotificationSystem from "react-notification-system";
 
-const uuidv4 = require("uuid/v4")
+const uuidv4 = require("uuid/v4");
 
+// Hold all our jobseekers in an array, allowing us to easily and quickly display the jobseekers based on filters
 var jobseekers = [];
-var currentCandidatesSkills = [];
-var education = [];
+
+// The current index in the jobseekers array
 var num = 0;
 
+// The selected jobKey, passed in from the Candidates component
 var currentJobKey;
 
 class JobCandidates extends React.Component {
@@ -45,23 +47,27 @@ class JobCandidates extends React.Component {
         userPhoneNumber: " ",
         userPostcode: " ",
         userSkills: " ",
-        userExperience: [{
-          userEmail: "",
-          userJobDescription: "",
-          userJobEndDate: "",
-          userJobLocation: "",
-          userJobStartDate: "",
-          userJobTitle: "",
-        }],
-        userEducation: [{
-          userEducationEndDate: "",
-          userEmail: "",
-          userEducationDescription: "",
-          userEducationInstitution: "",
-          userEducationTitle: "",
-          userEducationStartDate: "",
-          userEducationLocation: "",
-        }],
+        userExperience: [
+          {
+            userEmail: "",
+            userJobDescription: "",
+            userJobEndDate: "",
+            userJobLocation: "",
+            userJobStartDate: "",
+            userJobTitle: "",
+          },
+        ],
+        userEducation: [
+          {
+            userEducationEndDate: "",
+            userEmail: "",
+            userEducationDescription: "",
+            userEducationInstitution: "",
+            userEducationTitle: "",
+            userEducationStartDate: "",
+            userEducationLocation: "",
+          },
+        ],
         userState: " ",
       },
       noCandidates: false,
@@ -70,17 +76,20 @@ class JobCandidates extends React.Component {
 
   componentDidMount() {
     this.configureCandidates();
-    currentJobKey = this.props.jobKey
+    currentJobKey = this.props.jobKey;
   }
 
   configureCandidates() {
+    // Fetch the jobseekers
     this.getJobseekers();
+
+    // Get our filters from local storage and set them
     this.setFilters();
 
-    // need to filter in between here
+    // Filter the candidates based on the filters
     this.filterJobseekers();
 
-    // AFTER WE HAVE GOTTEN ALL THE CANDIDATES WE WANT, SET THE FIRST CANDIDATE TO DISPLAY
+    // Set the first candidate to display
     this.setCandidate();
   }
 
@@ -168,12 +177,11 @@ class JobCandidates extends React.Component {
         .then((result) => {
           // IF RESULT.LENGTH == 0 IT MEANS THE USER HAS NO JOBEXPERIENCE INFORMATION IN THE DATABASE SO WE WILL GET AN ERROR IF WE TRY TO ACCESS IT
           if (result.length > 0) {
-            for (var j=0; j<result.length; j++){
+            for (var j = 0; j < result.length; j++) {
               jobseekers[i].userExperience[j] = result[j];
             }
           }
         });
-
     }
     this.setState({
       experienceSet: true,
@@ -193,7 +201,7 @@ class JobCandidates extends React.Component {
         .then((result) => {
           // IF RESULT.LENGTH == 0 IT MEANS THE USER HAS NO JOBEXPERIENCE INFORMATION IN THE DATABASE SO WE WILL GET AN ERROR IF WE TRY TO ACCESS IT
           if (result.length > 0) {
-            for (var j=0; j< result.length; j++){
+            for (var j = 0; j < result.length; j++) {
               jobseekers[i].userEducation[j] = result[j];
             }
           }
@@ -218,15 +226,15 @@ class JobCandidates extends React.Component {
         // SET OUR STATE currentCandidate TO THE FIRST INDEX OF OUR FILTERED JOBSEEKERS ARRAY
         this.setState({
           currentCandidate: jobseekers[num],
-          });
+        });
         this.setState({
           currentCandidatesSkills: this.state.currentCandidate.userSkills,
-          currentCandidatesExperience: this.state.currentCandidate.userExperience,
+          currentCandidatesExperience: this.state.currentCandidate
+            .userExperience,
           currentCandidatesEducation: this.state.currentCandidate.userEducation,
-          });
-
+        });
       } else {
-        this.setState({noCandidates: true})
+        this.setState({ noCandidates: true });
       }
     } else {
       // IF INITIALISED IS FALSE, RECHECK IN 250ms OTHERWISE OUR DATA WILL BE UNDEFINED
@@ -235,10 +243,14 @@ class JobCandidates extends React.Component {
   };
 
   filterJobseekers = () => {
-    // WHEN FILTERING, LOOK THROUGH THE JOBSEEKER ARRAY FOR MATCHES. ANYTHING THAT DOESN'T MATCH, YOU CAN REMOVE FROM THE ARRAY USING 'jobseekers.splice(INDEX, 1)'
+    // WHEN FILTERING, LOOK THROUGH THE JOBSEEKER ARRAY FOR MATCHES. ANYTHING THAT DOESN'T MATCH CAN BE REMOVED USING 'jobseekers.splice(INDEX, 1)'
     // SPLICE SYNTAX IS: splice(position in array, amount of elements to remove)
     // CHECK IF INITIALISED
-    if (this.state.initialised && this.state.skillsSet && this.state.experienceSet) {
+    if (
+      this.state.initialised &&
+      this.state.skillsSet &&
+      this.state.experienceSet
+    ) {
       for (var i = 0; i < jobseekers.length; i++) {
         if (
           !this.state.filters.every((r) => jobseekers[i].userSkills.includes(r))
@@ -257,12 +269,9 @@ class JobCandidates extends React.Component {
     });
   };
 
-
-
   acceptCandidate = () => {
-
     // Generate a unique id
-    let matchId = uuidv4()
+    let matchId = uuidv4();
 
     if (
       this.state.initialised &&
@@ -272,7 +281,14 @@ class JobCandidates extends React.Component {
     ) {
       // Post the match to the databsae
 
-      console.log('CURRENT JOBKEY: ', currentJobKey, 'JOBSEEKER EMAIL: ', jobseekers[num].userEmail, 'MATCHID: ', matchId)
+      console.log(
+        "CURRENT JOBKEY: ",
+        currentJobKey,
+        "JOBSEEKER EMAIL: ",
+        jobseekers[num].userEmail,
+        "MATCHID: ",
+        matchId
+      );
       try {
         const params = {
           userEmail: jobseekers[num].userEmail,
@@ -292,18 +308,21 @@ class JobCandidates extends React.Component {
       // Increment the current index and check if there are still more candidates to show
       num++;
       if (num >= jobseekers.length) {
-        this.setState({noCandidates: true})
+        this.setState({ noCandidates: true });
       } else {
-        this.setState({
-          currentCandidate: jobseekers[num],
-          currentCandidatesSkills: jobseekers[num].userSkills,
-          currentCandidatesExperience: jobseekers[num].userExperience,
-          currentCandidatesEducation: jobseekers[num].userEducation,
-        }, () => console.log(this.state.currentCandidatesExperience),);
+        this.setState(
+          {
+            currentCandidate: jobseekers[num],
+            currentCandidatesSkills: jobseekers[num].userSkills,
+            currentCandidatesExperience: jobseekers[num].userExperience,
+            currentCandidatesEducation: jobseekers[num].userEducation,
+          },
+          () => console.log(this.state.currentCandidatesExperience)
+        );
       }
     }
 
-    console.log(jobseekers[num])
+    console.log(jobseekers[num]);
   };
 
   rejectCandidate = () => {
@@ -317,7 +336,7 @@ class JobCandidates extends React.Component {
       this.passNotification();
 
       if (num >= jobseekers.length) {
-        this.setState({noCandidates: true})
+        this.setState({ noCandidates: true });
       } else {
         this.setState({
           currentCandidate: jobseekers[num],
@@ -325,11 +344,11 @@ class JobCandidates extends React.Component {
           currentCandidatesExperience: jobseekers[num].userExperience,
           currentCandidatesEducation: jobseekers[num].userEducation,
         });
-
       }
     }
   };
 
+  // Notification handler
   likeNotification = () => {
     const notification = this.notificationSystem.current;
     notification.addNotification({
@@ -342,6 +361,7 @@ class JobCandidates extends React.Component {
     });
   };
 
+  // Notification handler
   passNotification = () => {
     const notification = this.notificationSystem.current;
     notification.addNotification({
@@ -355,13 +375,20 @@ class JobCandidates extends React.Component {
   };
 
   render() {
-    return <Container>
+    return (
+      <Container>
         <NotificationSystem ref={this.notificationSystem} />
-        {this.state.initialised && this.state.skillsFiltered && this.state.skillsSet && this.state.experienceSet && this.state.noCandidates === false ? <div>
+        {this.state.initialised &&
+        this.state.skillsFiltered &&
+        this.state.skillsSet &&
+        this.state.experienceSet &&
+        this.state.noCandidates === false ? (
+          <div>
             <div className="margin1">
               <h1 className="zeroMargin">
                 <p>
-                  {this.state.currentCandidate.userFirstName} {this.state.currentCandidate.userLastName}
+                  {this.state.currentCandidate.userFirstName}{" "}
+                  {this.state.currentCandidate.userLastName}
                 </p>
               </h1>
               <Icon prefix="fa" name="map-marker" />
@@ -396,7 +423,8 @@ class JobCandidates extends React.Component {
                 <span>EXPERIENCE</span>
               </div>
               {this.state.currentCandidate.userExperience.map((d) => {
-                return <div className="experienceContainer">
+                return (
+                  <div className="experienceContainer">
                     <div className="infoExperience">
                       <p>
                         <strong>{d.userJobTitle}</strong>
@@ -409,9 +437,9 @@ class JobCandidates extends React.Component {
                       </p>
                       <p className="zeroMargin">{d.userJobLocation}</p>
                     </div>
-                  </div>;
+                  </div>
+                );
               })}
-
             </div>
 
             <div className="infoRow">
@@ -419,7 +447,8 @@ class JobCandidates extends React.Component {
                 <span>EDUCATION</span>
               </div>
               {this.state.currentCandidate.userEducation.map((d) => {
-                return <div>
+                return (
+                  <div>
                     <div className="infoEducation">
                       <p>
                         <strong>{d.userEducationTitle}</strong>
@@ -428,42 +457,57 @@ class JobCandidates extends React.Component {
                     </div>
                     <div className="dateAndLocation">
                       <p className="margin2">
-                        {d.userEducationStartDate + " - " + d.userEducationEndDate}
+                        {d.userEducationStartDate +
+                          " - " +
+                          d.userEducationEndDate}
                       </p>
                       <p className="zeroMargin">{d.userEducationLocation}</p>
                     </div>
-                  </div>;
+                  </div>
+                );
               })}
             </div>
 
             <div className="buttonBox buttonBorder">
-              <Button className="buttonwidth passButton" onClick={this.rejectCandidate}>
+              <Button
+                className="buttonwidth passButton"
+                onClick={this.rejectCandidate}
+              >
                 <Icon prefix="fa" name="times" />
                 {""} Pass
                 {""}
               </Button>
             </div>
             <div className="buttonBox">
-              <Button className="buttonwidth likeButton" onClick={this.acceptCandidate}>
+              <Button
+                className="buttonwidth likeButton"
+                onClick={this.acceptCandidate}
+              >
                 <Icon prefix="fa" name="check" />
                 {""} Like
                 {""}
               </Button>
             </div>
-          </div> : this.state.noCandidates ? <p className="noCandidates">
+          </div>
+        ) : this.state.noCandidates ? (
+          <p className="noCandidates">
             {" "}
-            There are no more suitable candidates to show for the selected
-            job profile. If you have filters on, you can try removing some
-            in order to view a broader range of candidates. Otherwise, you
-            can check back another time when additional candidates are found
-            for your chosen filters.
-          </p> : <div id="candidatesLoader">
+            There are no more suitable candidates to show for the selected job
+            profile. If you have filters on, you can try removing some in order
+            to view a broader range of candidates. Otherwise, you can check back
+            another time when additional candidates are found for your chosen
+            filters.
+          </p>
+        ) : (
+          <div id="candidatesLoader">
             <Card.Body>
               <Dimmer active loader />
               <p> Fetching Candidates... </p>
             </Card.Body>
-          </div>}
-      </Container>;
+          </div>
+        )}
+      </Container>
+    );
   }
 }
 
