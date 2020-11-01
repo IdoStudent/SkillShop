@@ -22,8 +22,6 @@ import {
 import "tabler-react/dist/Tabler.css";
 import "semantic-ui-css/semantic.min.css";
 
-// type Props = {||};
-
 class App extends React.Component {
   state = {
     isAuthenticated: false,
@@ -34,21 +32,16 @@ class App extends React.Component {
 
   setAuthStatus = (authenticated) => {
     this.setState({ isAuthenticated: authenticated });
-    console.log("set auth");
   };
 
   setUser = (user) => {
     this.setState({ user: user });
-    console.log("set user");
   };
 
   isUserAuthenticated = () => {
     let isAuthenticated = true;
-
-    console.log("app auth", Auth.user)
     if(Auth.user === null) {
       isAuthenticated = false;
-      console.log("no user")
     }
 
     return isAuthenticated;
@@ -100,14 +93,13 @@ class App extends React.Component {
                 component={Signup}
               />
 
-              {/* IN PROGRESS */}
-              <Route
-                exact
+              {/* PRIVATE ROUTES (USER NEEDS TO BE AUTHENTICATED) */}
+              
+              <PrivateRoute
                 path="/chat"
-                render={(props) => <Chat {...props} auth={authProps} />}
+                component={Chat}
               />
 
-              {/* PRIVATE ROUTES (USER NEEDS TO BE AUTHENTICATED) */}
               {/* JOBSEEKER PAGES */}
               <PrivateRoute
                 path="/myprofile"
